@@ -1,17 +1,11 @@
-from flask import Flask, request, render_template
+# Prende i dati da un file (simulando una richiesta POST)
 
-app = Flask(__name__)
+# Supponiamo che i dati vengano inviati come testo tramite un modulo
+name = input("Inserisci il nome: ")
+date = input("Inserisci la data della prenotazione: ")
 
-@app.route('/')
-def home():
-    return render_template('index.html')
+# Salviamo i dati su un file di testo
+with open("prenotazioni.txt", "a") as f:
+    f.write(f"Prenotazione: {name} - {date}\n")
 
-@app.route('/submit', methods=['POST'])
-def submit():
-    name = request.form.get('name')
-    date = request.form.get('date')
-    print(f'Prenotazione ricevuta: {name} per il giorno {date}')
-    return f'Prenotazione ricevuta per {name} il {date}. Grazie!'
-
-if __name__ == '__main__':
-    app.run(debug=True)
+print("Prenotazione ricevuta!")
