@@ -1,15 +1,10 @@
-from flask import Flask
-import os
+from flask import Flask, render_template
 
-# Crea l'istanza dell'app Flask
 app = Flask(__name__)
 
 @app.route('/')
-def hello():
-    return "Ciao, mondo!"
+def home():
+    return render_template('index.html')
 
-if __name__ == "__main__":
-    # Recupera la porta dalla variabile d'ambiente PORT
-    port = int(os.environ.get("PORT", 5000))  # 5000 è il valore di default
-    # Avvia il server Flask
-    app.run(host="0.0.0.0", port=port)
+if __name__ == '__main__':
+    app.run(debug=True)
