@@ -14,30 +14,35 @@
 
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #f4f4f9;
+            background-color: #e0f7fa; /* Colore pastello blu chiaro */
             color: #333;
             line-height: 1.6;
         }
 
         /* Header e Hamburger Menu */
         header {
-            background-color: #333;
+            background-color: rgba(51, 51, 51, 0.9); /* Grigio scuro con trasparenza */
             color: #fff;
             padding: 10px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
         .logo {
             font-size: 24px;
             font-weight: bold;
+            color: #80cbc4; /* Verde acqua pastello */
         }
 
         .menu-icon {
             display: none;
             font-size: 24px;
             cursor: pointer;
+            color: #80cbc4; /* Verde acqua pastello */
         }
 
         nav {
@@ -49,18 +54,19 @@
             color: #fff;
             text-decoration: none;
             font-size: 16px;
+            transition: color 0.3s ease;
         }
 
         nav a:hover {
-            text-decoration: underline;
+            color: #80cbc4; /* Verde acqua pastello al passaggio del mouse */
         }
 
-        /* Form di prenotazione */
+        /* Contenuto principale */
         .container {
-            max-width: 600px;
+            max-width: 800px;
             margin: 50px auto;
             padding: 20px;
-            background-color: #fff;
+            background-color: rgba(255, 255, 255, 0.9); /* Bianco con trasparenza */
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
@@ -69,37 +75,61 @@
             text-align: center;
             margin-bottom: 20px;
             font-size: 28px;
-            color: #333;
+            color: #00796b; /* Verde scuro pastello */
         }
 
         form label {
             display: block;
             margin-bottom: 8px;
             font-weight: bold;
+            color: #00796b; /* Verde scuro pastello */
         }
 
         form input[type="text"],
-        form input[type="date"] {
+        form input[type="email"],
+        form input[type="date"],
+        form input[type="password"],
+        form select {
             width: 100%;
             padding: 10px;
             margin-bottom: 20px;
             border: 1px solid #ccc;
             border-radius: 4px;
+            background-color: rgba(255, 255, 255, 0.8); /* Bianco con trasparenza */
         }
 
         form input[type="submit"] {
             width: 100%;
             padding: 10px;
-            background-color: #333;
+            background-color: #00796b; /* Verde scuro pastello */
             color: #fff;
             border: none;
             border-radius: 4px;
             cursor: pointer;
             font-size: 16px;
+            transition: background-color 0.3s ease;
         }
 
         form input[type="submit"]:hover {
-            background-color: #555;
+            background-color: #004d40; /* Verde più scuro al passaggio del mouse */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table th,
+        table td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: left;
+        }
+
+        table th {
+            background-color: #00796b; /* Verde scuro pastello */
+            color: #fff;
         }
 
         /* Responsive Design */
@@ -111,7 +141,7 @@
             nav {
                 display: none;
                 flex-direction: column;
-                background-color: #333;
+                background-color: rgba(51, 51, 51, 0.9); /* Grigio scuro con trasparenza */
                 position: absolute;
                 top: 50px;
                 right: 20px;
@@ -131,25 +161,87 @@
         <div class="logo">FitBook</div>
         <div class="menu-icon" onclick="toggleMenu()">&#9776;</div>
         <nav id="navMenu">
-            <a href="#">Effettua Prenotazione</a>
-            <a href="#">Mostra Prenotazioni</a>
-            <a href="#">Acquista</a>
-            <a href="#">Login</a>
+            <a href="#" onclick="showForm('prenotazione')">Effettua Prenotazione</a>
+            <a href="#" onclick="showForm('mostraPrenotazioni')">Mostra Prenotazioni</a>
+            <a href="#" onclick="showForm('acquista')">Acquista</a>
+            <a href="#" onclick="showForm('login')">Login</a>
         </nav>
     </header>
 
-    <!-- Form di prenotazione -->
+    <!-- Contenuto principale -->
     <div class="container">
-        <h1>FitBook - Prenota la tua sessione in palestra</h1>
-        <form action="prenotazione.py" method="POST">
-            <label for="name">Nome:</label>
-            <input type="text" id="name" name="name" required>
+        <!-- Form Effettua Prenotazione -->
+        <div id="prenotazione" class="form-container">
+            <h1>Effettua Prenotazione</h1>
+            <form action="prenotazione.py" method="POST">
+                <label for="name">Nome:</label>
+                <input type="text" id="name" name="name" required>
 
-            <label for="date">Data della prenotazione:</label>
-            <input type="date" id="date" name="date" required>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
 
-            <input type="submit" value="Prenota">
-        </form>
+                <label for="date">Data della prenotazione:</label>
+                <input type="date" id="date" name="date" required>
+
+                <input type="submit" value="Prenota">
+            </form>
+        </div>
+
+        <!-- Tabella Mostra Prenotazioni -->
+        <div id="mostraPrenotazioni" class="form-container" style="display: none;">
+            <h1>Le tue Prenotazioni</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th>Data</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Mario Rossi</td>
+                        <td>mario@example.com</td>
+                        <td>2023-10-15</td>
+                    </tr>
+                    <tr>
+                        <td>Luigi Verdi</td>
+                        <td>luigi@example.com</td>
+                        <td>2023-10-20</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Form Acquista Abbonamento -->
+        <div id="acquista" class="form-container" style="display: none;">
+            <h1>Acquista Abbonamento</h1>
+            <form action="acquista.py" method="POST">
+                <label for="abbonamento">Seleziona durata abbonamento:</label>
+                <select id="abbonamento" name="abbonamento" required>
+                    <option value="1">1 Mese - €30</option>
+                    <option value="2">2 Mesi - €55</option>
+                    <option value="3">3 Mesi - €80</option>
+                    <option value="12">12 Mesi - €300</option>
+                </select>
+
+                <input type="submit" value="Acquista">
+            </form>
+        </div>
+
+        <!-- Form Login/Registrazione -->
+        <div id="login" class="form-container" style="display: none;">
+            <h1>Login/Registrazione</h1>
+            <form action="login.py" method="POST">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+
+                <input type="submit" value="Accedi">
+            </form>
+        </div>
     </div>
 
     <script>
@@ -157,6 +249,21 @@
         function toggleMenu() {
             const navMenu = document.getElementById('navMenu');
             navMenu.classList.toggle('active');
+        }
+
+        // Funzione per mostrare il form selezionato
+        function showForm(formId) {
+            // Nascondi tutti i form
+            const forms = document.querySelectorAll('.form-container');
+            forms.forEach(form => form.style.display = 'none');
+
+            // Mostra il form selezionato
+            const selectedForm = document.getElementById(formId);
+            selectedForm.style.display = 'block';
+
+            // Chiudi il menu hamburger (opzionale)
+            const navMenu = document.getElementById('navMenu');
+            navMenu.classList.remove('active');
         }
     </script>
 </body>
