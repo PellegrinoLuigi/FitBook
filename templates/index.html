@@ -130,6 +130,21 @@
             background-color: #004d40; /* Verde più scuro al passaggio del mouse */
         }
 
+        .switch-form {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .switch-form a {
+            color: #00796b; /* Verde scuro pastello */
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .switch-form a:hover {
+            text-decoration: underline;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
@@ -192,7 +207,7 @@
             <h1>Benvenuto su FitBook</h1>
             <div class="welcome-text">
                 <p>Prenota la tua sessione in palestra, gestisci le tue prenotazioni e acquista abbonamenti.</p>
-                <p>Se non sei ancora registrato, <a href="#" onclick="showForm('login')">clicca qui per accedere o registrarti</a>.</p>
+                <p>Se non sei ancora registrato, <a href="#" onclick="showForm('registrazione')">clicca qui per accedere o registrarti</a>.</p>
             </div>
         </div>
 
@@ -255,9 +270,9 @@
             </form>
         </div>
 
-        <!-- Form Login/Registrazione -->
+        <!-- Form Login -->
         <div id="login" class="form-container" style="display: none;">
-            <h1>Login/Registrazione</h1>
+            <h1>Login</h1>
             <form action="login.py" method="POST">
                 <label for="email">Email:</label>
                 <input type="email" id="email" name="email" required>
@@ -267,6 +282,35 @@
 
                 <input type="submit" value="Accedi">
             </form>
+            <div class="switch-form">
+                <p>Non sei ancora registrato? <a href="#" onclick="showForm('registrazione')">Registrati qui</a>.</p>
+            </div>
+        </div>
+
+        <!-- Form Registrazione -->
+        <div id="registrazione" class="form-container" style="display: none;">
+            <h1>Registrazione</h1>
+            <form action="registrazione.py" method="POST">
+                <label for="nome">Nome:</label>
+                <input type="text" id="nome" name="nome" required>
+
+                <label for="cognome">Cognome:</label>
+                <input type="text" id="cognome" name="cognome" required>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="data_nascita">Data di nascita:</label>
+                <input type="date" id="data_nascita" name="data_nascita" required>
+
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+
+                <input type="submit" value="Registrati">
+            </form>
+            <div class="switch-form">
+                <p>Hai già un account? <a href="#" onclick="showForm('login')">Accedi qui</a>.</p>
+            </div>
         </div>
     </div>
 
