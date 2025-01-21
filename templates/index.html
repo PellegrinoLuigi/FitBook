@@ -4,7 +4,187 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FitBook - Prenotazione</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+       <style>
+        /* Reset CSS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e0f7fa; /* Colore pastello blu chiaro */
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Header e Hamburger Menu */
+        header {
+            background-color: rgba(51, 51, 51, 0.9); /* Grigio scuro con trasparenza */
+            color: #fff;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #80cbc4; /* Verde acqua pastello */
+        }
+
+        .menu-icon {
+            display: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #80cbc4; /* Verde acqua pastello */
+        }
+
+        nav {
+            display: flex;
+            gap: 20px;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #80cbc4; /* Verde acqua pastello al passaggio del mouse */
+        }
+
+        /* Contenuto principale */
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9); /* Bianco con trasparenza */
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: #00796b; /* Verde scuro pastello */
+        }
+
+        .welcome-text {
+            text-align: center;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .welcome-text a {
+            color: #00796b; /* Verde scuro pastello */
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .welcome-text a:hover {
+            text-decoration: underline;
+        }
+
+        form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #00796b; /* Verde scuro pastello */
+        }
+
+        form input[type="text"],
+        form input[type="email"],
+        form input[type="date"],
+        form input[type="password"],
+        form select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: rgba(255, 255, 255, 0.8); /* Bianco con trasparenza */
+        }
+
+        form input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #00796b; /* Verde scuro pastello */
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        form input[type="submit"]:hover {
+            background-color: #004d40; /* Verde più scuro al passaggio del mouse */
+        }
+
+        .switch-form {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .switch-form a {
+            color: #00796b; /* Verde scuro pastello */
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .switch-form a:hover {
+            text-decoration: underline;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table th,
+        table td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: left;
+        }
+
+        table th {
+            background-color: #00796b; /* Verde scuro pastello */
+            color: #fff;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .menu-icon {
+                display: block;
+            }
+
+            nav {
+                display: none;
+                flex-direction: column;
+                background-color: rgba(51, 51, 51, 0.9); /* Grigio scuro con trasparenza */
+                position: absolute;
+                top: 50px;
+                right: 20px;
+                padding: 10px;
+                border-radius: 4px;
+            }
+
+            nav.active {
+                display: flex;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Header con Hamburger Menu -->
@@ -121,6 +301,127 @@
         </div>
     </div>
 
-    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
+    <script>
+        // Variabile per memorizzare lo stato di login
+        let loggedInUser = null;
+
+        // Funzione per attivare/disattivare il menu hamburger
+        function toggleMenu() {
+            const navMenu = document.getElementById('navMenu');
+            navMenu.classList.toggle('active');
+        }
+
+        // Funzione per mostrare il form selezionato
+        function showForm(formId) {
+            // Nascondi tutti i form
+            const forms = document.querySelectorAll('.form-container');
+            forms.forEach(form => form.style.display = 'none');
+
+            // Mostra il form selezionato
+            const selectedForm = document.getElementById(formId);
+            selectedForm.style.display = 'block';
+
+            // Chiudi il menu hamburger (opzionale)
+            const navMenu = document.getElementById('navMenu');
+            navMenu.classList.remove('active');
+        }
+
+        // Funzione per verificare se l'utente è loggato
+        function checkLogin(formId) {
+            if (!loggedInUser) {
+                alert("Devi effettuare il login per accedere a questa funzionalità.");
+                showForm('login');
+            } else {
+                showForm(formId);
+                if (formId === 'mostraPrenotazioni') {
+                    caricaPrenotazioni();
+                }
+            }
+        }
+
+        // Funzione per effettuare il login
+        function effettuaLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            // Simulazione di login (in un caso reale, fare una richiesta al server)
+            loggedInUser = { email, password };
+            alert("Login effettuato con successo!");
+            showForm('home');
+        }
+
+        // Funzione per effettuare la registrazione
+        function effettuaRegistrazione(event) {
+            event.preventDefault();
+            const nome = document.getElementById('nome').value;
+            const cognome = document.getElementById('cognome').value;
+            const email = document.getElementById('email').value;
+            const dataNascita = document.getElementById('data_nascita').value;
+            const password = document.getElementById('password').value;
+
+            // Simulazione di registrazione (in un caso reale, fare una richiesta al server)
+            loggedInUser = { nome, cognome, email, dataNascita, password };
+            alert("Registrazione effettuata con successo!");
+            showForm('login');
+        }
+
+        // Funzione per effettuare una prenotazione
+        function effettuaPrenotazione(event) {
+            event.preventDefault();
+            if (!loggedInUser) {
+                alert("Devi effettuare il login per prenotare.");
+                showForm('login');
+                return;
+            }
+
+            const nome = document.getElementById('name').value;
+            const data = document.getElementById('date').value;
+
+            // Simulazione di prenotazione (in un caso reale, fare una richiesta al server)
+            alert(`Prenotazione effettuata per ${nome} il ${data}`);
+            showForm('home');
+        }
+
+        // Funzione per caricare le prenotazioni
+        function caricaPrenotazioni() {
+            if (!loggedInUser) {
+                alert("Devi effettuare il login per visualizzare le prenotazioni.");
+                showForm('login');
+                return;
+            }
+
+            // Simulazione di prenotazioni (in un caso reale, fare una richiesta al server)
+            const prenotazioni = [
+                { nome: "Mario Rossi", data: "2023-10-15" },
+                { nome: "Luigi Verdi", data: "2023-10-20" }
+            ];
+
+            const tbody = document.querySelector('#prenotazioniTable tbody');
+            tbody.innerHTML = prenotazioni.map(p => `
+                <tr>
+                    <td>${p.nome}</td>
+                    <td>${p.data}</td>
+                </tr>
+            `).join('');
+        }
+
+        // Funzione per effettuare un acquisto
+        function effettuaAcquisto(event) {
+            event.preventDefault();
+            if (!loggedInUser) {
+                alert("Devi effettuare il login per acquistare.");
+                showForm('login');
+                return;
+            }
+
+            const abbonamento = document.getElementById('abbonamento').value;
+            alert(`Abbonamento acquistato per ${abbonamento} mesi.`);
+            showForm('home');
+        }
+
+        // Mostra la Home di default al caricamento della pagina
+        window.onload = () => showForm('home');
+    </script>
 </body>
 </html>
