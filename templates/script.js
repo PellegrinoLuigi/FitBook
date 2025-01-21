@@ -1,3 +1,6 @@
+
+console.log("JavaScript caricato correttamente!");
+
 // Variabile per memorizzare lo stato di login
 let loggedInUser = null;
 
