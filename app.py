@@ -3,26 +3,25 @@ from flask import Flask, render_template
 import psycopg2
 
 app = Flask(__name__, static_folder='static')
+# Configurazione del database tramite variabili d'ambiente
+db_name = os.getenv('DB_NAME')
+db_user = os.getenv('DB_USER')
+db_password = os.getenv('DB_PASSWORD')
+db_host = os.getenv('DB_HOST')
+db_port = os.getenv('DB_PORT', 5432)  # Porta di default
 
-# Configurazione del database
-DB_CONFIG = {
-    'DB_NAME': 'fitbook-reservation',
-    'DB_USER': 'fitbook_reservation_user',
-    'DB_PASSWORD': 'W858EmxOR0Hp34YiTAW5HLpaQNoK5qW9',
-    'DB_HOST': 'dpg-cu3s0ptds78s73ehhd8g-a.oregon-postgres.render.com',
-    'DB_PORT': 5432  # Default PostgreSQL port
-}
+# Costruisci la stringa di connessione
+conn_string = f"dbname={db_name} user={db_user} password={db_password} host={db_host} port={db_port}"
 
 def get_users():
     """Recupera i dati dalla tabella user."""
-    conn = psycopg2.connect(**DB_CONFIG)
+    conn = psycopg2.connect(conn_string)  # Usa la stringa di connessione
     cursor = conn.cursor()
     cursor.execute("SELECT id, nome, cognome, email, data_di_nascita FROM users;")
     rows = cursor.fetchall()  # Recupera tutti i record
     conn.close()
-    console.log(rows)
     return rows
-
+    
 @app.route('/')
 def home():
     users = get_users()
