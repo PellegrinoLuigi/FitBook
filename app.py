@@ -12,12 +12,20 @@ db_port = os.getenv('DB_PORT', 5432)  # Porta di default
 
 # Costruisci la stringa di connessione
 conn_string = f"dbname={db_name} user={db_user} password={db_password} host={db_host} port={db_port}"
+def get_db_connection():
+    """Restituisce una connessione al database"""
+    try:
+        conn = psycopg2.connect(conn_string)
+        return conn
+    except Exception as e:
+        print(f"Errore durante la connessione al database: {e}")
+        return None
 
 def get_users():
     """Recupera i dati dalla tabella user."""
     try:
         # Connessione al database
-        conn = psycopg2.connect(conn_string)  # Usa la stringa di connessione
+        conn = get_db_connection()
         cursor = conn.cursor()
         
         # Esegui la query
@@ -30,6 +38,25 @@ def get_users():
         # Stampa l'errore a schermo
         print(f"Errore durante la connessione al database o l'esecuzione della query: {e}")
         return []
+        
+@app.route('/login', methods=['POST'])
+def login():
+    data = request.get_json()
+    email = data.get('email')
+    password = data.get('password')
+
+    if not email or not password:
+        return jsonify({'error': 'Email e password sono richiesti'}), 400
+
+    cursor = db.cursor(dictionary=True)
+    query = "SELECT * FROM users WHERE email = %s AND password = %s"
+    cursor.execute(query, (email, password))
+    result = cursor.fetchone()
+
+    if result:
+        return jsonify({'message': 'Login effettuato con successo!', 'user': result}), 200
+    else:
+        return jsonify({'error': 'Email o password errati'}), 401
 
 @app.route('/')
 def home():

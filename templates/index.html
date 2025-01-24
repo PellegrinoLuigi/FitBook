@@ -202,34 +202,7 @@
     </header>
 
     <!-- Contenuto principale -->
-    <h1>Lista Utenti {{ utente }}</h1>
-
-    {% if users %}
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nome</th>
-                    <th>Cognome</th>
-                    <th>Email</th>
-                    <th>Data di Nascita</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for user in users %}
-                    <tr>
-                        <td>{{ user[0] }}</td> <!-- ID -->
-                        <td>{{ user[1] }}</td> <!-- Nome -->
-                        <td>{{ user[2] }}</td> <!-- Cognome -->
-                        <td>{{ user[3] }}</td> <!-- Email -->
-                        <td>{{ user[4] }}</td> <!-- Data di Nascita -->
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <p>Nessun utente trovato.</p>
-    {% endif %}
+    
 <div class="container">
         <!-- Home -->
         <div id="home" class="form-container">
