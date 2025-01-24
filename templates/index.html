@@ -287,13 +287,13 @@
                 <input type="text" id="cognome" name="cognome" required>
 
                 <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
+                <input type="email" id="emailreg" name="email" required>
 
                 <label for="data_nascita">Data di nascita:</label>
                 <input type="date" id="data_nascita" name="data_nascita" required>
 
                 <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
+                <input type="password" id="passwordReg" name="password" required>
 
                 <input type="submit" value="Registrati">
             </form>
@@ -378,9 +378,9 @@
             event.preventDefault();
             const nome = document.getElementById('nome').value;
             const cognome = document.getElementById('cognome').value;
-            const email = document.getElementById('email').value;
+            const email = document.getElementById('emailreg').value;
             const dataNascita = document.getElementById('data_nascita').value;
-            const password = document.getElementById('password').value;
+            const password = document.getElementById('passwordReg').value;
         
             const userData = {
                 nome: nome,
