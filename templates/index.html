@@ -198,6 +198,7 @@
             <a href="#" onclick="checkLogin('mostraPrenotazioni')">Mostra Prenotazioni</a>
             <a href="#" onclick="checkLogin('acquista')">Acquista</a>
             <a href="#" onclick="showForm('login')">Login</a>
+            <a href="#" onclick="effettuaLogout()">Logout</a>
         </nav>
     </header>
 
@@ -338,6 +339,10 @@
                 if (formId === 'mostraPrenotazioni') {
                     caricaPrenotazioni();
                 }
+                // Mostra il messaggio di benvenuto e nasconde il login
+                document.getElementById('welcomeMessage').style.display = 'block';
+                document.getElementById('userName').textContent = loggedInUser.email;
+                document.querySelector('a[href="#"]').style.display = 'none'; // Nasconde il link di login
             }
         }
 
@@ -347,32 +352,30 @@
             
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-        
-            // Effettua una richiesta POST al server Flask per il login
+
             fetch('/login', {
-                method: 'POST',  // Metodo HTTP per inviare i dati
-                headers: {'Content-Type': 'application/json' }, // Indica che i dati sono in formato JSON
-                body: JSON.stringify({ email, password })  // Converte i dati in formato JSON
+                method: 'POST',
+                headers: {'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
             })
-            .then(response => response.json())  // Analizza la risposta come JSON
+            .then(response => response.json())
             .then(data => {
-                // Se la risposta dal server è positiva (login riuscito)
                 if (data.success) {
-                    loggedInUser = { email };  // Salva i dati dell'utente loggato
+                    loggedInUser = { email };
                     alert("Login effettuato con successo!");
-                    showForm('home');  // Mostra la home
+                    showForm('home');
+                    document.getElementById('welcomeMessage').style.display = 'block';
+                    document.getElementById('userName').textContent = loggedInUser.email;
+                    document.querySelector('a[href="#"]').style.display = 'none'; // Nasconde il login
                 } else {
-                    // Se il login fallisce, mostra un messaggio di errore
                     alert(data.message || "Login fallito. Controlla email e password.");
                 }
             })
             .catch(error => {
-                // Gestione degli errori della richiesta
                 console.error("Errore durante il login:", error);
                 alert("Si è verificato un errore. Riprova più tardi.");
             });
-        }
-        
+        }        
 
         function effettuaRegistrazione(event) {
             event.preventDefault();
@@ -466,6 +469,13 @@
 
         // Mostra la Home di default al caricamento della pagina
         window.onload = () => showForm('home');
+
+        function effettuaLogout() {
+            loggedInUser = null;
+            document.getElementById('welcomeMessage').style.display = 'none'; // Nasconde il messaggio di benvenuto
+            document.querySelector('a[href="#"]').style.display = 'block'; // Mostra di nuovo il link di login
+            showForm('home'); // Torna alla home
+        }
     </script>
 </body>
 </html>
