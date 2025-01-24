@@ -24,7 +24,7 @@ def get_db_connection():
 def verifica_email(email):
     """Funzione per verificare se l'email esiste già nel DB"""
     try:
-        conn = connessione_db()
+        conn = get_db_connection()
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
         user = cursor.fetchone()
@@ -38,7 +38,7 @@ def verifica_email(email):
 def registra_utente(nome, cognome, email, data_nascita, password):
     """Funzione per registrare un nuovo utente nel DB"""
     try:
-        conn = connessione_db()
+        conn = get_db_connection()
         cursor = conn.cursor()
         cursor.execute("INSERT INTO users (nome, cognome, email, data_nascita, password) VALUES (%s, %s, %s, %s, %s)",
                        (nome, cognome, email, data_nascita, password))
