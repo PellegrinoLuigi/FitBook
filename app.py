@@ -60,6 +60,18 @@ def login_user(email, password):
         print(f"Errore nel connettersi al DB: {e}")
         return False
 
+@app.route('/login', methods=['POST'])
+def login():
+    data = request.get_json()  # Riceve i dati come JSON
+    email = data.get('email')
+    password = data.get('password')
+
+    if login_user(email, password):
+        return jsonify({"success": True})
+    else:
+        return jsonify({"success": False, "message": "Credenziali errate."})
+
+
 @app.route('/')
 def home():
     users = get_users()
