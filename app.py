@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template
+from flask import Flask, render_template, request, jsonify
 import psycopg2
 
 app = Flask(__name__, static_folder='static')
