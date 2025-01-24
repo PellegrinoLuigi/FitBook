@@ -21,6 +21,52 @@ def get_db_connection():
         print(f"Errore durante la connessione al database: {e}")
         return None
 
+def verifica_email(email):
+    """Funzione per verificare se l'email esiste già nel DB"""
+    try:
+        conn = connessione_db()
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
+        user = cursor.fetchone()
+        conn.close()
+
+        return user is not None
+    except Exception as e:
+        print(f"Errore nel connettersi al DB: {e}")
+        return False
+
+def registra_utente(nome, cognome, email, data_nascita, password):
+    """Funzione per registrare un nuovo utente nel DB"""
+    try:
+        conn = connessione_db()
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO users (nome, cognome, email, data_nascita, password) VALUES (%s, %s, %s, %s, %s)",
+                       (nome, cognome, email, data_nascita, password))
+        conn.commit()
+        conn.close()
+        return True
+    except Exception as e:
+        print(f"Errore nel registrare l'utente: {e}")
+        return False
+
+@app.route('/register', methods=['POST'])
+def registrazione():
+    data = request.get_json()
+    nome = data.get('nome')
+    cognome = data.get('cognome')
+    email = data.get('email')
+    data_nascita = data.get('data_nascita')
+    password = data.get('password')
+
+    if verifica_email(email):
+        return jsonify({"success": False, "message": "L'email è già registrata."})
+    
+    if registra_utente(nome, cognome, email, data_nascita, password):
+        return jsonify({"success": True, "message": "Registrazione avvenuta con successo!"})
+    else:
+        return jsonify({"success": False, "message": "Errore durante la registrazione."})
+
+
 def get_users():
     """Recupera i dati dalla tabella user."""
     try:

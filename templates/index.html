@@ -351,9 +351,7 @@
             // Effettua una richiesta POST al server Flask per il login
             fetch('/login', {
                 method: 'POST',  // Metodo HTTP per inviare i dati
-                headers: {
-                    'Content-Type': 'application/json'  // Indica che i dati sono in formato JSON
-                },
+                headers: {'Content-Type': 'application/json' }, // Indica che i dati sono in formato JSON
                 body: JSON.stringify({ email, password })  // Converte i dati in formato JSON
             })
             .then(response => response.json())  // Analizza la risposta come JSON
@@ -376,7 +374,6 @@
         }
         
 
-        // Funzione per effettuare la registrazione
         function effettuaRegistrazione(event) {
             event.preventDefault();
             const nome = document.getElementById('nome').value;
@@ -384,13 +381,35 @@
             const email = document.getElementById('email').value;
             const dataNascita = document.getElementById('data_nascita').value;
             const password = document.getElementById('password').value;
-
-            // Simulazione di registrazione (in un caso reale, fare una richiesta al server)
-            loggedInUser = { nome, cognome, email, dataNascita, password };
-            alert("Registrazione effettuata con successo!");
-            showForm('login');
+        
+            const userData = {
+                nome: nome,
+                cognome: cognome,
+                email: email,
+                data_nascita: dataNascita,
+                password: password
+            };
+        
+            fetch('/register', {  
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(userData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    showForm('login');
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Errore durante la registrazione:', error);
+                alert('Si è verificato un errore durante la registrazione.');
+            });
         }
-
+        
         // Funzione per effettuare una prenotazione
         function effettuaPrenotazione(event) {
             event.preventDefault();
