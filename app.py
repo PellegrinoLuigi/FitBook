@@ -38,25 +38,27 @@ def get_users():
         # Stampa l'errore a schermo
         print(f"Errore durante la connessione al database o l'esecuzione della query: {e}")
         return []
-        
-@app.route('/login', methods=['POST'])
-def login():
-    data = request.get_json()
-    email = data.get('email')
-    password = data.get('password')
 
-    if not email or not password:
-        return jsonify({'error': 'Email e password sono richiesti'}), 400
+def login_user(email, password):
+    """Funzione per verificare se l'utente esiste nel DB"""
+    try:
+        # Connessione al database
+        conn = get_db_connection()
+        cursor = conn.cursor()
 
-    cursor = db.cursor(dictionary=True)
-    query = "SELECT * FROM users WHERE email = %s AND password = %s"
-    cursor.execute(query, (email, password))
-    result = cursor.fetchone()
+        # Query per verificare l'utente
+        cursor.execute("SELECT * FROM users WHERE email = %s AND password = %s", (email, password))
+        user = cursor.fetchone()
 
-    if result:
-        return jsonify({'message': 'Login effettuato con successo!', 'user': result}), 200
-    else:
-        return jsonify({'error': 'Email o password errati'}), 401
+        conn.close()
+
+        if user:
+            return True
+        else:
+            return False
+    except Exception as e:
+        print(f"Errore nel connettersi al DB: {e}")
+        return False
 
 @app.route('/')
 def home():

@@ -344,14 +344,37 @@
         // Funzione per effettuare il login
         function effettuaLogin(event) {
             event.preventDefault();
+            
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-
-            // Simulazione di login (in un caso reale, fare una richiesta al server)
-            loggedInUser = { email, password };
-            alert("Login effettuato con successo!");
-            showForm('home');
+        
+            // Effettua una richiesta POST al server Flask per il login
+            fetch('/login', {
+                method: 'POST',  // Metodo HTTP per inviare i dati
+                headers: {
+                    'Content-Type': 'application/json'  // Indica che i dati sono in formato JSON
+                },
+                body: JSON.stringify({ email, password })  // Converte i dati in formato JSON
+            })
+            .then(response => response.json())  // Analizza la risposta come JSON
+            .then(data => {
+                // Se la risposta dal server è positiva (login riuscito)
+                if (data.success) {
+                    loggedInUser = { email };  // Salva i dati dell'utente loggato
+                    alert("Login effettuato con successo!");
+                    showForm('home');  // Mostra la home
+                } else {
+                    // Se il login fallisce, mostra un messaggio di errore
+                    alert(data.message || "Login fallito. Controlla email e password.");
+                }
+            })
+            .catch(error => {
+                // Gestione degli errori della richiesta
+                console.error("Errore durante il login:", error);
+                alert("Si è verificato un errore. Riprova più tardi.");
+            });
         }
+        
 
         // Funzione per effettuare la registrazione
         function effettuaRegistrazione(event) {
