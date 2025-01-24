@@ -24,6 +24,7 @@ def get_users():
 
 @app.route('/')
 def home():
+    users = get_users()
     return render_template('index.html')
 
 if __name__ == '__main__':
