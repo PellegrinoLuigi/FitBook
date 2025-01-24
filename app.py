@@ -62,8 +62,8 @@ def registrazione():
     if verifica_email(email):
         return jsonify({"success": False, "message": "L'email è già registrata."})
     
-     # if registra_utente(nome, cognome, email, data_nascita, password):
-    if registra_utente('Mario', 'Rossi', 'mario.rossi@example.com', '1990-05-20', 'hashed_password'):
+    if registra_utente(nome, cognome, email, data_nascita, password):
+    #if registra_utente('Mario', 'Rossi', 'mario.rossi@example.com', '1990-05-20', 'hashed_password'):
         return jsonify({"success": True, "message": "Registrazione avvenuta con successo!"})
     else:
         return jsonify({"success": False, "message": "Errore durante la registrazione."})
