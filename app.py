@@ -9,7 +9,7 @@ DB_CONFIG = {
     'dbname': 'fitbook-reservation',
     'user': 'fitbook_reservation_user',
     'password': 'W858EmxOR0Hp34YiTAW5HLpaQNoK5qW9',
-    'host': 'dpg-cu3s0ptds78s73ehhd8g-a',
+    'host': 'dpg-cu3s0ptds78s73ehhd8g-a.oregon-postgres.render.com',
     'port': 5432  # Default PostgreSQL port
 }
 
