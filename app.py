@@ -40,7 +40,7 @@ def registra_utente(nome, cognome, email, data_nascita, password):
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute("INSERT INTO users (nome, cognome, email, data_nascita, password) VALUES (%s, %s, %s, %s, %s)",
+        cursor.execute("INSERT INTO users (nome, cognome, email, data_di_nascita, password) VALUES (%s, %s, %s, %s, %s)",
                        (nome, cognome, email, data_nascita, password))
         conn.commit()
         conn.close()
