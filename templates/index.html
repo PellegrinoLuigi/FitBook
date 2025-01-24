@@ -208,9 +208,12 @@
         <!-- Home -->
         <div id="home" class="form-container">
             <h1>Benvenuto su FitBook</h1>
-            <div class="welcome-text">
+            <div class="welcome-text" id="welcomeMessageHost">
                 <p>Prenota la tua sessione in palestra, gestisci le tue prenotazioni e acquista abbonamenti.</p>
                 <p>Se non sei ancora registrato, <a href="#" onclick="showForm('registrazione')">clicca qui per accedere o registrarti</a>.</p>
+            </div>
+            <div class="welcome-text" id="welcomeMessage" style="display: none;">
+                <p>Ciao, <span id="userName"></span>! Benvenuto su FitBook.</p>
             </div>
         </div>
 
@@ -340,7 +343,9 @@
                     caricaPrenotazioni();
                 }
                 // Mostra il messaggio di benvenuto e nasconde il login
-                document.getElementById('welcomeMessage').style.display = 'block';
+                document.getElementById('welcomeMessageHost').style.display = 'block';
+                document.getElementById('welcomeMessage').style.display = 'none';
+
                 document.getElementById('userName').textContent = loggedInUser.email;
                 document.querySelector('a[href="#"]').style.display = 'none'; // Nasconde il link di login
             }
