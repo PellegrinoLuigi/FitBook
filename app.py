@@ -1,5 +1,6 @@
 import os
 from flask import Flask, render_template
+import psycopg2
 
 app = Flask(__name__, static_folder='static')
 
