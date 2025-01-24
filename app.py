@@ -35,7 +35,7 @@ def get_users():
 def home():
     users = get_users()
     utente='cavolo'
-    return render_template('index.html')
+    return render_template('index.html',utente=utente, users=users)
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))  # Usa la porta specificata da Render o 5000 in locale
