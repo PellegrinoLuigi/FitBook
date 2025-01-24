@@ -16,7 +16,7 @@ def get_users():
     """Recupera i dati dalla tabella user."""
     conn = psycopg2.connect(**DB_CONFIG)
     cursor = conn.cursor()
-    cursor.execute("SELECT id, nome, cognome, email, data_di_nascita FROM user;")
+    cursor.execute("SELECT id, nome, cognome, email, data_di_nascita FROM users;")
     rows = cursor.fetchall()  # Recupera tutti i record
     conn.close()
     console.log(rows)
