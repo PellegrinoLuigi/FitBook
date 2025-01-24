@@ -15,13 +15,22 @@ conn_string = f"dbname={db_name} user={db_user} password={db_password} host={db_
 
 def get_users():
     """Recupera i dati dalla tabella user."""
-    conn = psycopg2.connect(conn_string)  # Usa la stringa di connessione
-    cursor = conn.cursor()
-    cursor.execute("SELECT id, nome, cognome, email, data_di_nascita FROM users;")
-    rows = cursor.fetchall()  # Recupera tutti i record
-    conn.close()
-    return rows
-    
+    try:
+        # Connessione al database
+        conn = psycopg2.connect(conn_string)  # Usa la stringa di connessione
+        cursor = conn.cursor()
+        
+        # Esegui la query
+        cursor.execute("SELECT id, nome, cognome, email, data_di_nascita FROM users;")
+        rows = cursor.fetchall()  # Recupera tutti i record
+        conn.close()
+        
+        return rows
+    except Exception as e:
+        # Stampa l'errore a schermo
+        print(f"Errore durante la connessione al database o l'esecuzione della query: {e}")
+        return []
+
 @app.route('/')
 def home():
     users = get_users()
