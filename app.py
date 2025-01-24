@@ -6,11 +6,11 @@ app = Flask(__name__, static_folder='static')
 
 # Configurazione del database
 DB_CONFIG = {
-    'dbname': 'fitbook-reservation',
-    'user': 'fitbook_reservation_user',
-    'password': 'W858EmxOR0Hp34YiTAW5HLpaQNoK5qW9',
-    'host': 'dpg-cu3s0ptds78s73ehhd8g-a.oregon-postgres.render.com',
-    'port': 5432  # Default PostgreSQL port
+    'DB_NAME': 'fitbook-reservation',
+    'DB_USER': 'fitbook_reservation_user',
+    'DB_PASSWORD': 'W858EmxOR0Hp34YiTAW5HLpaQNoK5qW9',
+    'DB_HOST': 'dpg-cu3s0ptds78s73ehhd8g-a.oregon-postgres.render.com',
+    'DB_PORT': 5432  # Default PostgreSQL port
 }
 
 def get_users():
