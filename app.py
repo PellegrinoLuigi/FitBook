@@ -10,6 +10,9 @@ db_password = os.getenv('DB_PASSWORD')
 db_host = os.getenv('DB_HOST')
 db_port = os.getenv('DB_PORT', 5432)  # Porta di default
 
+QUERY_ALL_USER="SELECT id, nome, cognome, email, data_di_nascita FROM users;"
+QUERY_LOGGED_USER="SELECT * FROM users WHERE email = %s AND password = %s";
+
 # Costruisci la stringa di connessione
 conn_string = f"dbname={db_name} user={db_user} password={db_password} host={db_host} port={db_port}"
 def get_db_connection():
@@ -77,7 +80,7 @@ def get_users():
         cursor = conn.cursor()
         
         # Esegui la query
-        cursor.execute("SELECT id, nome, cognome, email, data_di_nascita FROM users;")
+        cursor.execute(QUERY_ALL_USER)
         rows = cursor.fetchall()  # Recupera tutti i record
         conn.close()
         
@@ -95,7 +98,7 @@ def login_user(email, password):
         cursor = conn.cursor()
 
         # Query per verificare l'utente
-        cursor.execute("SELECT * FROM users WHERE email = %s AND password = %s", (email, password))
+        cursor.execute(QUERY_LOGGED_USER, (email, password))
         user = cursor.fetchone()
 
         conn.close()
