@@ -118,11 +118,23 @@ def login():
     email = data.get('email')
     password = data.get('password')
 
-    if login_user(email, password):
+    #if login_user(email, password):
+    if db_request_select(QUERY_LOGGED_USER,email, password):
         return jsonify({"success": True})
     else:
         return jsonify({"success": False, "message": "Credenziali errate."})
-
+        
+def db_request_select(query, *params):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    if params:
+        cursor.execute(query, params)
+    else:
+        cursor.execute(query)
+    
+    result = cursor.fetchone()
+    conn.close()
+    return result
 
 @app.route('/')
 def home():
