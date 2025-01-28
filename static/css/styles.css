@@ -33,7 +33,7 @@
         }
 
         .menu-icon {
-            display: none;
+            display: block;
             font-size: 24px;
             cursor: pointer;
             color: #80cbc4; /* Verde acqua pastello */
