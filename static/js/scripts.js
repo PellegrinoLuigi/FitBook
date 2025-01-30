@@ -195,6 +195,8 @@ console.log("JavaScript caricato correttamente!");
                 showForm('login');
                 return;
             }
+            const userId = sessionStorage.getItem('userId'); 
+            const userData = {userId: userId };
 
             fetch('/checkReservation', {  
                 method: 'POST',
