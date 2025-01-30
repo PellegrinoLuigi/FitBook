@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, jsonify
 import psycopg2
 
 app = Flask(__name__, static_folder='static')
+
 # Configurazione del database tramite variabili d'ambiente configurate su Render.com
 db_name = os.getenv('DB_NAME')
 db_user = os.getenv('DB_USER')
