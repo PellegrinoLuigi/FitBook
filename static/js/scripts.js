@@ -240,7 +240,7 @@ console.log("JavaScript caricato correttamente!");
             .catch(error => {
                 console.error('ERROR:', error);
                 console.error( error);
-                alert('Non sono disponibili corsi per la data selezionata.');
+                alert('Non risultano prenotazioni attive.');
             });
 
            
@@ -321,7 +321,7 @@ console.log("JavaScript caricato correttamente!");
                 .then(data => {
                     if (data.success) {
                         alert(`Prenotazione cancellata !'`);
-                        showForm('home');
+                        showForm('showReservation');
                     } else {
                         alert(data.message);
                     }
