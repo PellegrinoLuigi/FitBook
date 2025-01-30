@@ -22,11 +22,11 @@ FROM course
 LEFT JOIN ( 
     SELECT course_id, COUNT(*) AS reservation_count 
     FROM reservation 
-    WHERE reservation_date = %s
+    WHERE reservation_date = '2025-01-31'
     GROUP BY course_id 
 ) AS reservations ON course.id = reservations.course_id 
 JOIN trainer ON course.trainer_id = trainer.id 
-WHERE course.weekday = TO_CHAR(TO_DATE(%s, 'YYYY-MM-DD'), 'FMDay') 
+WHERE course.weekday = TO_CHAR(TO_DATE('2025-01-31', 'YYYY-MM-DD'), 'FMDay') 
 AND course.id NOT IN ( 
     SELECT course_id 
     FROM reservation 
