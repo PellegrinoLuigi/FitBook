@@ -142,14 +142,14 @@ console.log("JavaScript caricato correttamente!");
                 if (data.success) {
                     console.log("Lista prenotazioni:", data.reservationlist);
                     if (data.reservationlist) {
-                        const availableSeats = reservationlist.map(course => ({
-                            id: course.id,
-                            name: course.name,
-                            availableSeats: course.available_seats,
-                            weekday: course.weekday,
-                            startTime: course.start_time,
-                            duration: course.duration,
-                            trainer: `${course.first_name} ${course.last_name}`
+                        const availableSeats = data.reservationlist.map(course => ({
+                            id: course[0],
+                            name: course[0],
+                            availableSeats: course[0],
+                            weekday: course[0],
+                            startTime: course[0],
+                            duration:course[0],
+                            trainer:course[0]
                         }));
             
                         console.log('Available Seats:', availableSeats);
