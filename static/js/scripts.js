@@ -265,8 +265,9 @@ console.log("JavaScript caricato correttamente!");
                     console.error('Errore durante la prenotazione:', error);
                     alert('Si è verificato un errore durante la prenotazione.');
             }
+            );
+            }
         }
-    }
 
         function checkLoggedUser() {
             if (!loggedInUser) {
