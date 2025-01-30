@@ -162,7 +162,7 @@ console.log("JavaScript caricato correttamente!");
                         </tr>
                     `).join('');
                     //alert(`Prenotazione effettuata per ${userName} il ${data}`);
-                    showForm('home');
+                   // showForm('home');
                 } else {
                     alert(data.message);
                 }
@@ -173,7 +173,7 @@ console.log("JavaScript caricato correttamente!");
             });
 
             // Simulazione di prenotazione (in un caso reale, fare una richiesta al server)
-            showForm('home');
+           // showForm('home');
         }
 
         // Funzione per caricare le prenotazioni
