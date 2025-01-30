@@ -61,7 +61,7 @@ console.log("JavaScript caricato correttamente!");
             .then(data => {
                 if (data.success) {
                     loggedInUser = { email };
-                    alert("Login effettuato con successo!");
+                    //alert("Login effettuato con successo!");
                     showForm('home');
                     document.getElementById('welcomeMessage').style.display = 'block';
                     document.getElementById('userName').textContent = loggedInUser.email;
@@ -121,10 +121,10 @@ console.log("JavaScript caricato correttamente!");
                 return;
             }
 
-            const userName = document.getElementById('userEmail').value;
+            const user_Name = document.getElementById('userEmail').value;
             const data = document.getElementById('date').value;
             const userData = {
-                userName: userName,
+                userName: user_Name,
                 data: data
                
             };
