@@ -218,6 +218,11 @@ console.log("JavaScript caricato correttamente!");
         window.onload = () => {
             // Leggi la variabile di sessione
             loggedInUser = sessionStorage.getItem('loggedInUser');
+            if(loggedInUser){
+                document.getElementById('welcomeMessageHost').style.display = 'none';
+                document.getElementById('welcomeMessage').style.display = 'block';
+                document.getElementById('userName').textContent = loggedInUser.email;
+            }
             showForm('home');
            
         };
