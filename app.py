@@ -154,7 +154,7 @@ def check_reservation():
         resdate='2025-01-31'     
 
       
-        result =db_request_select_all(QUERY_CHECK_RESERVATION,( resdate,reservation_date2,user_email))
+        result =db_request_select_all2(QUERY_CHECK_RESERVATION,( resdate,reservation_date2,user_email))
        # result =db_request_select_all2(query_test,resdate,resdate)
 
         if result:
@@ -197,10 +197,10 @@ def db_request_select_all(query, *params):
     result = cursor.fetchall()
     conn.close()
     return result
-def db_request_select_all2(query, par1,par2):
+def db_request_select_all2(query, par1,par2,par3):
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute(query, (par1,par2))
+    cursor.execute(query, (par1,par2,par3))
     result = cursor.fetchall()
     conn.close()
     return result
