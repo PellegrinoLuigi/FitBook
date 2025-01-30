@@ -154,7 +154,7 @@ def check_reservation():
 
       
         #result =db_request_select_all(QUERY_CHECK_RESERVATION,( reservation_date,reservation_date,user_email))
-        result =db_request_select_all(query_test,(resdate,resdate))
+        result =db_request_select_all2(query_test,(resdate,resdate))
 
         if result:
             return jsonify({"success": True, "reservationlist": result})
@@ -167,7 +167,7 @@ def checkReservation():
     try:
         resdate='2025-01-31'
         resemail='mario.rossi@example.com'        
-        result =db_request_select_all(query_test,(resdate))
+        result =db_request_select_all2(query_test,(resdate))
         if result:
             return jsonify({"success": True, "reservationlist": reservationlist})
         else:
@@ -193,6 +193,13 @@ def db_request_select_all(query, *params):
         cursor.execute(query, params)
     else:
         cursor.execute(query)    
+    result = cursor.fetchall()
+    conn.close()
+    return result
+def db_request_select_all2(query, par1,par2):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(query, (par1,par2))
     result = cursor.fetchall()
     conn.close()
     return result
