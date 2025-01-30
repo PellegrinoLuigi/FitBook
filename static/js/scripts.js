@@ -127,7 +127,7 @@ console.log("JavaScript caricato correttamente!");
             const data = document.getElementById('date').value;
             const userData = {
                 userName: user_Name,
-                data: data
+                reservation_date: data
                
             };
             
