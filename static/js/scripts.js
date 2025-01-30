@@ -163,6 +163,7 @@ console.log("JavaScript caricato correttamente!");
                                 <td>${p.startTime}</td>
                                 <td>${p.duration}</td>
                                 <td>${p.trainer}</td>
+                                <td><button onclick="prenotaCorso('${p.id}')">Prenota</button></td>
                             </tr>
                         `).join('');
                         //alert(`Prenotazione effettuata per ${userName} il ${data}`);
