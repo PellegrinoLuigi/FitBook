@@ -3,7 +3,7 @@ from flask import Flask, render_template, request, jsonify
 import psycopg2
 
 app = Flask(__name__, static_folder='static')
-# Configurazione del database tramite variabili d'ambiente
+# Configurazione del database tramite variabili d'ambiente configurate su Render.com
 db_name = os.getenv('DB_NAME')
 db_user = os.getenv('DB_USER')
 db_password = os.getenv('DB_PASSWORD')
@@ -14,10 +14,11 @@ QUERY_ALL_USER="SELECT id, nome, cognome, email, data_di_nascita FROM users;"
 QUERY_LOGGED_USER="SELECT * FROM users WHERE email = %s AND password = %s;"
 QUERY_EMAIL_FILTERED_USER="SELECT * FROM users WHERE email = %s;"
  
-# Costruisci la stringa di connessione
+# Stringa di connessione al db
 conn_string = f"dbname={db_name} user={db_user} password={db_password} host={db_host} port={db_port}"
+
+# Connessione al DB Postgres tramite psycopg2
 def get_db_connection():
-    """Restituisce una connessione al database"""
     try:
         conn = psycopg2.connect(conn_string)
         return conn
@@ -25,7 +26,7 @@ def get_db_connection():
         print(f"Errore durante la connessione al database: {e}")
         return None
 
-def verifica_email(email):
+def checkEmail(email):
     """Funzione per verificare se l'email esiste già nel DB"""
     try:
         conn = get_db_connection()
@@ -33,14 +34,13 @@ def verifica_email(email):
         cursor.execute(QUERY_EMAIL_FILTERED_USER, email)
         user = cursor.fetchone()
         conn.close()
-
         return user is not None
     except Exception as e:
         print(f"Errore nel connettersi al DB: {e}")
         return False
 
-def registra_utente(first_name, last_name, email, birthdate, password):
-    """Funzione per registrare un nuovo utente nel DB"""
+#Funzione per registrare un nuovo utente nel DB
+def userRegister(first_name, last_name, email, birthdate, password):
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
@@ -55,7 +55,7 @@ def registra_utente(first_name, last_name, email, birthdate, password):
 
 
 @app.route('/register', methods=['POST'])
-def registrazione():
+def register():
     data = request.get_json()
     first_name = data.get('first_name')
     last_name = data.get('last_name')
@@ -63,47 +63,35 @@ def registrazione():
     birthdate = data.get('birthdate')
     password = data.get('password')
 
-    if verifica_email(email):
-        return jsonify({"success": False, "message": "L'email è già registrata."})
-    
-    if registra_utente(first_name, last_name, email, birthdate, password):
-    #if registra_utente('Mario', 'Rossi', 'mario.rossi@example.com', '1990-05-20', 'hashed_password'):
+    if checkEmail(email):
+        return jsonify({"success": False, "message": "L'email è già registrata."})    
+    if userRegister(first_name, last_name, email, birthdate, password):
         return jsonify({"success": True, "message": "Registrazione avvenuta con successo!"})
     else:
         return jsonify({"success": False, "message": "Errore durante la registrazione."})
 
-
-def get_users():
-    """Recupera i dati dalla tabella user."""
+#Recupera i dati dalla tabella user.
+def getUsers():
     try:
-        # Connessione al database
         conn = get_db_connection()
-        cursor = conn.cursor()
-        
-        # Esegui la query
+        cursor = conn.cursor()        
         cursor.execute(QUERY_ALL_USER)
         rows = cursor.fetchall()  # Recupera tutti i record
-        conn.close()
-        
+        conn.close()        
         return rows
     except Exception as e:
         # Stampa l'errore a schermo
         print(f"Errore durante la connessione al database o l'esecuzione della query: {e}")
         return []
 
-def login_user(email, password):
-    """Funzione per verificare se l'utente esiste nel DB"""
+#Funzione per verificare se l'utente esiste nel DB
+def loginUser(email, password):
     try:
-        # Connessione al database
         conn = get_db_connection()
         cursor = conn.cursor()
-
-        # Query per verificare l'utente
         cursor.execute(QUERY_LOGGED_USER, (email, password))
         user = cursor.fetchone()
-
         conn.close()
-
         if user:
             return True
         else:
@@ -112,13 +100,13 @@ def login_user(email, password):
         print(f"Errore nel connettersi al DB: {e}")
         return False
 
+
 @app.route('/login', methods=['POST'])
 def login():
     data = request.get_json()  # Riceve i dati come JSON
     email = data.get('email')
     password = data.get('password')
-
-    #if login_user(email, password):
+    #if loginUser(email, password):
     if db_request_select(QUERY_LOGGED_USER,email, password):
         return jsonify({"success": True})
     else:
@@ -130,18 +118,17 @@ def db_request_select(query, *params):
     if params:
         cursor.execute(query, params)
     else:
-        cursor.execute(query)
-    
+        cursor.execute(query)    
     result = cursor.fetchone()
     conn.close()
     return result
 
 @app.route('/')
 def home():
-    users = get_users()
+    users = getUsers()
     utente='cavolo'
     return render_template('index.html',utente=utente, users=users)
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))  # Usa la porta specificata da Render o 5000 in locale
+    port = int(os.environ.get('PORT', 5000))  # Usa la porta specificata da Render 
     app.run(host='0.0.0.0', port=port, debug=True)
