@@ -207,7 +207,7 @@ def deleteReservation():
     if result:
         return jsonify({"success": True, "message": "Prenotazione effettuata con successo!"})
     else:
-        return jsonify({"success": False, "message": "Errore durante la prenotazione."})
+        return jsonify({"success": False, "message": "Errore durante la prenotazione."+reservationId})
 
 def deleteRes(reservationId):
     try:
