@@ -37,6 +37,9 @@ AND course.id NOT IN (
 
 QUERY_CHECK_RESERVATION2= "SELECT course.id, course.name, course.capacity,course.weekday, course.start_time, course.duration FROM course;"
 
+query_test=""" SELECT course_id
+    FROM reservation 
+    WHERE reservation_date = %s """
 
  
 # Stringa di connessione al db
@@ -150,9 +153,9 @@ def check_reservation():
         resdate='2025-01-31'     
 
       
-        query_with_params = QUERY_CHECK_RESERVATION % (reservation_date, reservation_date, user_email)
-        print(query_with_params)
-        result =db_request_select_all(QUERY_CHECK_RESERVATION,( reservation_date,reservation_date,user_email))
+        #result =db_request_select_all(QUERY_CHECK_RESERVATION,( reservation_date,reservation_date,user_email))
+        result =db_request_select_all(query_test,(resdate))
+
         if result:
             return jsonify({"success": True, "reservationlist": result})
         else:
@@ -164,7 +167,7 @@ def checkReservation():
     try:
         resdate='2025-01-31'
         resemail='mario.rossi@example.com'        
-        result =db_request_select_all(QUERY_CHECK_RESERVATION2)
+        result =db_request_select_all(query_test,(resdate))
         if result:
             return jsonify({"success": True, "reservationlist": reservationlist})
         else:
