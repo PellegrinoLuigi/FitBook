@@ -14,6 +14,11 @@ console.log("JavaScript caricato correttamente!");
         // Funzione per mostrare il form selezionato
         function showForm(formId) {
             // Nascondi tutti i form
+            if (!loggedInUser) {
+                noActiveLogin();
+            }else{
+                activeLogin();
+            }
             const forms = document.querySelectorAll('.form-container');
             forms.forEach(form => form.style.display = 'none');
 
@@ -34,7 +39,7 @@ console.log("JavaScript caricato correttamente!");
                 noActiveLogin();
             } else {
                 showForm(formId);
-                noActiveLogin();
+                activeLogin();
                 if (formId === 'mostraPrenotazioni') {
                     caricaPrenotazioni();
                 }
