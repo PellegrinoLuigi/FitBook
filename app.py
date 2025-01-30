@@ -170,13 +170,13 @@ def bookCourse():
     reservationDate= data.get('reservationDate')
     reservationStatus= 'Confirmed'
     #if loginUser(email, password):
-    result = book (QUERY_LOGGED_USER,userId, reservationDate,reservationStatus)
+    result = book (userId, courseId,reservationDate,reservationStatus)
     if result:
         return jsonify({"success": True, "message": "Prenotazione effettuata con successo!"})
     else:
         return jsonify({"success": False, "message": "Errore durante la prenotazione."})
 
-def book(QUERY_BOOK_COURSE, courseId, userId, reservationDate, reservationStatus):
+def book(userId, courseId, reservationDate, reservationStatus):
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
