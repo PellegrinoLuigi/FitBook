@@ -151,7 +151,7 @@ console.log("JavaScript caricato correttamente!");
                             availableSeats: course[2],
                             weekday: course[3],
                             startTime: course[4],
-                            duration:course[5],
+                            duration:course[5]+' min.',
                             trainer:course[6] + ' ' + course[7]
                         }));
             
@@ -212,7 +212,7 @@ console.log("JavaScript caricato correttamente!");
         }
 
         // Funzione per effettuare un acquisto
-        function effettuaAcquisto(event) {
+        function buySub(event) {
             event.preventDefault();
             if (!loggedInUser) {
                 alert("Devi effettuare il login per acquistare.");
@@ -266,7 +266,7 @@ console.log("JavaScript caricato correttamente!");
                     alert('Si è verificato un errore durante la prenotazione.');
             }
         }
-
+    }
 
         function checkLoggedUser() {
             if (!loggedInUser) {
