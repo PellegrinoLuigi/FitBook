@@ -5,20 +5,13 @@
             padding: 0;
             box-sizing: border-box;
         }
-
-        /*body {
-            font-family: 'Arial', sans-serif;
-            background-color: #e0f7fa; 
-            color: #333;
-            line-height: 1.6;
-        }*/
-
+       
         body {
             background-size: auto;
             background-position: inherit;
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
+            font-family: Raleway, sans-serif;
             color: #00796b; /* Colore del testo */
             line-height: 1.6;
         }
