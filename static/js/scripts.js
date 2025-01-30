@@ -136,11 +136,11 @@ console.log("JavaScript caricato correttamente!");
                 body: JSON.stringify(userData)
             })
             .then(response => response.json())
-            .then(data => {
-                console.log('data');
-                console.log(data);
-                if (data) {
-                    const availableSeats = data.reservationlist.map(course => ({
+            .then(res => {
+                console.log('res');
+                console.log(res);
+                if (res) {
+                    const availableSeats = res.reservationlist.map(course => ({
                         id: course.id,
                         name: course.name,
                         availableSeats: course.available_seats,
@@ -165,7 +165,7 @@ console.log("JavaScript caricato correttamente!");
                     //alert(`Prenotazione effettuata per ${userName} il ${data}`);
                    // showForm('home');
                 } else {
-                    alert(data.message);
+                    alert(res.message);
                 }
             })
             .catch(error => {
