@@ -124,6 +124,7 @@
             font-size: 16px;
             transition: background-color 0.3s ease;
             margin: 0 auto;
+            display: block;
         }
 
         form input[type="submit"]:hover {
