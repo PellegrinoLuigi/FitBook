@@ -14,12 +14,12 @@
         }*/
 
         body {
-            background-size: cover;
-            background-position: center;
+            background-size: auto;
+            background-position: inherit;
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
-            color: white; /* Colore del testo */
+            color: #00796b; /* Colore del testo */
             line-height: 1.6;
         }
 
@@ -68,10 +68,10 @@
         /* Contenuto principale */
         .container {
             max-width: 800px;
-            margin: 50px auto;
+            margin: 150px auto;
             padding: 20px;
             background-color: rgba(255, 255, 255, 0.9); /* Bianco con trasparenza */
-            border-radius: 8px;
+            border-radius: 60px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
