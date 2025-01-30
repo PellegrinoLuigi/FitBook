@@ -145,14 +145,7 @@ def login():
 def check_reservation():
     try:
         data = request.get_json()
-
-        # Simulazione di verifica prenotazione (da sostituire con logica DB)
-        if not data or 'email' not in data:
-            return jsonify({"success": False, "message": "Dati non validi"}), 400
-
-        # Esempio di risposta di successo
-        return jsonify({"success": True, "availableSeats": 5}), 200
-
+        return db_request_select(QUERY_CHECK_RESERVATION2)
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
 
