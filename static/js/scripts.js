@@ -121,7 +121,7 @@ console.log("JavaScript caricato correttamente!");
                 return;
             }
 
-            const userName = document.getElementById('userName').value;
+            const userName = document.getElementById('userEmail').value;
             const data = document.getElementById('date').value;
             const userData = {
                 userName: userName,
