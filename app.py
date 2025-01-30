@@ -158,7 +158,7 @@ def checkReservation():
     try:
         resdate='2025-01-31'
         resemail='mario.rossi@example.com'        
-        result =db_request_select_all(QUERY_CHECK_RESERVATION,(resdate,resdate,resemail))
+        result =db_request_select_all(QUERY_CHECK_RESERVATION2)
         if result:
             return jsonify({"success": True, "reservationlist": reservationlist})
         else:
