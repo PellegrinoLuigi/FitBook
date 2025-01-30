@@ -165,7 +165,7 @@ console.log("JavaScript caricato correttamente!");
                                 <td>${p.startTime}</td>
                                 <td>${p.duration}</td>
                                 <td>${p.trainer}</td>
-                                <td><button class="prenota-bottone" onclick="bookCourse('${p.id}')">Prenota</button></td>
+                                <td><button class="prenota-bottone" onclick="confirmedReservartion('${p.id}')">Prenota</button></td>
                             </tr>
                         `).join('');
                         //alert(`Prenotazione effettuata per ${userName} il ${data}`);
@@ -275,7 +275,7 @@ console.log("JavaScript caricato correttamente!");
            
         };
 
-        function bookCourse(courseId) {
+        function confirmedReservartion(courseId) {
             if(checkLoggedUser){
                 const user_Name = sessionStorage.getItem('userEmail'); 
                 const userId = sessionStorage.getItem('userId'); 
@@ -286,7 +286,7 @@ console.log("JavaScript caricato correttamente!");
                     reservationDate: reservationDate
                 };
                 
-                fetch('/bookCourse', {  
+                fetch('/confirmedReservartion', {  
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify(userData)
@@ -295,6 +295,34 @@ console.log("JavaScript caricato correttamente!");
                 .then(data => {
                     if (data.success) {
                         alert(`Prenotazione effettuata per ${user_Name} il ${data.reservation_date}`);
+                        showForm('home');
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Errore durante la prenotazione:', error);
+                    alert('Si è verificato un errore durante la prenotazione.');
+            }
+            );
+            }
+        }
+
+        function deleteReservation(reservationId) {
+            if(checkLoggedUser){               
+                const userData = {
+                    reservationId: reservationId                    
+                };
+                
+                fetch('/deleteReservation', {  
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(userData)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(`Prenotazione cancellata !'`);
                         showForm('home');
                     } else {
                         alert(data.message);

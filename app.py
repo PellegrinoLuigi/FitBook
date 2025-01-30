@@ -43,7 +43,7 @@ JOIN course c ON r.course_id = c.id
 WHERE   r.reservation_status = 'Confirmed'
 AND r.user_id = %s ;"""
 
-
+QUERY_DELETE_RESERVATION="DELETE FROM reservation WHERE id = %s;"
 
 
  
@@ -169,8 +169,8 @@ def check_reservation():
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
 
-@app.route('/bookCourse', methods=['POST'])
-def bookCourse():
+@app.route('/confirmedReservartion', methods=['POST'])
+def confirmedReservartion():
     data = request.get_json()  # Riceve i dati come JSON
     userId = data.get('userId')
     courseId = data.get('courseId')
@@ -183,12 +183,36 @@ def bookCourse():
     else:
         return jsonify({"success": False, "message": "Errore durante la prenotazione."})
 
+
 def book(userId, courseId, reservationDate, reservation_status):
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
         #"INSERT INTO reservation (user_id, course_id, reservation_date, reservation_status) VALUES (%s, %s, %s, %s);
         cursor.execute(QUERY_BOOK_COURSE, (userId,courseId,  reservationDate, reservation_status))                     
+        conn.commit()
+        conn.close()
+        return True
+    except Exception as e:
+        print(f"Errore nel registrare prenotazione: {e}")
+        return False
+
+@app.route('/deleteReservation', methods=['POST'])
+def deleteReservation():
+    data = request.get_json()  # Riceve i dati come JSON
+    reservationId = data.get('reservationId')    
+    result = deleteRes (reservationId)
+    if result:
+        return jsonify({"success": True, "message": "Prenotazione effettuata con successo!"})
+    else:
+        return jsonify({"success": False, "message": "Errore durante la prenotazione."})
+
+def deleteRes(reservationId):
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        #"INSERT INTO reservation (user_id, course_id, reservation_date, reservation_status) VALUES (%s, %s, %s, %s);
+        cursor.execute(QUERY_DELETE_RESERVATION, (reservationId))                     
         conn.commit()
         conn.close()
         return True
