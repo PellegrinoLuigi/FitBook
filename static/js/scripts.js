@@ -63,6 +63,7 @@ console.log("JavaScript caricato correttamente!");
                     loggedInUser = { email };
                     //alert("Login effettuato con successo!");
                     showForm('home');
+                    sessionStorage.setItem('loggedInUser',loggedInUser);
                     document.getElementById('welcomeMessage').style.display = 'block';
                     document.getElementById('userName').textContent = loggedInUser.email;
                     document.querySelector('a[href="#"]').style.display = 'none'; // Nasconde il login
@@ -214,8 +215,12 @@ console.log("JavaScript caricato correttamente!");
         }
 
         // Mostra la Home di default al caricamento della pagina
-        window.onload = () => showForm('home');
-
+        window.onload = () => {
+            // Leggi la variabile di sessione
+            loggedInUser = sessionStorage.getItem('loggedInUser');
+            showForm('home');
+           
+        };
         function effettuaLogout() {
             loggedInUser = null;
             document.getElementById('welcomeMessage').style.display = 'none'; // Nasconde il messaggio di benvenuto
