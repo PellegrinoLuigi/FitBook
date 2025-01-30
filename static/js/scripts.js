@@ -228,11 +228,7 @@ console.log("JavaScript caricato correttamente!");
             // Leggi la variabile di sessione
             loggedInUser = sessionStorage.getItem('loggedInUser');
             if(loggedInUser){
-                document.getElementById('welcomeMessageHost').style.display = 'none';
-                document.getElementById('welcomeMessage').style.display = 'block';
-                document.getElementById('loginLink').style.display = 'none';
-                document.getElementById('logoutLink').style.display = 'block';
-                document.getElementById('userName').textContent = loggedInUser.email;
+                activeLogin();
             }
             showForm('home');
            
