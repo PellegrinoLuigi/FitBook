@@ -153,8 +153,8 @@ def check_reservation():
         reservation_date2 = data.get('reservation_date')
 
       
-       # result =db_request_select_all2(QUERY_CHECK_RESERVATION,resdate,reservation_date2,user_email)
-        result =db_request_select_all(QUERY_CHECK_RESERVATION,(reservation_date,reservation_date2,user_email))
+        result =db_request_select_all2(QUERY_CHECK_RESERVATION,reservation_date,reservation_date2,user_email)
+        #result =db_request_select_all(QUERY_CHECK_RESERVATION,(reservation_date,reservation_date2,user_email))
 
        # result =db_request_select_all2(query_test,resdate,resdate)
 
