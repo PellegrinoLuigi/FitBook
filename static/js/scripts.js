@@ -136,7 +136,7 @@ console.log("JavaScript caricato correttamente!");
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(userData)
             })
-            .then(response =>{console.log(response); response.json()})
+            .then(response =>{ return response.json();})
             .then(data => {
                 console.log("Dati JSON ricevuti:", data);
                 if (data.success) {
