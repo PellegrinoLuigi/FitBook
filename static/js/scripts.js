@@ -137,38 +137,43 @@ console.log("JavaScript caricato correttamente!");
                 body: JSON.stringify(userData)
             })
             .then(response =>{console.log(response); response.json()})
-            .then(reservationlist => {
-                console.log('reservationlist');
-                console.log(reservationlist);
-                if (reservationlist) {
-                    const availableSeats = reservationlist.map(course => ({
-                        id: course.id,
-                        name: course.name,
-                        availableSeats: course.available_seats,
-                        weekday: course.weekday,
-                        startTime: course.start_time,
-                        duration: course.duration,
-                        trainer: `${course.first_name} ${course.last_name}`
-                    }));
-        
-                    console.log('Available Seats:', availableSeats);
-        
-                    const tbody = document.querySelector('#availableSeatsTable tbody');
-                    tbody.innerHTML = availableSeats.map(p => `
-                        <tr>
-                            <td>${p.name}</td>
-                            <td>${p.availableSeats}</td>
-                            <td>${p.startTime}</td>
-                            <td>${p.duration}</td>
-                            <td>${p.trainer}</td>
-                        </tr>
-                    `).join('');
-                    //alert(`Prenotazione effettuata per ${userName} il ${data}`);
-                   // showForm('home');
+            .then(data => {
+                console.log("Dati JSON ricevuti:", data);
+                if (data.success) {
+                    console.log("Lista prenotazioni:", data.reservationlist);
+                    if (data.reservationlist) {
+                        const availableSeats = reservationlist.map(course => ({
+                            id: course.id,
+                            name: course.name,
+                            availableSeats: course.available_seats,
+                            weekday: course.weekday,
+                            startTime: course.start_time,
+                            duration: course.duration,
+                            trainer: `${course.first_name} ${course.last_name}`
+                        }));
+            
+                        console.log('Available Seats:', availableSeats);
+            
+                        const tbody = document.querySelector('#availableSeatsTable tbody');
+                        tbody.innerHTML = availableSeats.map(p => `
+                            <tr>
+                                <td>${p.name}</td>
+                                <td>${p.availableSeats}</td>
+                                <td>${p.startTime}</td>
+                                <td>${p.duration}</td>
+                                <td>${p.trainer}</td>
+                            </tr>
+                        `).join('');
+                        //alert(`Prenotazione effettuata per ${userName} il ${data}`);
+                       // showForm('home');
+                    } else {
+                        alert(res.message);
+                    }
                 } else {
-                    alert(res.message);
+                    console.error("Errore:", data.error);
+                    alert("Errore nella richiesta: " + data.error);
                 }
-            })
+            })            
             .catch(error => {
                 console.error('ERROR:', error);
                 console.error( error);
