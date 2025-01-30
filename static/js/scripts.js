@@ -29,7 +29,7 @@ console.log("JavaScript caricato correttamente!");
         // Funzione per verificare se l'utente è loggato
         function checkLogin(formId) {
             if (!loggedInUser) {
-                alert("Devi effettuare il login per accedere a questa funzionalità.");
+                //alert("Devi effettuare il login per accedere a questa funzionalità.");
                 showForm('login');
             } else {
                 showForm(formId);
