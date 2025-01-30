@@ -44,6 +44,8 @@ WHERE   r.reservation_status = 'Confirmed'
 AND r.user_id = %s ;"""
 
 QUERY_DELETE_RESERVATION="DELETE FROM reservation WHERE id = %s;"
+QUERY_LOGICAL_DELETE_RESERVATION="UPDATE reservation SET reservation_status = 'Cancelled' WHERE id = %s;"
+
 
 
  
@@ -211,13 +213,12 @@ def deleteRes(reservationId):
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        #"INSERT INTO reservation (user_id, course_id, reservation_date, reservation_status) VALUES (%s, %s, %s, %s);
-        cursor.execute(QUERY_DELETE_RESERVATION, (reservationId))                     
+        cursor.execute(QUERY_LOGICAL_DELETE_RESERVATION, (reservationId))                     
         conn.commit()
         conn.close()
         return True
     except Exception as e:
-        print(f"Errore nel registrare prenotazione: {e}")
+        print(f"Errore nel CANCELLARE prenotazione: {e}")
         return False
 
 @app.route('/retrieveReservation', methods=['POST'])
