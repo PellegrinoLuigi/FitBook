@@ -37,6 +37,13 @@ AND course.id NOT IN (
 
 QUERY_BOOK_COURSE = "INSERT INTO reservation (user_id, course_id, reservation_date, reservation_status) VALUES (%s, %s, %s, %s);"
 
+QUERY_BOOKED_COURSES = """SELECT r.id as reservation_id, c.name AS course_name,DATE(r.reservation_date) AS reservation_date , c.start_time AS reservation_time 
+FROM reservation r
+JOIN course c ON r.course_id = c.id
+WHERE   r.reservation_status = 'Confirmed'
+AND r.user_id = %s ;"""
+
+
 
 
  
@@ -156,7 +163,7 @@ def check_reservation():
 
 
         if result:
-            return jsonify({"success": True, "reservationlist": result})
+            return jsonify({"success": True, "courselist": result})
         else:
             print("Nessun risultato trovato")
     except Exception as e:
@@ -188,6 +195,17 @@ def book(userId, courseId, reservationDate, reservation_status):
     except Exception as e:
         print(f"Errore nel registrare prenotazione: {e}")
         return False
+
+@app.route('/retrieveReservation', methods=['POST'])
+def retrieveReservation():
+    data = request.get_json()
+    userId = data.get('userId')
+    result = db_request_select_all(QUERY_BOOKED_COURSES,userId)
+    if result:
+        return jsonify({"success": True, "reservationlist": result})
+    else:
+        return jsonify({"success": False, "message": "Errore durante la prenotazione."})
+    
 
 def db_request_select(query, *params):
     conn = get_db_connection()

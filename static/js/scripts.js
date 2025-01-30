@@ -143,9 +143,9 @@ console.log("JavaScript caricato correttamente!");
             .then(data => {
                 console.log("Dati JSON ricevuti:", data);
                 if (data.success) {
-                    console.log("Lista prenotazioni:", data.reservationlist);
-                    if (data.reservationlist) {
-                        const availableSeats = data.reservationlist.map(course => ({
+                    console.log("Lista prenotazioni:", data.courselist);
+                    if (data.courselist) {
+                        const availableSeats = data.courselist.map(course => ({
                             id: course[0],
                             name: course[1],
                             availableSeats: course[2],
@@ -196,19 +196,56 @@ console.log("JavaScript caricato correttamente!");
                 return;
             }
 
-            // Simulazione di prenotazioni (in un caso reale, fare una richiesta al server)
-            const prenotazioni = [
-                { nome: "Mario Rossi", data: "2023-10-15" },
-                { nome: "Luigi Verdi", data: "2023-10-20" }
-            ];
+            fetch('/checkReservation', {  
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(userData)
+            })
+            .then(response =>{ return response.json();})
+            .then(data => {
+                console.log("Dati JSON ricevuti:", data);
+                if (data.success) {
+                    console.log("Lista prenotazioni:", data.reservationlist);
+                    if (data.reservationlist) {
+                        const availableSeats = data.reservationlist.map(reservation => ({
+                            id: reservation[0],
+                            name: reservation[1],
+                            data: reservation[2],
+                            startTime: reservation[3]                           
+                        }));
+            
+                        console.log('Available Seats:', availableSeats);
+                        document.getElementById('availableSeats').style.display = 'block';
 
-            const tbody = document.querySelector('#prenotazioniTable tbody');
-            tbody.innerHTML = prenotazioni.map(p => `
-                <tr>
-                    <td>${p.nome}</td>
-                    <td>${p.data}</td>
-                </tr>
-            `).join('');
+                        const tbody = document.querySelector('#prenotazioniTable tbody');
+                        tbody.innerHTML = prenotazioni.map(p => `
+                            <tr>
+                                <td>${p.name}</td>
+                                <td>${p.data}</td>
+                                <td>${p.startTime}</td>
+                                <td><button class="prenota-bottone" onclick="deleteReservation('${p.id}')">Cancella</button></td>
+                            </tr>
+                        `).join('');
+                       
+                        //alert(`Prenotazione effettuata per ${userName} il ${data}`);
+                       // showForm('home');
+                    } else {
+                        alert(res.message);
+                    }
+                } else {
+                    console.error("Errore:", data.error);
+                    alert("Errore nella richiesta: " + data.error);
+                }
+            })            
+            .catch(error => {
+                console.error('ERROR:', error);
+                console.error( error);
+                alert('Non sono disponibili corsi per la data selezionata.');
+            });
+
+           
+
+            
         }
 
         // Funzione per effettuare un acquisto
