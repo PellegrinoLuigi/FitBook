@@ -22,7 +22,7 @@ FROM course
 LEFT JOIN ( 
     SELECT course_id, COUNT(*) AS reservation_count 
     FROM reservation 
-    WHERE reservation_date = '2025-01-31'
+    WHERE reservation_date = '%s'
     GROUP BY course_id 
 ) AS reservations ON course.id = reservations.course_id 
 JOIN trainer ON course.trainer_id = trainer.id 
@@ -149,7 +149,7 @@ def check_reservation():
         reservation_date = data.get('reservation_date')
         resdate='2025-01-31'
         #result=db_request_select_all(QUERY_CHECK_RESERVATION2)
-        result =db_request_select_all(QUERY_CHECK_RESERVATION,( user_email))
+        result =db_request_select_all(QUERY_CHECK_RESERVATION,( resdate,user_email))
         if result:
             return jsonify({"success": True, "reservationlist": result})
         else:
