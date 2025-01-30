@@ -18,9 +18,9 @@
         <div class="menu-icon" onclick="toggleMenu()">&#9776;</div>
         <nav id="navMenu">
             <a href="#" onclick="showForm('home')">Home</a>
-            <a href="#" onclick="checkLogin('prenotazione')" id="prenotazioneLink">Prenota Corsi</a>
-            <a href="#" onclick="checkLogin('mostraPrenotazioni')" id="mostraPrenotazioniLink">Le tue Prenotazioni</a>
-            <a href="#" onclick="checkLogin('acquista')" id="acquistaLink">Acquista</a>
+            <a href="#" onclick="checkLogin('reservation')" id="reservationLink">Prenota Corsi</a>
+            <a href="#" onclick="checkLogin('showReservation')" id="showReservationLink">Le tue Prenotazioni</a>
+            <a href="#" onclick="checkLogin('buySub')" id="buySubLink">Acquista</a>
             <a href="#" onclick="showForm('login')" id="loginLink">Login</a>
             <a href="#" onclick="effettuaLogout()" id="logoutLink">Logout</a>
         </nav>
@@ -48,9 +48,9 @@
         </div>
 
         <!-- Form Effettua Prenotazione -->
-        <div id="prenotazione" class="form-container" style="display: none;">
+        <div id="reservation" class="form-container" style="display: none;">
             <h1>Ricerca i tuoi corsi preferiti</h1>
-            <form id="prenotazioneForm" onsubmit="checkReservation(event)">
+            <form id="reservationForm" onsubmit="checkReservation(event)">
                 <label for="date">INSERISCI DATA:</label>
                 <input type="date" id="date" name="date"  value="2025-01-31" required>
                 <input type="submit" value="CERCA">
@@ -88,7 +88,7 @@
         </div>
 
         <!-- Tabella Mostra Prenotazioni -->
-        <div id="mostraPrenotazioni" class="form-container" style="display: none;">
+        <div id="showReservation" class="form-container" style="display: none;">
             <h1>Le tue Prenotazioni</h1>
             <table id="prenotazioniTable">
                 <thead>
@@ -104,9 +104,9 @@
         </div>
 
         <!-- Form Acquista Abbonamento -->
-        <div id="acquista" class="form-container" style="display: none;">
+        <div id="buySub" class="form-container" style="display: none;">
             <h1>Acquista Abbonamento</h1>
-            <form id="acquistaForm" onsubmit="effettuaAcquisto(event)">
+            <form id="buySubForm" onsubmit="effettuaAcquisto(event)">
                 <label for="abbonamento">Seleziona durata abbonamento:</label>
                 <select id="abbonamento" name="abbonamento" required>
                     <option value="1">1 Mese - €30</option>
@@ -122,7 +122,7 @@
         <!-- Form Login -->
         <div id="login" class="form-container" style="display: none;">
             <h1>Login</h1>
-            <form id="loginForm" onsubmit="effettuaLogin(event)">
+            <form id="loginForm" onsubmit="login(event)">
                 <label for="email">Email:</label>
                 <input type="email" id="email" name="email" required>
 
@@ -139,7 +139,7 @@
         <!-- Form Registrazione -->
         <div id="registrazione" class="form-container" style="display: none;">
             <h1>Registrazione</h1>
-            <form id="registrazioneForm" onsubmit="effettuaRegistrazione(event)">
+            <form id="registrazioneForm" onsubmit="registration(event)">
                 <label for="firstname">Nome:</label>
                 <input type="text" id="firstname" name="firstname" required>
 

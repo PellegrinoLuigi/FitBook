@@ -40,15 +40,15 @@ console.log("JavaScript caricato correttamente!");
             } else {
                 showForm(formId);
                 activeLogin();
-                if (formId === 'mostraPrenotazioni') {
-                    caricaPrenotazioni();
+                if (formId === 'showReservation') {
+                    retrieveReservation();
                 }
-                document.getElementById('userName').textContent = loggedInUser.email;
+              //  document.getElementById('userName').textContent = loggedInUser.email;
             }
         }
 
         // Funzione per effettuare il login
-        function effettuaLogin(event) {
+        function login(event) {
             event.preventDefault();
             
             const email = document.getElementById('email').value;
@@ -80,7 +80,7 @@ console.log("JavaScript caricato correttamente!");
             });
         }        
 
-        function effettuaRegistrazione(event) {
+        function registration(event) {
             event.preventDefault();
             const firstname = document.getElementById('firstname').value;
             const lastname = document.getElementById('lastname').value;
@@ -186,7 +186,7 @@ console.log("JavaScript caricato correttamente!");
         }
 
         // Funzione per caricare le prenotazioni
-        function caricaPrenotazioni() {
+        function retrieveReservation() {
             if (!loggedInUser) {
                 alert("Devi effettuare il login per visualizzare le prenotazioni.");
                 showForm('login');
