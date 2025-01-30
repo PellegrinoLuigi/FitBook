@@ -146,7 +146,7 @@ def check_reservation():
         user_email = data.get('userName')
         reservation_date = data.get('reservation_date')
         resdate='2025-01-31'
-        reservationlist =db_request_select_all(QUERY_CHECK_RESERVATION,reservation_date,reservation_date,user_email)
+        reservationlist =db_request_select_all(QUERY_CHECK_RESERVATION,(reservation_date,reservation_date,user_email))
 
         return jsonify({"success": True, "reservationlist": reservationlist})
     except Exception as e:
