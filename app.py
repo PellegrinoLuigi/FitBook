@@ -154,7 +154,7 @@ def check_reservation():
         resdate='2025-01-31'     
 
       
-        result =db_request_select_all2(QUERY_CHECK_RESERVATION,( resdate,reservation_date2,user_email))
+        result =db_request_select_all2(QUERY_CHECK_RESERVATION,resdate,reservation_date2,user_email)
        # result =db_request_select_all2(query_test,resdate,resdate)
 
         if result:
