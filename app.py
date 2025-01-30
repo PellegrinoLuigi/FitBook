@@ -50,7 +50,8 @@ def get_db_connection():
     except Exception as e:
         print(f"Errore durante la connessione al database: {e}")
         return None
-
+        
+@app.route('/checkEmail', methods=['POST'])
 def checkEmail(email):
     """Funzione per verificare se l'email esiste già nel DB"""
     try:
