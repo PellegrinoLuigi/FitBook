@@ -22,11 +22,11 @@ FROM course
 LEFT JOIN ( 
     SELECT course_id, COUNT(*) AS reservation_count 
     FROM reservation 
-    WHERE reservation_date = '%s'
+    WHERE reservation_date = %s
     GROUP BY course_id 
 ) AS reservations ON course.id = reservations.course_id 
 JOIN trainer ON course.trainer_id = trainer.id 
-WHERE course.weekday = TO_CHAR(TO_DATE('2025-01-31', 'YYYY-MM-DD'), 'FMDay') 
+WHERE course.weekday = TO_CHAR(TO_DATE(%s, 'YYYY-MM-DD'), 'FMDay') 
 AND course.id NOT IN ( 
     SELECT course_id 
     FROM reservation 
@@ -147,13 +147,12 @@ def check_reservation():
         data = request.get_json()
         user_email = data.get('userName')
         reservation_date = data.get('reservation_date')
-        resdate='2025-01-31'
-        date_obj = datetime.strptime(reservation_date, '%d-%m-%Y')
+        resdate='2025-01-31'     
 
-        # Ora puoi formattarla nel formato 'YYYY-MM-DD' per PostgreSQL
-        formatted_date = date_obj.strftime('%Y-%m-%d')
-        #result=db_request_select_all(QUERY_CHECK_RESERVATION2)
-        result =db_request_select_all(QUERY_CHECK_RESERVATION,( formatted_date,user_email))
+      
+        query_with_params = QUERY_CHECK_RESERVATION % (reservation_date, reservation_date, user_email)
+        print(query_with_params)
+        result =db_request_select_all(QUERY_CHECK_RESERVATION,( reservation_date,reservation_date,user_email))
         if result:
             return jsonify({"success": True, "reservationlist": result})
         else:
