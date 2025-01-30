@@ -154,6 +154,17 @@ def check_reservation():
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
 
+def checkReservation():
+    try:
+        resdate='2025-01-31'
+        resemail='mario.rossi@example.com'        
+        result =db_request_select_all(QUERY_CHECK_RESERVATION,(resdate,resdate,resemail))
+        if result:
+            return jsonify({"success": True, "reservationlist": reservationlist})
+        else:
+            print("Nessun risultato trovato")
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
 
 def db_request_select(query, *params):
     conn = get_db_connection()
@@ -179,7 +190,7 @@ def db_request_select_all(query, *params):
 
 @app.route('/')
 def home():
-    users = getUsers()
+    users = checkReservation()
     utente='cavolo'
     return render_template('index.html',utente=utente, users=users)
 
