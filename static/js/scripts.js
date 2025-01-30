@@ -222,6 +222,7 @@ console.log("JavaScript caricato correttamente!");
            
         };
         function effettuaLogout() {
+            sessionStorage.removeItem('loggedInUser');
             loggedInUser = null;
             document.getElementById('welcomeMessage').style.display = 'none'; // Nasconde il messaggio di benvenuto
             document.querySelector('a[href="#"]').style.display = 'block'; // Mostra di nuovo il link di login
