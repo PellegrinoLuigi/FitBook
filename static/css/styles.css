@@ -27,6 +27,7 @@
             position: sticky;
             top: 0;
             z-index: 1000;
+            font-family: Raleway, sans-serif;
         }
 
         .logo {
@@ -73,6 +74,7 @@
             margin-bottom: 20px;
             font-size: 28px;
             color: #00796b; /* Verde scuro pastello */
+            font-family: Raleway, sans-serif;
         }
 
         .welcome-text {
@@ -97,6 +99,7 @@
             font-weight: bold;
             color: #00796b; /* Verde scuro pastello */
             text-align:center;
+            font-family: Raleway, sans-serif;
         }
 
         form input[type="text"],
@@ -111,6 +114,7 @@
             border: 1px solid #ccc;
             border-radius: 4px;
             background-color: rgba(255, 255, 255, 0.8); /* Bianco con trasparenza */
+            font-family: Raleway, sans-serif;
         }
 
         form input[type="submit"] {
@@ -123,12 +127,14 @@
             cursor: pointer;
             font-size: 16px;
             transition: background-color 0.3s ease;
-            margin: 0 auto;
+            margin: 30px auto;
             display: block;
+            font-family: Raleway, sans-serif;
         }
 
         form input[type="submit"]:hover {
             background-color: #004d40; /* Verde più scuro al passaggio del mouse */
+            font-family: Raleway, sans-serif;
         }
 
         .switch-form {
