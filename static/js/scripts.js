@@ -65,8 +65,9 @@ console.log("JavaScript caricato correttamente!");
                     loggedInUser = { email };
                     activeLogin();
                     showForm('home');
-                    sessionStorage.setItem('loggedInUser',loggedInUser);                   
-                    document.getElementById('userName').textContent = data.userFullName;
+                    sessionStorage.setItem('loggedInUser',loggedInUser);      
+                    sessionStorage.setItem('userName',data.userFullName);                        
+                    //document.getElementById('userName').textContent = data.userFullName;
                 } else {
                     alert(data.message || "Login fallito. Controlla email e password.");
                 }
