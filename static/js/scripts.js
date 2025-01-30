@@ -169,8 +169,9 @@ console.log("JavaScript caricato correttamente!");
                 }
             })
             .catch(error => {
-                console.error('Errore durante la registrazione:', error);
-                alert('Si è verificato un errore durante la registrazione.');
+                console.error('ERROR:', error);
+                console.error( error);
+                alert('Si è verificato un errore durante il recupero dei corsi.');
             });
 
             // Simulazione di prenotazione (in un caso reale, fare una richiesta al server)
