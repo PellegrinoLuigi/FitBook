@@ -18,8 +18,8 @@
         <div class="menu-icon" onclick="toggleMenu()">&#9776;</div>
         <nav id="navMenu">
             <a href="#" onclick="showForm('home')">Home</a>
-            <a href="#" onclick="checkLogin('prenotazione')" id="prenotazioneLink">Effettua Prenotazione</a>
-            <a href="#" onclick="checkLogin('mostraPrenotazioni')" id="mostraPrenotazioniLink">Mostra Prenotazioni</a>
+            <a href="#" onclick="checkLogin('prenotazione')" id="prenotazioneLink">Prenota Corsi</a>
+            <a href="#" onclick="checkLogin('mostraPrenotazioni')" id="mostraPrenotazioniLink">Prenotazioni Attive</a>
             <a href="#" onclick="checkLogin('acquista')" id="acquistaLink">Acquista</a>
             <a href="#" onclick="showForm('login')" id="loginLink">Login</a>
             <a href="#" onclick="effettuaLogout()" id="logoutLink">Logout</a>
@@ -37,7 +37,13 @@
                 <p>Se non sei ancora registrato,{{ users }}! <a href="#" onclick="showForm('login')">clicca qui per accedere o registrarti</a>.</p>
             </div>
             <div class="welcome-text" id="welcomeMessage" style="display: none;">
-                <p>Ciao, <span id="userNamePlaceholder"></span>! Benvenuto su FitBook.</p><span id="userEmailPlaceholder" style="display: none;"></span>
+                <p>Ciao, <span id="userNamePlaceholder"></span>! Bentornato su FitBook.</p><span id="userEmailPlaceholder" style="display: none;"></span>
+            </div>
+            <div class="welcome-sub" id="welcomeSub" style="display: none;">
+                <p>Ti ricordiamo che il tuo abbonamento è ancora attivo e che scadrà in data: <span id="subExpiredDate"></span>.</p>
+            </div>
+            <div class="welcome-no-sub" id="welcomeNoSub" style="display: none;">
+                <p>Ti ricordiamo che il tuo abbonamento risulta scaduto, vai nella sezione abbonamenti se vuoi procedere con un nuovo acquisto!<span id="subExpired"></span>.</p>
             </div>
         </div>
 
