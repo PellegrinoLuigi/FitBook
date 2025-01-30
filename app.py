@@ -153,10 +153,10 @@ def check_reservation():
         reservation_date2 = data.get('reservation_date')
 
       
-        result =db_request_select_all2(QUERY_CHECK_RESERVATION,reservation_date,reservation_date2,user_email)
+        result =db_request_select_all_3_params(QUERY_CHECK_RESERVATION,reservation_date,reservation_date2,user_email)
+        # in errore di tuple index out of range"
         #result =db_request_select_all(QUERY_CHECK_RESERVATION,(reservation_date,reservation_date2,user_email))
 
-       # result =db_request_select_all2(query_test,resdate,resdate)
 
         if result:
             return jsonify({"success": True, "reservationlist": result})
@@ -165,17 +165,7 @@ def check_reservation():
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
 
-def checkReservation():
-    try:
-        resdate='2025-01-31'
-        resemail='mario.rossi@example.com'        
-        result =db_request_select_all2(query_test,(resdate))
-        if result:
-            return jsonify({"success": True, "reservationlist": reservationlist})
-        else:
-            print("Nessun risultato trovato")
-    except Exception as e:
-        return jsonify({"success": False, "error": str(e)}), 500
+
 
 def db_request_select(query, *params):
     conn = get_db_connection()
@@ -198,7 +188,8 @@ def db_request_select_all(query, *params):
     result = cursor.fetchall()
     conn.close()
     return result
-def db_request_select_all2(query, par1,par2,par3):
+    
+def db_request_select_all_3_params(query, par1,par2,par3):
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute(query, (par1,par2,par3))
