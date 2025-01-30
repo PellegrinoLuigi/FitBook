@@ -50,7 +50,7 @@ def get_db_connection():
     except Exception as e:
         print(f"Errore durante la connessione al database: {e}")
         return None
-        
+
 @app.route('/checkEmail', methods=['POST'])
 def checkEmail(email):
     """Funzione per verificare se l'email esiste già nel DB"""
@@ -150,7 +150,7 @@ def check_reservation():
         result=db_request_select_all(QUERY_CHECK_RESERVATION2)
         #result =db_request_select_all(QUERY_CHECK_RESERVATION,(reservation_date,reservation_date,user_email))
         if result:
-            return jsonify({"success": True, "reservationlist": reservationlist})
+            return jsonify({"success": True, "reservationlist": result})
         else:
             print("Nessun risultato trovato")
     except Exception as e:
