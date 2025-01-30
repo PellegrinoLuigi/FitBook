@@ -141,10 +141,14 @@ def login():
 
 @app.route('/checkReservation', methods=['POST'])
 def checkReservation():
-    data = request.get_json()  # Riceve i dati come JSON
-    user_email = data.get('userName')
-    reservation_date = data.get('reservation_date')
-    return db_request_select(QUERY_CHECK_RESERVATION2)
+    try:
+        data = request.get_json()  # Riceve i dati come JSON
+        user_email = data.get('userName')
+        reservation_date = data.get('reservation_date')
+        return db_request_select(QUERY_CHECK_RESERVATION2)
+    except Exception as e:
+        print(f"Errore nel connettersi al DB: {e}")
+        return {e}
 
     #return db_request_select(QUERY_CHECK_RESERVATION,reservation_date,reservation_date,user_email)
         
