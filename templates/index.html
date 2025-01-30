@@ -19,7 +19,7 @@
         <nav id="navMenu">
             <a href="#" onclick="showForm('home')">Home</a>
             <a href="#" onclick="checkLogin('prenotazione')" id="prenotazioneLink">Prenota Corsi</a>
-            <a href="#" onclick="checkLogin('mostraPrenotazioni')" id="mostraPrenotazioniLink">Prenotazioni Attive</a>
+            <a href="#" onclick="checkLogin('mostraPrenotazioni')" id="mostraPrenotazioniLink">Le tue Prenotazioni</a>
             <a href="#" onclick="checkLogin('acquista')" id="acquistaLink">Acquista</a>
             <a href="#" onclick="showForm('login')" id="loginLink">Login</a>
             <a href="#" onclick="effettuaLogout()" id="logoutLink">Logout</a>
@@ -51,11 +51,8 @@
         <div id="prenotazione" class="form-container" style="display: none;">
             <h1>Ricerca i tuoi corsi preferiti</h1>
             <form id="prenotazioneForm" onsubmit="checkReservation(event)">
-                <input type="text" id="userEmail" name="userEmail" value="mario.rossi@example.com" display="none">
-
                 <label for="date">INSERISCI DATA:</label>
                 <input type="date" id="date" name="date"  value="2025-01-31" required>
-
                 <input type="submit" value="CERCA">
             </form>
             <br>

@@ -124,8 +124,7 @@ console.log("JavaScript caricato correttamente!");
                 showForm('login');
                 return;
             }
-
-            const user_Name = document.getElementById('userEmail').value;
+            const user_Name = sessionStorage.getItem('userEmail'); 
             const data = document.getElementById('date').value;
             const userData = {
                 userName: user_Name,
