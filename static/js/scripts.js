@@ -61,12 +61,10 @@ console.log("JavaScript caricato correttamente!");
             .then(data => {
                 if (data.success) {
                     loggedInUser = { email };
-                    //alert("Login effettuato con successo!");
+                    activeLogin();
                     showForm('home');
-                    sessionStorage.setItem('loggedInUser',loggedInUser);
-                    document.getElementById('welcomeMessage').style.display = 'block';
+                    sessionStorage.setItem('loggedInUser',loggedInUser);                   
                     document.getElementById('userName').textContent = loggedInUser.email;
-                    document.querySelector('a[href="#"]').style.display = 'none'; // Nasconde il login
                 } else {
                     alert(data.message || "Login fallito. Controlla email e password.");
                 }
@@ -237,5 +235,18 @@ console.log("JavaScript caricato correttamente!");
             document.getElementById('logoutLink').style.display = 'none';
             document.querySelector('a[href="#"]').style.display = 'block'; // Mostra di nuovo il link di login
             showForm('home'); // Torna alla home
+        }
+
+        function activeLogin(){
+            document.getElementById('welcomeMessageHost').style.display = 'none';
+            document.getElementById('welcomeMessage').style.display = 'block';
+            document.getElementById('loginLink').style.display = 'none';
+            document.getElementById('logoutLink').style.display = 'block';
+        }
+        function noActiveLogin(){
+            document.getElementById('welcomeMessageHost').style.display = 'block';
+            document.getElementById('welcomeMessage').style.display = 'none';
+            document.getElementById('loginLink').style.display = 'block';
+            document.getElementById('logoutLink').style.display = 'none';
         }
     
