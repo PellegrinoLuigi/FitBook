@@ -209,18 +209,16 @@ console.log("JavaScript caricato correttamente!");
                 if (data.success) {
                     console.log("Lista prenotazioni:", data.reservationlist);
                     if (data.reservationlist) {
-                        const availableSeats = data.reservationlist.map(reservation => ({
+                        const reservations = data.reservationlist.map(reservation => ({
                             id: reservation[0],
                             name: reservation[1],
                             data: reservation[2],
                             startTime: reservation[3]                           
                         }));
             
-                        console.log('Available Seats:', availableSeats);
-                        document.getElementById('availableSeats').style.display = 'block';
-
+                        console.log('reservations:', reservations);
                         const tbody = document.querySelector('#prenotazioniTable tbody');
-                        tbody.innerHTML = prenotazioni.map(p => `
+                        tbody.innerHTML = reservations.map(p => `
                             <tr>
                                 <td>${p.name}</td>
                                 <td>${p.data}</td>
