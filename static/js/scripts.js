@@ -114,7 +114,7 @@ console.log("JavaScript caricato correttamente!");
         }
         
         // Funzione per effettuare una prenotazione
-        function effettuaPrenotazione(event) {
+        function checkReservation(event) {
             event.preventDefault();
             if (!loggedInUser) {
                 alert("Devi effettuare il login per prenotare.");
