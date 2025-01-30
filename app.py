@@ -39,7 +39,7 @@ QUERY_CHECK_RESERVATION2= "SELECT course.id, course.name, course.capacity,course
 
 query_test=""" SELECT course_id
     FROM reservation 
-    WHERE reservation_date = %s """
+    WHERE reservation_date >= %s   and reservation_date <= %s  """
 
  
 # Stringa di connessione al db
@@ -154,7 +154,7 @@ def check_reservation():
 
       
         #result =db_request_select_all(QUERY_CHECK_RESERVATION,( reservation_date,reservation_date,user_email))
-        result =db_request_select_all(query_test,(resdate))
+        result =db_request_select_all(query_test,(resdate,resdate))
 
         if result:
             return jsonify({"success": True, "reservationlist": result})
