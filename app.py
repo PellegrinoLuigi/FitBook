@@ -14,27 +14,26 @@ db_port = os.getenv('DB_PORT', 5432)  # Porta di default
 QUERY_ALL_USER="SELECT id, nome, cognome, email, data_di_nascita FROM users;"
 QUERY_LOGGED_USER="SELECT * FROM users WHERE email = %s AND password = %s;"
 QUERY_EMAIL_FILTERED_USER="SELECT * FROM users WHERE email = %s;"
-reservation_date 
-user_email 
-QUERY_CHECK_RESERVATION = f"""
+
+QUERY_CHECK_RESERVATION =  """
 SELECT course.id, course.name, course.capacity - COALESCE(reservation_count, 0) AS available_seats, 
        course.weekday, course.start_time, course.duration, trainer.first_name, trainer.last_name 
 FROM course 
 LEFT JOIN ( 
     SELECT course_id, COUNT(*) AS reservation_count 
     FROM reservation 
-    WHERE reservation_date = '{reservation_date}' 
+    WHERE reservation_date = %s
     GROUP BY course_id 
 ) AS reservations ON course.id = reservations.course_id 
 JOIN trainer ON course.trainer_id = trainer.id 
-WHERE course.weekday = TO_CHAR(TO_DATE('{reservation_date}', 'YYYY-MM-DD'), 'FMDay') 
+WHERE course.weekday = TO_CHAR(TO_DATE(%s, 'YYYY-MM-DD'), 'FMDay') 
 AND course.id NOT IN ( 
     SELECT course_id 
     FROM reservation 
     JOIN users ON reservation.user_id = users.id 
-    WHERE users.email = '{user_email}' 
+    WHERE users.email = %s 
 );
-""".strip()
+"""
 
 
  
@@ -141,7 +140,7 @@ def checkReservation():
     data = request.get_json()  # Riceve i dati come JSON
     reservation_date = data.get('reservation_date')
     user_email = data.get('userName')
-    return db_request_select(QUERY_CHECK_RESERVATION)
+    return db_request_select(QUERY_CHECK_RESERVATION,reservation_date,reservation_date,user_email)
         
 def db_request_select(query, *params):
     conn = get_db_connection()
