@@ -6,10 +6,21 @@
             box-sizing: border-box;
         }
 
-        body {
+        /*body {
             font-family: 'Arial', sans-serif;
-            background-color: #e0f7fa; /* Colore pastello blu chiaro */
+            background-color: #e0f7fa; 
             color: #333;
+            line-height: 1.6;
+        }*/
+
+        body {
+            background-image: url("{{ url_for('static', filename='images/backgroundimage.jpg') }}");
+            background-size: cover;
+            background-position: center;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            color: white; /* Colore del testo */
             line-height: 1.6;
         }
 
