@@ -167,20 +167,21 @@ def bookCourse():
     data = request.get_json()  # Riceve i dati come JSON
     userId = data.get('userId')
     courseId = data.get('courseId')
-    reservationDate= data.get('courseId')
-    statusBook= 'Confirmed'
+    reservationDate= data.get('reservationDate')
+    reservationStatus= 'Confirmed'
     #if loginUser(email, password):
-    result = book (QUERY_LOGGED_USER,userId, reservationDate,statusBook)
+    result = book (QUERY_LOGGED_USER,userId, reservationDate,reservationStatus)
     if result:
         return jsonify({"success": True, "message": "Prenotazione effettuata con successo!"})
     else:
         return jsonify({"success": False, "message": "Errore durante la prenotazione."})
 
-def book(QUERY_BOOK_COURSE, courseId, userId, reservationDate, statusBook):
+def book(QUERY_BOOK_COURSE, courseId, userId, reservationDate, reservationStatus):
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute(QUERY_BOOK_COURSE, (courseId, userId, reservationDate, statusBook))                     
+        #"INSERT INTO reservation (user_id, course_id, reservation_date, reservationStatus) VALUES (%s, %s, %s, %s);
+        cursor.execute(QUERY_BOOK_COURSE, (userId,courseId,  reservationDate, reservationStatus))                     
         conn.commit()
         conn.close()
         return True
