@@ -153,7 +153,7 @@ console.log("JavaScript caricato correttamente!");
                         }));
             
                         console.log('Available Seats:', availableSeats);
-            
+                        document.getElementById('availableSeats').style.display = 'block';
                         const tbody = document.querySelector('#availableSeatsTable tbody');
                         tbody.innerHTML = availableSeats.map(p => `
                             <tr>
