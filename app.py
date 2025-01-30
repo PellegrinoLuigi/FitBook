@@ -35,9 +35,7 @@ AND course.id NOT IN (
 );
 """
 
-QUERY_CHECK_RESERVATION2= """SELECT course.id, course.name, course.capacity   ,
-       course.weekday, course.start_time, course.duration
-FROM course """
+QUERY_CHECK_RESERVATION2= "SELECT course.id, course.name, course.capacity,course.weekday, course.start_time, course.duration FROM course "
 
 
  
