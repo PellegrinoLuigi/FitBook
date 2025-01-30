@@ -135,7 +135,7 @@ def login():
     #if loginUser(email, password):
     result = db_request_select(QUERY_LOGGED_USER,email, password)
     if result:
-        return jsonify({"success": True, "userFullName":result[0] + " " + result[1]})
+        return jsonify({"success": True, "userFullName":result[0] + " " + result[1],"userEmail":result[2] })
     else:
         return jsonify({"success": False, "message": "Credenziali errate."})
 

@@ -66,7 +66,7 @@ console.log("JavaScript caricato correttamente!");
                     activeLogin();
                     showForm('home');
                     sessionStorage.setItem('loggedInUser',loggedInUser);                   
-                    document.getElementById('userName').textContent = loggedInUser.email;
+                    document.getElementById('userName').textContent = data.userFullName;
                 } else {
                     alert(data.message || "Login fallito. Controlla email e password.");
                 }
