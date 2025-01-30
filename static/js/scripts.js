@@ -121,11 +121,58 @@ console.log("JavaScript caricato correttamente!");
                 return;
             }
 
-            const nome = document.getElementById('name').value;
+            const userName = document.getElementById('userName').value;
             const data = document.getElementById('date').value;
+            const userData = {
+                userName: userName,
+                data: data
+               
+            };
+            
+            fetch('/checkReservation', {  
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(userData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('data');
+                console.log(data);
+                if (data.success) {
+                    const availableSeats = data.courses.map(course => ({
+                        id: course.id,
+                        name: course.name,
+                        availableSeats: course.available_seats,
+                        weekday: course.weekday,
+                        startTime: course.start_time,
+                        duration: course.duration,
+                        trainer: `${course.first_name} ${course.last_name}`
+                    }));
+        
+                    console.log('Available Seats:', availableSeats);
+        
+                    const tbody = document.querySelector('#availableSeatsTable tbody');
+                    tbody.innerHTML = availableSeats.map(p => `
+                        <tr>
+                            <td>${p.name}</td>
+                            <td>${p.availableSeats}</td>
+                            <td>${p.startTime}</td>
+                            <td>${p.duration}</td>
+                            <td>${p.trainer}</td>
+                        </tr>
+                    `).join('');
+                    //alert(`Prenotazione effettuata per ${userName} il ${data}`);
+                    showForm('home');
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Errore durante la registrazione:', error);
+                alert('Si è verificato un errore durante la registrazione.');
+            });
 
             // Simulazione di prenotazione (in un caso reale, fare una richiesta al server)
-            alert(`Prenotazione effettuata per ${nome} il ${data}`);
             showForm('home');
         }
 

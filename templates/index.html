@@ -43,16 +43,33 @@
         <div id="prenotazione" class="form-container" style="display: none;">
             <h1>Effettua Prenotazione</h1>
             <form id="prenotazioneForm" onsubmit="effettuaPrenotazione(event)">
-                <label for="name">Nome:</label>
-                <input type="text" id="name" name="name" required>
+                <input type="text" id="name" name="name" value="userName" display="none">
 
-                <label for="date">Data della prenotazione:</label>
+                <label for="date">INSERISCI DATA:</label>
                 <input type="date" id="date" name="date" required>
 
-                <input type="submit" value="Prenota">
+                <input type="submit" value="CERCA">
             </form>
             <br>
-            <h1>Le tue Prenotazioni</h1>
+            <div id="availableSeats" class="form-container" style="display: none;">
+                <h1>Corsi Disponibili</h1>
+                <table id="availableSeatsTable">
+                    <thead>
+                        <tr>
+                            <th>Corso</th>
+                            <th>Posti Disponibili</th>
+                            <th>Orario</th>
+                            <th>Durata</th>
+                            <th>Trainer</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- POSTI DISPONIBILI -->
+                    </tbody>
+                </table>
+            </div>
+            <br>
+            <!--h1>Le tue Prenotazioni</h1>
             <table id="prenotazioniTable">
                 <thead>
                     <tr>
@@ -61,9 +78,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Le prenotazioni verranno caricate qui dinamicamente -->
                 </tbody>
-            </table>
+            </table>-->
         </div>
 
         <!-- Tabella Mostra Prenotazioni -->
