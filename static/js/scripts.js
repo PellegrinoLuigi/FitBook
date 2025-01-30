@@ -66,7 +66,8 @@ console.log("JavaScript caricato correttamente!");
                     showForm('home');
                     sessionStorage.setItem('loggedInUser',loggedInUser);      
                     sessionStorage.setItem('userName',data.userFullName);   
-                    sessionStorage.setItem('userEmail',data.userEmail);         
+                    sessionStorage.setItem('userEmail',data.userEmail);      
+                    sessionStorage.setItem('userId',data.userId);            
                     activeLogin();               
                      
                     //document.getElementById('userName').textContent = data.userFullName;
@@ -126,6 +127,7 @@ console.log("JavaScript caricato correttamente!");
             }
             const user_Name = sessionStorage.getItem('userEmail'); 
             const data = document.getElementById('date').value;
+            sessionStorage.setItem('reservationDate',data); 
             const userData = {
                 userName: user_Name,
                 reservation_date: data
@@ -163,7 +165,7 @@ console.log("JavaScript caricato correttamente!");
                                 <td>${p.startTime}</td>
                                 <td>${p.duration}</td>
                                 <td>${p.trainer}</td>
-                                <td><button class="prenota-bottone" onclick="prenotaCorso('${p.id}')">Prenota</button></td>
+                                <td><button class="prenota-bottone" onclick="bookCourse('${p.id}')">Prenota</button></td>
                             </tr>
                         `).join('');
                         //alert(`Prenotazione effettuata per ${userName} il ${data}`);
@@ -233,6 +235,47 @@ console.log("JavaScript caricato correttamente!");
             showForm('home');
            
         };
+
+        function bookCourse(courseId) {
+            if(checkLoggedUser){
+                const user_Name = sessionStorage.getItem('userEmail'); 
+                const userId = sessionStorage.getItem('userId'); 
+                reservationDate = sessionStorage.getItem('reservationDate');
+                const userData = {
+                    userId: userId,
+                    courseId: courseId,
+                    reservationDate: reservationDate
+                };
+                
+                fetch('/bookCourse', {  
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(userData)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(`Prenotazione effettuata per ${user_Name} il ${data.reservation_date}`);
+                        showForm('home');
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Errore durante la prenotazione:', error);
+                    alert('Si è verificato un errore durante la prenotazione.');
+            }
+        }
+
+
+        function checkLoggedUser() {
+            if (!loggedInUser) {
+                alert("Devi effettuare il login per visualizzare le prenotazioni.");
+                showForm('login');
+                return false;
+            }
+        }
+
         function effettuaLogout() {
             sessionStorage.removeItem('loggedInUser');
             loggedInUser = null;

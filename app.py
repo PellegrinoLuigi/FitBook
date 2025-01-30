@@ -12,7 +12,7 @@ db_host = os.getenv('DB_HOST')
 db_port = os.getenv('DB_PORT', 5432)  # Porta di default
 
 QUERY_ALL_USER="SELECT id, nome, cognome, email, data_di_nascita FROM users;"
-QUERY_LOGGED_USER="SELECT first_name,last_name,email  FROM users WHERE email = %s AND password = %s;"
+QUERY_LOGGED_USER="SELECT first_name,last_name,email,id  FROM users WHERE email = %s AND password = %s;"
 QUERY_EMAIL_FILTERED_USER="SELECT * FROM users WHERE email = %s;"
 
 QUERY_CHECK_RESERVATION =  """
@@ -35,11 +35,9 @@ AND course.id NOT IN (
 );
 """
 
-QUERY_CHECK_RESERVATION2= "SELECT course.id, course.name, course.capacity,course.weekday, course.start_time, course.duration FROM course;"
+QUERY_BOOK_COURSE = "INSERT INTO reservation (user_id, course_id, reservation_date, reservationStatus) VALUES (%s, %s, %s, %s);"
 
-query_test=""" SELECT course_id
-    FROM reservation 
-    WHERE reservation_date >= %s   and reservation_date <= %s  """
+
 
  
 # Stringa di connessione al db
@@ -135,10 +133,9 @@ def login():
     data = request.get_json()  # Riceve i dati come JSON
     email = data.get('email')
     password = data.get('password')
-    #if loginUser(email, password):
     result = db_request_select(QUERY_LOGGED_USER,email, password)
     if result:
-        return jsonify({"success": True, "userFullName":result[0] + " " + result[1],"userEmail":result[2] })
+        return jsonify({"success": True, "userFullName":result[0] + " " + result[1],"userEmail":result[2],"userId":result[3] })
     else:
         return jsonify({"success": False, "message": "Credenziali errate."})
 
@@ -165,7 +162,31 @@ def check_reservation():
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
 
+@app.route('/bookCourse', methods=['POST'])
+def bookCourse():
+    data = request.get_json()  # Riceve i dati come JSON
+    userId = data.get('userId')
+    courseId = data.get('courseId')
+    reservationDate= data.get('courseId')
+    statusBook= 'Confirmed'
+    #if loginUser(email, password):
+    result = book(QUERY_LOGGED_USER,userId, password)
+    if result:
+        return jsonify({"success": True, "userFullName":result[0] + " " + result[1],"userEmail":result[2] })
+    else:
+        return jsonify({"success": False, "message": "Credenziali errate."})
 
+def book(QUERY_BOOK_COURSE, courseId, userId, reservationDate, statusBook):
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute(QUERY_BOOK_COURSE, (courseId, userId, reservationDate, statusBook))                     
+        conn.commit()
+        conn.close()
+        return True
+    except Exception as e:
+        print(f"Errore nel registrare prenotazione: {e}")
+        return False
 
 def db_request_select(query, *params):
     conn = get_db_connection()
