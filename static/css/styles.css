@@ -14,7 +14,7 @@
         }*/
 
         body {
-            background-image: url("{{ url_for('static', filename='images/backgroundimage.jpg') }}");
+            background-image: url("{{ url_for('static', filename='images/backgroundimage.webp') }}");
             background-size: cover;
             background-position: center;
             margin: 0;
