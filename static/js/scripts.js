@@ -198,7 +198,7 @@ console.log("JavaScript caricato correttamente!");
             const userId = sessionStorage.getItem('userId'); 
             const userData = {userId: userId };
 
-            fetch('/checkReservation', {  
+            fetch('/retrieveReservation', {  
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(userData)
