@@ -35,6 +35,10 @@ AND course.id NOT IN (
 );
 """
 
+QUERY_CHECK_RESERVATION2= """SELECT course.id, course.name, course.capacity   ,
+       course.weekday, course.start_time, course.duration
+FROM course """
+
 
  
 # Stringa di connessione al db
@@ -140,7 +144,9 @@ def checkReservation():
     data = request.get_json()  # Riceve i dati come JSON
     user_email = data.get('userName')
     reservation_date = data.get('reservation_date')
-    return db_request_select(QUERY_CHECK_RESERVATION,reservation_date,reservation_date,user_email)
+    return db_request_select(QUERY_CHECK_RESERVATION2)
+
+    #return db_request_select(QUERY_CHECK_RESERVATION,reservation_date,reservation_date,user_email)
         
 def db_request_select(query, *params):
     conn = get_db_connection()
