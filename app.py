@@ -143,7 +143,7 @@ def login():
 def check_reservation():
     try:
         data = request.get_json()
-        return db_request_select(QUERY_CHECK_RESERVATION2)
+        return db_request_select_all(QUERY_CHECK_RESERVATION2)
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
 
@@ -156,6 +156,17 @@ def db_request_select(query, *params):
     else:
         cursor.execute(query)    
     result = cursor.fetchone()
+    conn.close()
+    return result
+
+def db_request_select_all(query, *params):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    if params:
+        cursor.execute(query, params)
+    else:
+        cursor.execute(query)    
+    result = cursor.fetchall()
     conn.close()
     return result
 
