@@ -148,8 +148,8 @@ console.log("JavaScript caricato correttamente!");
                             availableSeats: course[2],
                             weekday: course[3],
                             startTime: course[4],
-                            duration:course[4],
-                            trainer:course[4]
+                            duration:course[5],
+                            trainer:course[6] + ' ' + course[7]
                         }));
             
                         console.log('Available Seats:', availableSeats);
