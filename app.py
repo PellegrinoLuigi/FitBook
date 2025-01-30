@@ -100,7 +100,7 @@ def getUsers():
     try:
         conn = get_db_connection()
         cursor = conn.cursor()        
-        cursor.execute(QUERY_CHECK_RESERVATION2)
+        cursor.execute(QUERY_ALL_USER)
         rows = cursor.fetchall()  # Recupera tutti i record
         conn.close()        
         return rows
@@ -143,7 +143,10 @@ def login():
 def check_reservation():
     try:
         data = request.get_json()
-        reservationlist =db_request_select_all(QUERY_CHECK_RESERVATION2)
+        user_email = data.get('userName')
+        reservation_date = data.get('reservation_date')
+        reservationlist =db_request_select_all(QUERY_CHECK_RESERVATION,reservation_date,reservation_date,user_email)
+
         return jsonify({"success": True, "reservationlist": reservationlist})
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500

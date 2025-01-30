@@ -136,11 +136,11 @@ console.log("JavaScript caricato correttamente!");
                 body: JSON.stringify(userData)
             })
             .then(response => response.json())
-            .then(data => {
+            .then(reservationlist => {
                 console.log('data');
-                console.log(data);
-                if (data.success) {
-                    const availableSeats = data.courses.map(course => ({
+                console.log(reservationlist);
+                if (reservationlist) {
+                    const availableSeats = reservationlist.courses.map(course => ({
                         id: course.id,
                         name: course.name,
                         availableSeats: course.available_seats,
