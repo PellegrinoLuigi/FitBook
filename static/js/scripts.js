@@ -62,11 +62,13 @@ console.log("JavaScript caricato correttamente!");
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    loggedInUser = { email };
-                    activeLogin();
+                    loggedInUser = { email };                    
                     showForm('home');
                     sessionStorage.setItem('loggedInUser',loggedInUser);      
-                    sessionStorage.setItem('userName',data.userFullName);                        
+                    sessionStorage.setItem('userName',data.userFullName);   
+                    sessionStorage.setItem('userEmail',data.userEmail);         
+                    activeLogin();               
+                     
                     //document.getElementById('userName').textContent = data.userFullName;
                 } else {
                     alert(data.message || "Login fallito. Controlla email e password.");
@@ -242,7 +244,6 @@ console.log("JavaScript caricato correttamente!");
             document.getElementById('welcomeMessage').style.display = 'none';
             document.getElementById('loginLink').style.display = 'block';
             document.getElementById('logoutLink').style.display = 'none';
-            document.querySelector('a[href="#"]').style.display = 'block'; // Mostra di nuovo il link di login
             showForm('home'); // Torna alla home
         }
 
@@ -251,6 +252,15 @@ console.log("JavaScript caricato correttamente!");
             document.getElementById('welcomeMessage').style.display = 'block';
             document.getElementById('loginLink').style.display = 'none';
             document.getElementById('logoutLink').style.display = 'block';
+
+            sessionStorage.getItem('loggedInUser');   
+
+            userName  = sessionStorage.getItem('userName');   
+            userEmail = sessionStorage.getItem('userEmail');      
+            document.getElementById('userNamePlaceholder').textContent = userName;
+            document.getElementById('userEmailPlaceholder').textContent = userEmail;
+
+
            // sessionStorage.setItem('loggedInUser',loggedInUser); 
         }
         function noActiveLogin(){
@@ -258,5 +268,8 @@ console.log("JavaScript caricato correttamente!");
             document.getElementById('welcomeMessage').style.display = 'none';
             document.getElementById('loginLink').style.display = 'block';
             document.getElementById('logoutLink').style.display = 'none';
+            document.getElementById('userNamePlaceholder').textContent = '';
+            document.getElementById('userEmailPlaceholder').textContent = '';
         }
+
     
