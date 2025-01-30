@@ -245,6 +245,7 @@ console.log("JavaScript caricato correttamente!");
             document.getElementById('welcomeMessage').style.display = 'block';
             document.getElementById('loginLink').style.display = 'none';
             document.getElementById('logoutLink').style.display = 'block';
+           // sessionStorage.setItem('loggedInUser',loggedInUser); 
         }
         function noActiveLogin(){
             document.getElementById('welcomeMessageHost').style.display = 'block';

@@ -12,7 +12,7 @@ db_host = os.getenv('DB_HOST')
 db_port = os.getenv('DB_PORT', 5432)  # Porta di default
 
 QUERY_ALL_USER="SELECT id, nome, cognome, email, data_di_nascita FROM users;"
-QUERY_LOGGED_USER="SELECT * FROM users WHERE email = %s AND password = %s;"
+QUERY_LOGGED_USER="SELECT first_name,last_name,email  FROM users WHERE email = %s AND password = %s;"
 QUERY_EMAIL_FILTERED_USER="SELECT * FROM users WHERE email = %s;"
 
 QUERY_CHECK_RESERVATION =  """
