@@ -31,17 +31,14 @@ console.log("JavaScript caricato correttamente!");
             if (!loggedInUser) {
                 //alert("Devi effettuare il login per accedere a questa funzionalità.");
                 showForm('login');
+                noActiveLogin();
             } else {
                 showForm(formId);
+                noActiveLogin();
                 if (formId === 'mostraPrenotazioni') {
                     caricaPrenotazioni();
                 }
-                // Mostra il messaggio di benvenuto e nasconde il login
-                document.getElementById('welcomeMessageHost').style.display = 'block';
-                document.getElementById('welcomeMessage').style.display = 'none';
-
                 document.getElementById('userName').textContent = loggedInUser.email;
-                document.querySelector('a[href="#"]').style.display = 'none'; // Nasconde il link di login
             }
         }
 
