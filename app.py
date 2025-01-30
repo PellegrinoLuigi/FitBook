@@ -149,7 +149,7 @@ def check_reservation():
         reservation_date = data.get('reservation_date')
         resdate='2025-01-31'
         #result=db_request_select_all(QUERY_CHECK_RESERVATION2)
-        result =db_request_select_all(QUERY_CHECK_RESERVATION,(reservation_date,reservation_date,user_email))
+        result =db_request_select_all(QUERY_CHECK_RESERVATION,( user_email))
         if result:
             return jsonify({"success": True, "reservationlist": result})
         else:
