@@ -35,7 +35,7 @@ AND course.id NOT IN (
 );
 """
 
-QUERY_BOOK_COURSE = "INSERT INTO reservation (user_id, course_id, reservation_date, reservationStatus) VALUES (%s, %s, %s, %s);"
+QUERY_BOOK_COURSE = "INSERT INTO reservation (user_id, course_id, reservation_date, reservation_status) VALUES (%s, %s, %s, %s);"
 
 
 
@@ -168,20 +168,20 @@ def bookCourse():
     userId = data.get('userId')
     courseId = data.get('courseId')
     reservationDate= data.get('reservationDate')
-    reservationStatus= 'Confirmed'
+    reservation_status= 'Confirmed'
     #if loginUser(email, password):
-    result = book (userId, courseId,reservationDate,reservationStatus)
+    result = book (userId, courseId,reservationDate,reservation_status)
     if result:
         return jsonify({"success": True, "message": "Prenotazione effettuata con successo!"})
     else:
         return jsonify({"success": False, "message": "Errore durante la prenotazione."})
 
-def book(userId, courseId, reservationDate, reservationStatus):
+def book(userId, courseId, reservationDate, reservation_status):
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        #"INSERT INTO reservation (user_id, course_id, reservation_date, reservationStatus) VALUES (%s, %s, %s, %s);
-        cursor.execute(QUERY_BOOK_COURSE, (userId,courseId,  reservationDate, reservationStatus))                     
+        #"INSERT INTO reservation (user_id, course_id, reservation_date, reservation_status) VALUES (%s, %s, %s, %s);
+        cursor.execute(QUERY_BOOK_COURSE, (userId,courseId,  reservationDate, reservation_status))                     
         conn.commit()
         conn.close()
         return True
