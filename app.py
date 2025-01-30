@@ -143,7 +143,8 @@ def login():
 def check_reservation():
     try:
         data = request.get_json()
-        return db_request_select_all(QUERY_CHECK_RESERVATION2)
+        reservationlist =db_request_select_all(QUERY_CHECK_RESERVATION2)
+        return jsonify({"success": True, "reservationlist": reservationlist})
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
 
