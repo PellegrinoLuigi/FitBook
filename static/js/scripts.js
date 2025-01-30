@@ -78,17 +78,17 @@ console.log("JavaScript caricato correttamente!");
 
         function effettuaRegistrazione(event) {
             event.preventDefault();
-            const nome = document.getElementById('nome').value;
-            const cognome = document.getElementById('cognome').value;
+            const firstname = document.getElementById('firstname').value;
+            const lastname = document.getElementById('lastname').value;
             const email = document.getElementById('emailreg').value;
-            const dataNascita = document.getElementById('data_nascita').value;
+            const birthDate = document.getElementById('birthdate').value;
             const password = document.getElementById('passwordReg').value;
         
             const userData = {
-                nome: nome,
-                cognome: cognome,
+                first_name: firstname,
+                last_name: lastname,
                 email: email,
-                data_nascita: dataNascita,
+                birthdate: birthDate,
                 password: password
             };
         

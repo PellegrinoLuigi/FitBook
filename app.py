@@ -13,7 +13,7 @@ db_port = os.getenv('DB_PORT', 5432)  # Porta di default
 QUERY_ALL_USER="SELECT id, nome, cognome, email, data_di_nascita FROM users;"
 QUERY_LOGGED_USER="SELECT * FROM users WHERE email = %s AND password = %s;"
 QUERY_EMAIL_FILTERED_USER="SELECT * FROM users WHERE email = %s;"
-
+ 
 # Costruisci la stringa di connessione
 conn_string = f"dbname={db_name} user={db_user} password={db_password} host={db_host} port={db_port}"
 def get_db_connection():
@@ -30,7 +30,7 @@ def verifica_email(email):
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute(QUERY_EMAIL_FILTERED_USER, (email,))
+        cursor.execute(QUERY_EMAIL_FILTERED_USER, email)
         user = cursor.fetchone()
         conn.close()
 
@@ -39,13 +39,13 @@ def verifica_email(email):
         print(f"Errore nel connettersi al DB: {e}")
         return False
 
-def registra_utente(nome, cognome, email, data_nascita, password):
+def registra_utente(first_name, last_name, email, birthdate, password):
     """Funzione per registrare un nuovo utente nel DB"""
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute("INSERT INTO users (nome, cognome, email, data_di_nascita, password) VALUES (%s, %s, %s, %s, %s)",
-                       (nome, cognome, email, data_nascita, password))
+        cursor.execute("INSERT INTO users (first_name, last_name, email, birthdate, password) VALUES (%s, %s, %s, %s, %s)",
+                       (first_name, last_name, email, birthdate, password))
         conn.commit()
         conn.close()
         return True
@@ -57,16 +57,16 @@ def registra_utente(nome, cognome, email, data_nascita, password):
 @app.route('/register', methods=['POST'])
 def registrazione():
     data = request.get_json()
-    nome = data.get('nome')
-    cognome = data.get('cognome')
+    first_name = data.get('first_name')
+    last_name = data.get('last_name')
     email = data.get('email')
-    data_nascita = data.get('data_nascita')
+    birthdate = data.get('birthdate')
     password = data.get('password')
 
     if verifica_email(email):
         return jsonify({"success": False, "message": "L'email è già registrata."})
     
-    if registra_utente(nome, cognome, email, data_nascita, password):
+    if registra_utente(first_name, last_name, email, birthdate, password):
     #if registra_utente('Mario', 'Rossi', 'mario.rossi@example.com', '1990-05-20', 'hashed_password'):
         return jsonify({"success": True, "message": "Registrazione avvenuta con successo!"})
     else:
