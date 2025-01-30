@@ -221,6 +221,8 @@ console.log("JavaScript caricato correttamente!");
             if(loggedInUser){
                 document.getElementById('welcomeMessageHost').style.display = 'none';
                 document.getElementById('welcomeMessage').style.display = 'block';
+                document.getElementById('loginLink').style.display = 'none';
+                document.getElementById('logoutLink').style.display = 'block';
                 document.getElementById('userName').textContent = loggedInUser.email;
             }
             showForm('home');
@@ -229,7 +231,10 @@ console.log("JavaScript caricato correttamente!");
         function effettuaLogout() {
             sessionStorage.removeItem('loggedInUser');
             loggedInUser = null;
-            document.getElementById('welcomeMessage').style.display = 'none'; // Nasconde il messaggio di benvenuto
+            document.getElementById('welcomeMessageHost').style.display = 'block';
+            document.getElementById('welcomeMessage').style.display = 'none';
+            document.getElementById('loginLink').style.display = 'block';
+            document.getElementById('logoutLink').style.display = 'none';
             document.querySelector('a[href="#"]').style.display = 'block'; // Mostra di nuovo il link di login
             showForm('home'); // Torna alla home
         }
