@@ -188,7 +188,7 @@ def db_request_select_all(query, *params):
     result = cursor.fetchall()
     conn.close()
     return result
-    
+
 def db_request_select_all_3_params(query, par1,par2,par3):
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -199,7 +199,7 @@ def db_request_select_all_3_params(query, par1,par2,par3):
 
 @app.route('/')
 def home():
-    users = checkReservation()
+    users = getUsers()
     utente='cavolo'
     return render_template('index.html',utente=utente, users=users)
 
