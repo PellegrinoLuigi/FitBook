@@ -100,7 +100,7 @@ def getUsers():
     try:
         conn = get_db_connection()
         cursor = conn.cursor()        
-        cursor.execute(QUERY_ALL_USER)
+        cursor.execute(QUERY_CHECK_RESERVATION2)
         rows = cursor.fetchall()  # Recupera tutti i record
         conn.close()        
         return rows
