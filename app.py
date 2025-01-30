@@ -139,19 +139,24 @@ def login():
     else:
         return jsonify({"success": False, "message": "Credenziali errate."})
 
-@app.route('/checkReservation', methods=['POST'])
-def checkReservation():
-    try:
-        data = request.get_json()  # Riceve i dati come JSON
-        user_email = data.get('userName')
-        reservation_date = data.get('reservation_date')
-        return db_request_select(QUERY_CHECK_RESERVATION2)
-    except Exception as e:
-        print(f"Errore nel connettersi al DB: {e}")
-        return {e}
 
-    #return db_request_select(QUERY_CHECK_RESERVATION,reservation_date,reservation_date,user_email)
-        
+
+@app.route('/checkReservation', methods=['POST'])
+def check_reservation():
+    try:
+        data = request.get_json()
+
+        # Simulazione di verifica prenotazione (da sostituire con logica DB)
+        if not data or 'email' not in data:
+            return jsonify({"success": False, "message": "Dati non validi"}), 400
+
+        # Esempio di risposta di successo
+        return jsonify({"success": True, "availableSeats": 5}), 200
+
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+
 def db_request_select(query, *params):
     conn = get_db_connection()
     cursor = conn.cursor()
