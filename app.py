@@ -233,7 +233,7 @@ def deleteRes(reservationId):
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute(QUERY_LOGICAL_DELETE_RESERVATION, (reservationId))                     
+        cursor.execute(QUERY_LOGICAL_DELETE_RESERVATION, (reservationId,))                     
         conn.commit()
         conn.close()
         return True
