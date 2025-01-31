@@ -273,7 +273,7 @@ console.log("JavaScript caricato correttamente!");
            
         };
 
-        function confirmedReservartion(courseId) {
+        function confirmedReservartion(event, courseId) {
             if(checkLoggedUser){
                 const user_Name = sessionStorage.getItem('userEmail'); 
                 const userId = sessionStorage.getItem('userId'); 
@@ -294,7 +294,7 @@ console.log("JavaScript caricato correttamente!");
                     if (data.success) {
                         alert(`Prenotazione effettuata per ${user_Name} il ${data.reservation_date}`);
                         //showForm('home');
-                        refreshRetrieveCourse();
+                        refreshRetrieveCourse(event);
                     } else {
                         alert(data.message);
                     }
@@ -378,9 +378,9 @@ console.log("JavaScript caricato correttamente!");
             document.getElementById('userEmailPlaceholder').textContent = '';
         }
 
-        function refreshRetrieveCourse(){
+        function refreshRetrieveCourse(event){
             const tbody = document.querySelector('#prenotazioniTable tbody');
             tbody.innerHTML = '';
-            retrieveCourse();
+            retrieveCourse(event);
         }
     
