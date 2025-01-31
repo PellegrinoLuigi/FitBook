@@ -125,6 +125,9 @@ console.log("JavaScript caricato correttamente!");
                 showForm('login');
                 return;
             }
+            retrieveCourse();
+        }
+        function retrieveCourse() {
             const user_Name = sessionStorage.getItem('userEmail'); 
             const data = document.getElementById('date').value;
             sessionStorage.setItem('reservationDate',data); 
@@ -294,6 +297,7 @@ console.log("JavaScript caricato correttamente!");
                     if (data.success) {
                         alert(`Prenotazione effettuata per ${user_Name} il ${data.reservation_date}`);
                         //showForm('home');
+                        refreshRetrieveCourse();
                         
                     } else {
                         alert(data.message);
