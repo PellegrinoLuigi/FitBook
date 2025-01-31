@@ -125,6 +125,9 @@ console.log("JavaScript caricato correttamente!");
                 showForm('login');
                 return;
             }
+            retrieveC();
+        }
+        function retrieveC(){
             const user_Name = sessionStorage.getItem('userEmail'); 
             const data = document.getElementById('date').value;
             sessionStorage.setItem('reservationDate',data); 
@@ -381,6 +384,6 @@ console.log("JavaScript caricato correttamente!");
         function refreshRetrieveCourse(event){
             const tbody = document.querySelector('#prenotazioniTable tbody');
             tbody.innerHTML = '';
-            retrieveCourse(event);
+            retrieveC();
         }
     
