@@ -186,7 +186,8 @@ console.log("JavaScript caricato correttamente!");
             .catch(error => {
                 console.error('ERROR:', error);
                 console.error( error);
-                alert('Non sono disponibili corsi per la data selezionata.');
+                document.getElementById('availableSeats').style.display = 'none';
+                //alert('Non sono disponibili corsi per la data selezionata.');
             });
 
             // Simulazione di prenotazione (in un caso reale, fare una richiesta al server)
