@@ -15,7 +15,7 @@ QUERY_ALL_USER="SELECT id, nome, cognome, email, data_di_nascita FROM users;"
 QUERY_LOGGED_USER="SELECT first_name,last_name,email,id  FROM users WHERE email = %s AND password = %s;"
 QUERY_EMAIL_FILTERED_USER="SELECT * FROM users WHERE email = %s;"
 
-QUERY_CHECK_RESERVATION =  """
+QUERY_CHECK_RESERVATION2 =  """
 SELECT course.id, course.name, course.capacity - COALESCE(reservation_count, 0) AS available_seats, 
        course.weekday, course.start_time, course.duration, trainer.first_name, trainer.last_name 
 FROM course 
@@ -34,6 +34,25 @@ AND course.id NOT IN (
     WHERE users.email = %s 
 );
 """
+
+QUERY_CHECK_RESERVATION ="""SELECT course.id, course.name, course.capacity - COALESCE(reservation_count, 0) AS available_seats, 
+       course.weekday, course.start_time, course.duration, trainer.first_name, trainer.last_name 
+FROM course 
+LEFT JOIN (
+    SELECT course_id, COUNT(*) AS reservation_count 
+    FROM reservation 
+    WHERE reservation_date = %s
+    GROUP BY course_id 
+) AS reservations ON course.id = reservations.course_id 
+JOIN trainer ON course.trainer_id = trainer.id 
+WHERE course.weekday = TO_CHAR(TO_DATE(%s, 'YYYY-MM-DD'), 'FMDay')
+AND course.id NOT IN (
+    SELECT course_id 
+    FROM reservation 
+    JOIN users ON reservation.user_id = users.id 
+    WHERE users.email = %s
+    AND reservation.reservation_date = %s
+);"""
 
 QUERY_BOOK_COURSE = "INSERT INTO reservation (user_id, course_id, reservation_date, reservation_status) VALUES (%s, %s, %s, %s);"
 
@@ -150,16 +169,17 @@ def login():
 
 
 
-@app.route('/checkReservation', methods=['POST'])
-def check_reservation():
+@app.route('/retrieveCourse', methods=['POST'])
+def retrieveCourse():
     try:
         data = request.get_json()
         user_email = data.get('userName')
         reservation_date = data.get('reservation_date')
         reservation_date2 = data.get('reservation_date')
+        reservation_date3 = data.get('reservation_date')
 
       
-        result =db_request_select_all_3_params(QUERY_CHECK_RESERVATION,reservation_date,reservation_date2,user_email)
+        result =db_request_select_all_4_params(QUERY_CHECK_RESERVATION,reservation_date,reservation_date2,user_email,reservation_date3)
         # in errore di tuple index out of range"
         #result =db_request_select_all(QUERY_CHECK_RESERVATION,(reservation_date,reservation_date2,user_email))
 
@@ -258,6 +278,14 @@ def db_request_select_all_3_params(query, par1,par2,par3):
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute(query, (par1,par2,par3))
+    result = cursor.fetchall()
+    conn.close()
+    return result
+
+def db_request_select_all_4_params(query, par1,par2,par3,par4):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(query, (par1,par2,par3,par4))
     result = cursor.fetchall()
     conn.close()
     return result

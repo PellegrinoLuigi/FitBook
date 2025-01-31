@@ -118,7 +118,7 @@ console.log("JavaScript caricato correttamente!");
         }
         
         // Funzione per effettuare una prenotazione
-        function checkReservation(event) {
+        function retrieveCourse(event) {
             event.preventDefault();
             if (!loggedInUser) {
                 alert("Devi effettuare il login per prenotare.");
@@ -134,7 +134,7 @@ console.log("JavaScript caricato correttamente!");
                
             };
             
-            fetch('/checkReservation', {  
+            fetch('/retrieveCourse', {  
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(userData)
