@@ -52,7 +52,7 @@ AND course.id NOT IN (
     JOIN users ON reservation.user_id = users.id 
     WHERE users.email = %s
     AND reservation.reservation_date = %s
-   	AND reservation.reservation_status = 'Confrimed'
+   	AND reservation.reservation_status = 'Confirmed'
 );"""
 
 QUERY_BOOK_COURSE = "INSERT INTO reservation (user_id, course_id, reservation_date, reservation_status) VALUES (%s, %s, %s, %s);"
