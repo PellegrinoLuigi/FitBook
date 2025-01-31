@@ -327,9 +327,9 @@ console.log("JavaScript caricato correttamente!");
                 })
                 .then(response => response.json())
                 .then(data => {
-                    if (data.success) {
-                        alert(`Prenotazione cancellata !'`);
-                        showForm('showReservation');
+                    if (data.success) {refreshRetrieveCourse();
+                        //alert(`Prenotazione cancellata !'`);
+                        //showForm('showReservation');
                     } else {
                         alert(data.message);
                     }
@@ -386,8 +386,15 @@ console.log("JavaScript caricato correttamente!");
         }
 
         function refreshRetrieveCourse(){
-            const tbody = document.querySelector('#prenotazioniTable tbody');
+            const tbody = document.querySelector('#availableSeatsTable tbody');
             tbody.innerHTML = '';
             retrieveCourse();
         }
     
+        function refreshRetrieveCourse(){
+            const tbody = document.querySelector('#prenotazioniTable tbody');
+            tbody.innerHTML = '';
+            retrieveReservation();
+        }
+    
+        
