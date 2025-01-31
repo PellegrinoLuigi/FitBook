@@ -175,6 +175,8 @@ console.log("JavaScript caricato correttamente!");
                        // showForm('home');
                     } else {
                         alert(res.message);
+                        console.log('Available Seats:', availableSeats);
+                        document.getElementById('availableSeats').style.display = 'none';
                     }
                 } else {
                     console.error("Errore:", data.error);
