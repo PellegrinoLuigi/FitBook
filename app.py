@@ -15,25 +15,7 @@ QUERY_ALL_USER="SELECT id, nome, cognome, email, data_di_nascita FROM users;"
 QUERY_LOGGED_USER="SELECT first_name,last_name,email,id  FROM users WHERE email = %s AND password = %s;"
 QUERY_EMAIL_FILTERED_USER="SELECT * FROM users WHERE email = %s;"
 
-QUERY_CHECK_RESERVATION2 =  """
-SELECT course.id, course.name, course.capacity - COALESCE(reservation_count, 0) AS available_seats, 
-       course.weekday, course.start_time, course.duration, trainer.first_name, trainer.last_name 
-FROM course 
-LEFT JOIN ( 
-    SELECT course_id, COUNT(*) AS reservation_count 
-    FROM reservation 
-    WHERE reservation_date = %s
-    GROUP BY course_id 
-) AS reservations ON course.id = reservations.course_id 
-JOIN trainer ON course.trainer_id = trainer.id 
-WHERE course.weekday = TO_CHAR(TO_DATE(%s, 'YYYY-MM-DD'), 'FMDay') 
-AND course.id NOT IN ( 
-    SELECT course_id 
-    FROM reservation 
-    JOIN users ON reservation.user_id = users.id 
-    WHERE users.email = %s 
-);
-"""
+
 
 QUERY_CHECK_RESERVATION ="""SELECT course.id, course.name, course.capacity - COALESCE(reservation_count, 0) AS available_seats, 
        course.weekday, course.start_time, course.duration, trainer.first_name, trainer.last_name 

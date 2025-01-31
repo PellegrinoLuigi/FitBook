@@ -293,7 +293,8 @@ console.log("JavaScript caricato correttamente!");
                 .then(data => {
                     if (data.success) {
                         alert(`Prenotazione effettuata per ${user_Name} il ${data.reservation_date}`);
-                        showForm('home');
+                        //showForm('home');
+                        refreshRetrieveCourse();
                     } else {
                         alert(data.message);
                     }
@@ -377,4 +378,9 @@ console.log("JavaScript caricato correttamente!");
             document.getElementById('userEmailPlaceholder').textContent = '';
         }
 
+        function refreshRetrieveCourse(){
+            const tbody = document.querySelector('#prenotazioniTable tbody');
+            tbody.innerHTML = '';
+            retrieveCourse();
+        }
     
