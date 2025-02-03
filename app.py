@@ -17,37 +17,34 @@ QUERY_EMAIL_FILTERED_USER = "SELECT * FROM users WHERE email = %s;"
 
 
 QUERY_CHECK_RESERVATION = """SELECT course.id, course.name, course.capacity - COALESCE(reservation_count, 0) AS available_seats, 
-       course.weekday, course.start_time, course.duration, trainer.first_name, trainer.last_name 
-FROM course 
-LEFT JOIN (
-    SELECT course_id, COUNT(*) AS reservation_count 
-    FROM reservation 
-    WHERE reservation_date = %s
-    GROUP BY course_id 
-) AS reservations ON course.id = reservations.course_id 
-JOIN trainer ON course.trainer_id = trainer.id 
-WHERE course.weekday = TO_CHAR(TO_DATE(%s, 'YYYY-MM-DD'), 'FMDay')
-AND course.id NOT IN (
-    SELECT course_id 
-    FROM reservation 
-    JOIN users ON reservation.user_id = users.id 
-    WHERE users.email = %s
-    AND reservation.reservation_date = %s
-   	AND reservation.reservation_status = 'Confirmed'
-);"""
+                                   course.weekday, course.start_time, course.duration, trainer.first_name, trainer.last_name 
+                            FROM course 
+                            LEFT JOIN (
+                                SELECT course_id, COUNT(*) AS reservation_count 
+                                FROM reservation 
+                                WHERE reservation_date = %s
+                                GROUP BY course_id 
+                            ) AS reservations ON course.id = reservations.course_id 
+                            JOIN trainer ON course.trainer_id = trainer.id 
+                            WHERE course.weekday = TO_CHAR(TO_DATE(%s, 'YYYY-MM-DD'), 'FMDay')
+                            AND course.id NOT IN (
+                                SELECT course_id 
+                                FROM reservation 
+                                JOIN users ON reservation.user_id = users.id 
+                                WHERE users.email = %s
+                                AND reservation.reservation_date = %s
+                               	AND reservation.reservation_status = 'Confirmed'
+                            );"""
 
 QUERY_BOOK_COURSE = "INSERT INTO reservation (user_id, course_id, reservation_date, reservation_status) VALUES (%s, %s, %s, %s);"
-
 QUERY_BOOKED_COURSES = """SELECT r.id as reservation_id, c.name AS course_name,DATE(r.reservation_date) AS reservation_date , c.start_time AS reservation_time 
-FROM reservation r
-JOIN course c ON r.course_id = c.id
-WHERE   r.reservation_status = 'Confirmed'
-AND r.user_id = %s ;"""
+                     FROM reservation r
+                     JOIN course c ON r.course_id = c.id
+                     WHERE   r.reservation_status = 'Confirmed'
+                     AND r.user_id = %s ;"""
 
 QUERY_DELETE_RESERVATION = "DELETE FROM reservation WHERE id = %s;"
-QUERY_LOGICAL_DELETE_RESERVATION = (
-    "UPDATE reservation SET reservation_status = 'Cancelled' WHERE id = %s;"
-)
+QUERY_LOGICAL_DELETE_RESERVATION = "UPDATE reservation SET reservation_status = 'Cancelled' WHERE id = %s;"
 QUERY_GET_SUBSCRIPTION ="SELECT * FROM user_subscription where user_id = %s;"
 
 
