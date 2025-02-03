@@ -238,10 +238,10 @@
 
         .prenota-bottone {
             padding: 10px;
-            background-color: var(--primary-color); 
+            background-color: #d85c95; 
             color: #fff;
             border: none;
-            border-radius: 4px;
+            border-radius: 20px 0px 0px 20px;
             cursor: pointer;
             font-size: 16px;
             transition: background-color 0.3s ease;
@@ -251,7 +251,7 @@
         }
         
         .prenota-bottone:hover {
-            background-color: var(--primary-color-hover); 
+            background-color: #904065; 
         }
         button.disabled {
             background-color: #d3d3d3; /* Colore grigio */
