@@ -391,7 +391,7 @@ console.log("JavaScript caricato correttamente!");
             retrieveReservation();
         }
         function showReservation(){
-            document.getElementById('prenotazioniTable').style.display = 'block';
+            document.getElementById('prenotazioniTable').style.display = 'table';
             document.getElementById('noReservation').style.display = 'none';
 
         }
