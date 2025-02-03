@@ -178,6 +178,9 @@
             background-color: var(--primary-color); /* Verde scuro pastello */
             color: #fff;
         }
+        td{
+                    font-weight: bolder;
+        }
 
         /* Responsive Design */
         @media (max-width: 768px) {
