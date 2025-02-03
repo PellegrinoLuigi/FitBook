@@ -14,6 +14,7 @@ db_port = os.getenv("DB_PORT", 5432)  # Porta di default
 QUERY_ALL_USER = "SELECT id, nome, cognome, email, data_di_nascita FROM users;"
 QUERY_LOGGED_USER = "SELECT first_name,last_name,email,id  FROM users WHERE email = %s AND password = %s;"
 QUERY_EMAIL_FILTERED_USER = "SELECT * FROM users WHERE email = %s;"
+QUERY_NEW_USER="INSERT INTO users (first_name, last_name, email, birthdate, password) VALUES (%s, %s, %s, %s, %s)"
 
 
 QUERY_CHECK_RESERVATION = """SELECT course.id, course.name, course.capacity - COALESCE(reservation_count, 0) AS available_seats, 
@@ -59,40 +60,7 @@ def get_db_connection():
     except Exception as e:
         print(f"Errore durante la connessione al database: {e}")
         return None
-
-#Funzione per verificare se l'email esiste già nel DB
-
-@app.route("/checkEmail", methods=["POST"])
-def checkEmail(email):
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        cursor.execute(QUERY_EMAIL_FILTERED_USER, email)
-        user = cursor.fetchone()
-        conn.close()
-        return user is not None
-    except Exception as e:
-        print(f"Errore nel connettersi al DB: {e}")
-        return False
-
-
-# Funzione per registrare un nuovo utente nel DB
-def userRegister(first_name, last_name, email, birthdate, password):
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        cursor.execute(
-            "INSERT INTO users (first_name, last_name, email, birthdate, password) VALUES (%s, %s, %s, %s, %s)",
-            (first_name, last_name, email, birthdate, password),
-        )
-        conn.commit()
-        conn.close()
-        return True
-    except Exception as e:
-        print(f"Errore nel registrare l'utente: {e}")
-        return False
-
-
+      
 @app.route("/register", methods=["POST"])
 def register():
     data = request.get_json()
@@ -113,41 +81,34 @@ def register():
             {"success": False, "message": "Errore durante la registrazione."}
         )
 
-
-# Recupera i dati dalla tabella user.
-def getUsers():
+#Funzione per verificare se l'email esiste già nel DB
+def checkEmail(email):
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute(QUERY_ALL_USER)
-        rows = cursor.fetchall()  # Recupera tutti i record
-        conn.close()
-        return rows
-    except Exception as e:
-        # Stampa l'errore a schermo
-        print(
-            f"Errore durante la connessione al database o l'esecuzione della query: {e}"
-        )
-        return []
-
-
-# Funzione per verificare se l'utente esiste nel DB
-def loginUser(email, password):
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        cursor.execute(QUERY_LOGGED_USER, (email, password))
+        cursor.execute(QUERY_EMAIL_FILTERED_USER, email)
         user = cursor.fetchone()
         conn.close()
-        if user:
-            return True
-        else:
-            return False
+        return user is not None
     except Exception as e:
         print(f"Errore nel connettersi al DB: {e}")
         return False
 
 
+# Funzione per registrare un nuovo utente nel DB
+def userRegister(first_name, last_name, email, birthdate, password):
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute(QUERY_NEW_USER,(first_name, last_name, email, birthdate, password),)
+        conn.commit()
+        conn.close()
+        return True
+    except Exception as e:
+        print(f"Errore nel registrare l'utente: {e}")
+        return False
+
+# Funzione per verificare se l'utente esiste nel DB
 @app.route("/login", methods=["POST"])
 def login():
     data = request.get_json()  # Riceve i dati come JSON
@@ -166,7 +127,7 @@ def login():
     else:
         return jsonify({"success": False, "message": "Credenziali errate."})
 
-
+# Funzione per recuperare i corsi prenotabili dall'utente loggato
 @app.route("/retrieveCourse", methods=["POST"])
 def retrieveCourse():
     try:
@@ -193,7 +154,7 @@ def retrieveCourse():
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
 
-
+# Funzione per confermare una prenotazione 
 @app.route("/confirmedReservation", methods=["POST"])
 def confirmedReservation():
     data = request.get_json()  # Riceve i dati come JSON
@@ -201,7 +162,6 @@ def confirmedReservation():
     courseId = data.get("courseId")
     reservationDate = data.get("reservationDate")
     reservation_status = "Confirmed"
-    # if loginUser(email, password):
     result = book(userId, courseId, reservationDate, reservation_status)
     if result:
         return jsonify(
@@ -226,7 +186,7 @@ def book(userId, courseId, reservationDate, reservation_status):
         print(f"Errore nel registrare prenotazione: {e}")
         return False
 
-
+# Funzione per cancellare una prenotazione 
 @app.route("/deleteReservation", methods=["POST"])
 def deleteReservation():
     data = request.get_json()  # Riceve i dati come JSON
@@ -252,7 +212,7 @@ def deleteRes(reservationId):
         print(f"Errore nel CANCELLARE prenotazione: {e}")
         return False
 
-
+# Funzione per recuperare le prenotazioni dell'utente loggato 
 @app.route("/retrieveReservation", methods=["POST"])
 def retrieveReservation():
     data = request.get_json()
