@@ -278,7 +278,7 @@ console.log("JavaScript caricato correttamente!");
 
      
 
-        function confirmedReservartion( courseId) {
+        function confirmedReservation( courseId) {
             if(checkLoggedUser){
                 const user_Name = sessionStorage.getItem('userEmail'); 
                 const userId = sessionStorage.getItem('userId'); 
@@ -289,7 +289,7 @@ console.log("JavaScript caricato correttamente!");
                     reservationDate: reservationDate
                 };
                 
-                fetch('/confirmedReservartion', {  
+                fetch('/confirmedReservation', {  
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify(userData)
