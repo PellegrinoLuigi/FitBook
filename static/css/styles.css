@@ -141,7 +141,7 @@
         }
 
         form input[type="submit"]:hover {
-            background-color: #004d40; /* Verde più scuro al passaggio del mouse */
+            background-color: var(--primary-color-hover)  
             font-family: Raleway, sans-serif;
         }
 
@@ -151,7 +151,7 @@
         }
 
         .switch-form a {
-            color: var(--primary-color); /* Verde scuro pastello */
+            color: var(--primary-color);  
             text-decoration: none;
             font-weight: bold;
         }
@@ -170,12 +170,12 @@
         table td {
             padding: 10px;
             border-bottom: 1px solid #ccc;
-            border-radius: 20px 10px 50px 0px;
+            border-radius: 50px 10px 50px 0px;
             text-align: center;
         }
 
         table th {
-            background-color: var(--primary-color); /* Verde scuro pastello */
+            background-color: var(--primary-color); 
             color: #fff;
         }
         td{
@@ -191,7 +191,7 @@
             nav {
                 display: none;
                 flex-direction: column;
-                background-color: rgba(51, 51, 51, 0.9); /* Grigio scuro con trasparenza */
+                background-color: rgba(51, 51, 51, 0.9); 
                 position: absolute;
                 top: 50px;
                 right: 20px;
@@ -238,7 +238,7 @@
 
         .prenota-bottone {
             padding: 10px;
-            background-color: var(--primary-color); /* Verde scuro pastello */
+            background-color: var(--primary-color); 
             color: #fff;
             border: none;
             border-radius: 4px;
@@ -251,7 +251,7 @@
         }
         
         .prenota-bottone:hover {
-            background-color: var(--primary-color-hover); /* Verde scuro */
+            background-color: var(--primary-color-hover); 
         }
         button.disabled {
             background-color: #d3d3d3; /* Colore grigio */
