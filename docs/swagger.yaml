@@ -1,0 +1,168 @@
+openapi: 3.0.0
+info:
+  title: API FitBook
+  version: 1.0.0
+  description: Documentazione Swagger per le API del sistema di prenotazione corsi.
+servers:
+  - url: https://fitbook-sr59.onrender.com/
+paths:
+  /checkEmail:
+    post:
+      summary: Verifica se un'email esiste nel database
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+              required:
+                - email
+      responses:
+        '200':
+          description: Email trovata
+        '400':
+          description: Errore nella verifica
+  /register:
+    post:
+      summary: Registra un nuovo utente
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                first_name:
+                  type: string
+                last_name:
+                  type: string
+                email:
+                  type: string
+                birthdate:
+                  type: string
+                  format: date
+                password:
+                  type: string
+              required:
+                - first_name
+                - last_name
+                - email
+                - birthdate
+                - password
+      responses:
+        '200':
+          description: Registrazione avvenuta con successo
+        '400':
+          description: Errore durante la registrazione
+  /login:
+    post:
+      summary: Effettua il login dell'utente
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - email
+                - password
+      responses:
+        '200':
+          description: Login effettuato con successo
+        '400':
+          description: Credenziali errate
+  /retrieveCourse:
+    post:
+      summary: Recupera i corsi disponibili
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userName:
+                  type: string
+                reservation_date:
+                  type: string
+                  format: date
+              required:
+                - userName
+                - reservation_date
+      responses:
+        '200':
+          description: Lista corsi trovata
+        '500':
+          description: Errore interno
+  /confirmedReservartion:
+    post:
+      summary: Conferma una prenotazione
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: integer
+                courseId:
+                  type: integer
+                reservationDate:
+                  type: string
+                  format: date
+              required:
+                - userId
+                - courseId
+                - reservationDate
+      responses:
+        '200':
+          description: Prenotazione confermata
+        '400':
+          description: Errore durante la prenotazione
+  /deleteReservation:
+    post:
+      summary: Cancella una prenotazione
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reservationId:
+                  type: integer
+              required:
+                - reservationId
+      responses:
+        '200':
+          description: Prenotazione cancellata con successo
+        '400':
+          description: Errore nella cancellazione
+  /retrieveReservation:
+    post:
+      summary: Recupera le prenotazioni confermate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: integer
+              required:
+                - userId
+      responses:
+        '200':
+          description: Lista prenotazioni trovata
+        '400':
+          description: Errore durante il recupero delle prenotazioni
