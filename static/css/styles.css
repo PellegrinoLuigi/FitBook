@@ -1,10 +1,14 @@
 
-        /* Reset CSS */
+        :root {
+            --primary-color: #87556e; /* #00796b; */
+        }
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+
         a{
                 cursor:pointer;
         }
@@ -15,7 +19,7 @@
             margin: 0;
             padding: 0;
             font-family: Raleway, sans-serif;
-            color: #00796b; /* Colore del testo */
+            color: var(--primary-color); /* Colore del testo */
             line-height: 1.6;
         }
 
@@ -76,7 +80,7 @@
             text-align: center;
             margin-bottom: 20px;
             font-size: 28px;
-            color: #00796b; /* Verde scuro pastello */
+            color:var(--primary-color); /* Verde scuro pastello */
             font-family: Raleway, sans-serif;
         }
 
@@ -87,7 +91,7 @@
         }
 
         .welcome-text a {
-            color: #00796b; /* Verde scuro pastello */
+            color: var(--primary-color); /* Verde scuro pastello */
             text-decoration: none;
             font-weight: bold;
         }
@@ -100,7 +104,7 @@
             display: block;
             margin-bottom: 8px;
             font-weight: bold;
-            color: #00796b; /* Verde scuro pastello */
+            color: var(--primary-color); /* Verde scuro pastello */
             text-align:center;
             font-family: Raleway, sans-serif;
         }
@@ -123,7 +127,7 @@
         form input[type="submit"] {
             width: 50%;
             padding: 10px;
-            background-color: #00796b; /* Verde scuro pastello */
+            background-color: var(--primary-color); /* Verde scuro pastello */
             color: #fff;
             border: none;
             border-radius: 4px;
@@ -146,7 +150,7 @@
         }
 
         .switch-form a {
-            color: #00796b; /* Verde scuro pastello */
+            color: var(--primary-color); /* Verde scuro pastello */
             text-decoration: none;
             font-weight: bold;
         }
@@ -170,7 +174,7 @@
         }
 
         table th {
-            background-color: #00796b; /* Verde scuro pastello */
+            background-color: var(--primary-color); /* Verde scuro pastello */
             color: #fff;
         }
 
@@ -230,7 +234,7 @@
 
         .prenota-bottone {
             padding: 10px;
-            background-color: #00796b; /* Verde scuro pastello */
+            background-color: var(--primary-color); /* Verde scuro pastello */
             color: #fff;
             border: none;
             border-radius: 4px;
