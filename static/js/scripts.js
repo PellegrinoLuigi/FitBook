@@ -407,7 +407,7 @@ console.log("JavaScript caricato correttamente!");
         }
 
         function showCourse(){
-            document.getElementById('noCourse').style.display = 'none';
+            //document.getElementById('noCourse').style.display = 'none';
             document.getElementById('availableSeats').style.display = 'block';
 
         }
