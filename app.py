@@ -174,8 +174,8 @@ def retrieveCourse():
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
 
-@app.route('/confirmedReservartion', methods=['POST'])
-def confirmedReservartion():
+@app.route('/confirmedReservation', methods=['POST'])
+def confirmedReservation():
     data = request.get_json()  # Riceve i dati come JSON
     userId = data.get('userId')
     courseId = data.get('courseId')
