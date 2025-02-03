@@ -2,22 +2,21 @@ import os
 from flask import Flask, render_template, request, jsonify
 import psycopg2
 
-app = Flask(__name__, static_folder='static')
+app = Flask(__name__, static_folder="static")
 
 # Configurazione del database tramite variabili d'ambiente configurate su Render.com
-db_name = os.getenv('DB_NAME')
-db_user = os.getenv('DB_USER')
-db_password = os.getenv('DB_PASSWORD')
-db_host = os.getenv('DB_HOST')
-db_port = os.getenv('DB_PORT', 5432)  # Porta di default
+db_name = os.getenv("DB_NAME")
+db_user = os.getenv("DB_USER")
+db_password = os.getenv("DB_PASSWORD")
+db_host = os.getenv("DB_HOST")
+db_port = os.getenv("DB_PORT", 5432)  # Porta di default
 
-QUERY_ALL_USER="SELECT id, nome, cognome, email, data_di_nascita FROM users;"
-QUERY_LOGGED_USER="SELECT first_name,last_name,email,id  FROM users WHERE email = %s AND password = %s;"
-QUERY_EMAIL_FILTERED_USER="SELECT * FROM users WHERE email = %s;"
+QUERY_ALL_USER = "SELECT id, nome, cognome, email, data_di_nascita FROM users;"
+QUERY_LOGGED_USER = "SELECT first_name,last_name,email,id  FROM users WHERE email = %s AND password = %s;"
+QUERY_EMAIL_FILTERED_USER = "SELECT * FROM users WHERE email = %s;"
 
 
-
-QUERY_CHECK_RESERVATION ="""SELECT course.id, course.name, course.capacity - COALESCE(reservation_count, 0) AS available_seats, 
+QUERY_CHECK_RESERVATION = """SELECT course.id, course.name, course.capacity - COALESCE(reservation_count, 0) AS available_seats, 
        course.weekday, course.start_time, course.duration, trainer.first_name, trainer.last_name 
 FROM course 
 LEFT JOIN (
@@ -45,12 +44,13 @@ JOIN course c ON r.course_id = c.id
 WHERE   r.reservation_status = 'Confirmed'
 AND r.user_id = %s ;"""
 
-QUERY_DELETE_RESERVATION="DELETE FROM reservation WHERE id = %s;"
-QUERY_LOGICAL_DELETE_RESERVATION="UPDATE reservation SET reservation_status = 'Cancelled' WHERE id = %s;"
+QUERY_DELETE_RESERVATION = "DELETE FROM reservation WHERE id = %s;"
+QUERY_LOGICAL_DELETE_RESERVATION = (
+    "UPDATE reservation SET reservation_status = 'Cancelled' WHERE id = %s;"
+)
+QUERY_GET_SUBSCRIPTION ="SELECT * FROM subscription where id = %s;"
 
 
-
- 
 # Stringa di connessione al db
 conn_string = f"dbname={db_name} user={db_user} password={db_password} host={db_host} port={db_port}"
 
@@ -63,9 +63,10 @@ def get_db_connection():
         print(f"Errore durante la connessione al database: {e}")
         return None
 
-@app.route('/checkEmail', methods=['POST'])
+#Funzione per verificare se l'email esiste già nel DB
+
+@app.route("/checkEmail", methods=["POST"])
 def checkEmail(email):
-    """Funzione per verificare se l'email esiste già nel DB"""
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
@@ -77,13 +78,16 @@ def checkEmail(email):
         print(f"Errore nel connettersi al DB: {e}")
         return False
 
-#Funzione per registrare un nuovo utente nel DB
+
+# Funzione per registrare un nuovo utente nel DB
 def userRegister(first_name, last_name, email, birthdate, password):
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute("INSERT INTO users (first_name, last_name, email, birthdate, password) VALUES (%s, %s, %s, %s, %s)",
-                       (first_name, last_name, email, birthdate, password))
+        cursor.execute(
+            "INSERT INTO users (first_name, last_name, email, birthdate, password) VALUES (%s, %s, %s, %s, %s)",
+            (first_name, last_name, email, birthdate, password),
+        )
         conn.commit()
         conn.close()
         return True
@@ -92,37 +96,45 @@ def userRegister(first_name, last_name, email, birthdate, password):
         return False
 
 
-@app.route('/register', methods=['POST'])
+@app.route("/register", methods=["POST"])
 def register():
     data = request.get_json()
-    first_name = data.get('first_name')
-    last_name = data.get('last_name')
-    email = data.get('email')
-    birthdate = data.get('birthdate')
-    password = data.get('password')
+    first_name = data.get("first_name")
+    last_name = data.get("last_name")
+    email = data.get("email")
+    birthdate = data.get("birthdate")
+    password = data.get("password")
 
     if checkEmail(email):
-        return jsonify({"success": False, "message": "L'email è già registrata."})    
+        return jsonify({"success": False, "message": "L'email è già registrata."})
     if userRegister(first_name, last_name, email, birthdate, password):
-        return jsonify({"success": True, "message": "Registrazione avvenuta con successo!"})
+        return jsonify(
+            {"success": True, "message": "Registrazione avvenuta con successo!"}
+        )
     else:
-        return jsonify({"success": False, "message": "Errore durante la registrazione."})
+        return jsonify(
+            {"success": False, "message": "Errore durante la registrazione."}
+        )
 
-#Recupera i dati dalla tabella user.
+
+# Recupera i dati dalla tabella user.
 def getUsers():
     try:
         conn = get_db_connection()
-        cursor = conn.cursor()        
+        cursor = conn.cursor()
         cursor.execute(QUERY_ALL_USER)
         rows = cursor.fetchall()  # Recupera tutti i record
-        conn.close()        
+        conn.close()
         return rows
     except Exception as e:
         # Stampa l'errore a schermo
-        print(f"Errore durante la connessione al database o l'esecuzione della query: {e}")
+        print(
+            f"Errore durante la connessione al database o l'esecuzione della query: {e}"
+        )
         return []
 
-#Funzione per verificare se l'utente esiste nel DB
+
+# Funzione per verificare se l'utente esiste nel DB
 def loginUser(email, password):
     try:
         conn = get_db_connection()
@@ -139,33 +151,43 @@ def loginUser(email, password):
         return False
 
 
-@app.route('/login', methods=['POST'])
+@app.route("/login", methods=["POST"])
 def login():
     data = request.get_json()  # Riceve i dati come JSON
-    email = data.get('email')
-    password = data.get('password')
-    result = db_request_select(QUERY_LOGGED_USER,email, password)
+    email = data.get("email")
+    password = data.get("password")
+    result = db_request_select(QUERY_LOGGED_USER, email, password)
     if result:
-        return jsonify({"success": True, "userFullName":result[0] + " " + result[1],"userEmail":result[2],"userId":result[3] })
+        return jsonify(
+            {
+                "success": True,
+                "userFullName": result[0] + " " + result[1],
+                "userEmail": result[2],
+                "userId": result[3],
+            }
+        )
     else:
         return jsonify({"success": False, "message": "Credenziali errate."})
 
 
-
-@app.route('/retrieveCourse', methods=['POST'])
+@app.route("/retrieveCourse", methods=["POST"])
 def retrieveCourse():
     try:
         data = request.get_json()
-        user_email = data.get('userName')
-        reservation_date = data.get('reservation_date')
-        reservation_date2 = data.get('reservation_date')
-        reservation_date3 = data.get('reservation_date')
+        user_email = data.get("userName")
+        reservation_date = data.get("reservation_date")
+        reservation_date2 = data.get("reservation_date")
+        reservation_date3 = data.get("reservation_date")
 
-      
-        result =db_request_select_all_4_params(QUERY_CHECK_RESERVATION,reservation_date,reservation_date2,user_email,reservation_date3)
+        result = db_request_select_all_4_params(
+            QUERY_CHECK_RESERVATION,
+            reservation_date,
+            reservation_date2,
+            user_email,
+            reservation_date3,
+        )
         # in errore di tuple index out of range"
-        #result =db_request_select_all(QUERY_CHECK_RESERVATION,(reservation_date,reservation_date2,user_email))
-
+        # result =db_request_select_all(QUERY_CHECK_RESERVATION,(reservation_date,reservation_date2,user_email))
 
         if result:
             return jsonify({"success": True, "courselist": result})
@@ -174,17 +196,20 @@ def retrieveCourse():
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
 
-@app.route('/confirmedReservation', methods=['POST'])
+
+@app.route("/confirmedReservation", methods=["POST"])
 def confirmedReservation():
     data = request.get_json()  # Riceve i dati come JSON
-    userId = data.get('userId')
-    courseId = data.get('courseId')
-    reservationDate= data.get('reservationDate')
-    reservation_status= 'Confirmed'
-    #if loginUser(email, password):
-    result = book (userId, courseId,reservationDate,reservation_status)
+    userId = data.get("userId")
+    courseId = data.get("courseId")
+    reservationDate = data.get("reservationDate")
+    reservation_status = "Confirmed"
+    # if loginUser(email, password):
+    result = book(userId, courseId, reservationDate, reservation_status)
     if result:
-        return jsonify({"success": True, "message": "Prenotazione effettuata con successo!"})
+        return jsonify(
+            {"success": True, "message": "Prenotazione effettuata con successo!"}
+        )
     else:
         return jsonify({"success": False, "message": "Errore durante la prenotazione."})
 
@@ -193,8 +218,10 @@ def book(userId, courseId, reservationDate, reservation_status):
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        #"INSERT INTO reservation (user_id, course_id, reservation_date, reservation_status) VALUES (%s, %s, %s, %s);
-        cursor.execute(QUERY_BOOK_COURSE, (userId,courseId,  reservationDate, reservation_status))                     
+        # "INSERT INTO reservation (user_id, course_id, reservation_date, reservation_status) VALUES (%s, %s, %s, %s);
+        cursor.execute(
+            QUERY_BOOK_COURSE, (userId, courseId, reservationDate, reservation_status)
+        )
         conn.commit()
         conn.close()
         return True
@@ -202,21 +229,25 @@ def book(userId, courseId, reservationDate, reservation_status):
         print(f"Errore nel registrare prenotazione: {e}")
         return False
 
-@app.route('/deleteReservation', methods=['POST'])
+
+@app.route("/deleteReservation", methods=["POST"])
 def deleteReservation():
     data = request.get_json()  # Riceve i dati come JSON
-    reservationId = data.get('reservationId')    
-    result = deleteRes (reservationId)
+    reservationId = data.get("reservationId")
+    result = deleteRes(reservationId)
     if result:
-        return jsonify({"success": True, "message": "Prenotazione effettuata con successo!"})
+        return jsonify(
+            {"success": True, "message": "Prenotazione effettuata con successo!"}
+        )
     else:
         return jsonify({"success": False, "message": "Errore durante la prenotazione."})
+
 
 def deleteRes(reservationId):
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute(QUERY_LOGICAL_DELETE_RESERVATION, (reservationId,))                     
+        cursor.execute(QUERY_LOGICAL_DELETE_RESERVATION, (reservationId,))
         conn.commit()
         conn.close()
         return True
@@ -224,16 +255,27 @@ def deleteRes(reservationId):
         print(f"Errore nel CANCELLARE prenotazione: {e}")
         return False
 
-@app.route('/retrieveReservation', methods=['POST'])
+
+@app.route("/retrieveReservation", methods=["POST"])
 def retrieveReservation():
     data = request.get_json()
-    userId = data.get('userId')
-    result = db_request_select_all(QUERY_BOOKED_COURSES,userId)
+    userId = data.get("userId")
+    result = db_request_select_all(QUERY_BOOKED_COURSES, userId)
     if result:
         return jsonify({"success": True, "reservationlist": result})
     else:
         return jsonify({"success": False, "message": "Errore durante la prenotazione."})
-    
+
+@app.route("/retrieveSubscription", methods=["POST"])
+def retrieveSubscription():
+    data = request.get_json()
+    userId = data.get("userId")
+    result = db_request_select_all(QUERY_GET_SUBSCRIPTION, userId)
+    if result:
+        return jsonify({"success": True, "subscriptionList": result})
+    else:
+        return jsonify({"success": False, "message": "Errore durante la prenotazione."})
+
 
 def db_request_select(query, *params):
     conn = get_db_connection()
@@ -241,10 +283,11 @@ def db_request_select(query, *params):
     if params:
         cursor.execute(query, params)
     else:
-        cursor.execute(query)    
+        cursor.execute(query)
     result = cursor.fetchone()
     conn.close()
     return result
+
 
 def db_request_select_all(query, *params):
     conn = get_db_connection()
@@ -252,33 +295,36 @@ def db_request_select_all(query, *params):
     if params:
         cursor.execute(query, params)
     else:
-        cursor.execute(query)    
+        cursor.execute(query)
     result = cursor.fetchall()
     conn.close()
     return result
 
-def db_request_select_all_3_params(query, par1,par2,par3):
+
+def db_request_select_all_3_params(query, par1, par2, par3):
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute(query, (par1,par2,par3))
+    cursor.execute(query, (par1, par2, par3))
     result = cursor.fetchall()
     conn.close()
     return result
 
-def db_request_select_all_4_params(query, par1,par2,par3,par4):
+
+def db_request_select_all_4_params(query, par1, par2, par3, par4):
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute(query, (par1,par2,par3,par4))
+    cursor.execute(query, (par1, par2, par3, par4))
     result = cursor.fetchall()
     conn.close()
     return result
 
-@app.route('/')
+
+@app.route("/")
 def home():
     users = getUsers()
-    utente='cavolo'
-    return render_template('index.html',utente=utente, users=users)
+    return render_template("index.html", users=users)
 
-if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))  # Usa la porta specificata da Render 
-    app.run(host='0.0.0.0', port=port, debug=True)
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))  # Usa la porta specificata da Render
+    app.run(host="0.0.0.0", port=port, debug=True)
