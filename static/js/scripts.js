@@ -466,14 +466,13 @@ window.onload = () => {
                 }
             })
             .catch(error => {
-                    console.error('Errore durante recupero dell'
-                        abbonamento: ', error);
+                  console.log('errore:' + error);
                         //  alert('Si è verificato un errore durante la prenotazione.');
                     }
                 );
 
-            }
     }
+    
     showForm('home');
 
 
