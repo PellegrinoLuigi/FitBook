@@ -416,44 +416,48 @@ console.log("JavaScript caricato correttamente!");
             document.getElementById('availableSeats').style.display = 'none';
         }
        // Mostra la Home di default al caricamento della pagina
-        window.onload = () => {
-            // Leggi la variabile di sessione
-            userId = sessionStorage.getItem('userId');
-            if(loggedInUser){
-                activeLogin();                
-                const userData = {
-                    userId: userId                    
-                };
-                fetch('/retrieveSubscription', {  
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify(userData)
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                      console.log(data.subscriptionList);
-                    } else {
-                        alert(data.message);
-                    }
-                })
-                .catch(error => {
-                    console.error('Errore durante recupero dell'abbonamento:', error);
-                  //  alert('Si è verificato un errore durante la prenotazione.');
-            }
-            );
-           
-            }
-            showForm('home');
+    window.onload = () => {
+    // Leggi la variabile di sessione
+    let userId = sessionStorage.getItem('userId');  
 
-           
-           
-            var today = new Date().toISOString().split('T')[0]; // Ottieni la data odierna in formato YYYY-MM-DD
-            var dataInput = document.getElementById("dataInput");
-            dataInput.setAttribute('min', today); // Imposta la data minima a oggi
-            dataInput.value = today; // Imposta il valore di default a oggi
-           
+    // Assicurati che loggedInUser sia definito prima di usarlo
+    if (typeof loggedInUser !== 'undefined' && loggedInUser) {
+        activeLogin();
+        
+        const userData = {
+            userId: userId                    
         };
+
+        fetch('/retrieveSubscription', {  
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(userData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log(data.subscriptionList);
+            } else {
+                alert(data.message);
+            }
+        })
+        .catch(error => {
+            console.error("Errore durante il recupero dell'abbonamento:", error);
+            // alert('Si è verificato un errore durante la prenotazione.');
+        });
+    }
+
+    showForm('home');
+
+    // Imposta la data odierna per un campo input di tipo date
+    let today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+    let dataInput = document.getElementById("dataInput");
+    if (dataInput) {  // Controllo per evitare errori se l'elemento non esiste
+        dataInput.setAttribute('min', today);
+        dataInput.value = today;
+    }
+};
+
 
 function formatDate(date) {
     return ' '+(date.toString()).substring(0, 11); // Formatta con Day.js
