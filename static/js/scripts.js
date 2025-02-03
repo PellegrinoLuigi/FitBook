@@ -228,7 +228,7 @@ console.log("JavaScript caricato correttamente!");
                         tbody.innerHTML = reservations.map(p => `
                             <tr>
                                 <td>${p.name}</td>
-                                <td>${p.data}</td>
+                                <td>${formatDate(p.data)}</td>
                                 <td>${p.startTime}</td>
                                 <td><button class="prenota-bottone" onclick="deleteReservation('${p.id}')">Cancella</button></td>
                             </tr>
@@ -414,4 +414,8 @@ console.log("JavaScript caricato correttamente!");
             dataInput.value = today; // Imposta il valore di default a oggi
            
         };
+
+function formatDate(date) {
+    return dayjs(date).format('YYYY-MM-DD'); // Formatta con Day.js
+}
         
