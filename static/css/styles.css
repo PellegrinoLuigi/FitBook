@@ -1,7 +1,8 @@
 
         :root {
-            --primary-color: #87556e; /* #00796b; */
-        }
+            --primary-color: #00B0B9;/* #87556e;  #00796b; */
+            --primary-color-hover: #03656a;
+        } 
         
         * {
             margin: 0;
@@ -247,7 +248,7 @@
         }
         
         .prenota-bottone:hover {
-            background-color: #00574b; /* Verde scuro */
+            background-color: var(--primary-color-hover); /* Verde scuro */
         }
         button.disabled {
             background-color: #d3d3d3; /* Colore grigio */
