@@ -165,7 +165,7 @@ console.log("JavaScript caricato correttamente!");
                         tbody.innerHTML = availableSeats.map(p => `
                             <tr>
                                 <td>${p.name}</td>
-                                <td>${p.availableSeats}</td>
+                                <td>${p.availableSeats + ' posti'}</td>
                                 <td>${p.startTime}</td>
                                 <td>${p.duration}</td>
                                 <td>${p.trainer}</td>
