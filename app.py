@@ -278,8 +278,8 @@ def db_request_select_all_4_params(query, par1, par2, par3, par4):
 
 @app.route("/")
 def home():
-    users = getUsers()
-    return render_template("index.html", users=users)
+    #users=users
+    return render_template("index.html")
 
 
 if __name__ == "__main__":
