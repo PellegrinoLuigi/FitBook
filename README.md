@@ -1,8 +1,8 @@
 # FitBook
 
 [![Swagger](https://img.shields.io/badge/docs-Swagger-blue)](https://pellegrinoluigi.github.io/FitBook)
-![Descrizione del Diagramma](docs/dm_fitbook.md)
-![Descrizione del Diagramma](docs/FitBook%20Diagram.svg)
+
+
 
 
 ## 📌 Descrizione
@@ -29,6 +29,7 @@ FitBook è un sistema di prenotazione online per centro fitness, che consente ag
   - pgAdmin
   - Swagger.io
   - [dbdiagram.io](https://dbdiagram.io/d/FitBook-Diagram-6798b7b5263d6cf9a046ced8)
+  - ![Descrizione del Diagramma](docs/FitBook%20Diagram.svg)
 
 --
 ## 📬 Contatti
