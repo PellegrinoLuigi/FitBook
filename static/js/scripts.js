@@ -268,18 +268,7 @@ console.log("JavaScript caricato correttamente!");
             showForm('home');
         }
 
-        // Mostra la Home di default al caricamento della pagina
-        window.onload = () => {
-            // Leggi la variabile di sessione
-            loggedInUser = sessionStorage.getItem('loggedInUser');
-            if(loggedInUser){
-                activeLogin();
-            }
-            showForm('home');
-             var today = new Date().toISOString().split('T')[0];
-            document.getElementById("dataInput").setAttribute('min', today);
-           
-        };
+     
 
         function confirmedReservartion( courseId) {
             if(checkLoggedUser){
@@ -398,5 +387,19 @@ console.log("JavaScript caricato correttamente!");
             tbody.innerHTML = '';
             retrieveReservation();
         }
-    
+       // Mostra la Home di default al caricamento della pagina
+        window.onload = () => {
+            // Leggi la variabile di sessione
+            loggedInUser = sessionStorage.getItem('loggedInUser');
+            if(loggedInUser){
+                activeLogin();
+            }
+            showForm('home');
+           
+            var today = new Date().toISOString().split('T')[0]; // Ottieni la data odierna in formato YYYY-MM-DD
+            var dataInput = document.getElementById("dataInput");
+            dataInput.setAttribute('min', today); // Imposta la data minima a oggi
+            dataInput.value = today; // Imposta il valore di default a oggi
+           
+        };
         
