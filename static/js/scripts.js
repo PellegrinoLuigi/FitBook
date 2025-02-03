@@ -233,7 +233,7 @@ console.log("JavaScript caricato correttamente!");
                         tbody.innerHTML = reservations.map(p => `
                             <tr>
                                 <td>${p.name}</td>
-                                <td>${formatDate(p.data)}</td>
+                                <td>${formatDate(p.data) + ' '+p.startTime}</td>
                                 <td>${p.startTime}</td>
                                 <td><button class="prenota-bottone" onclick="deleteReservation('${p.id}')">Cancella</button></td>
                             </tr>
