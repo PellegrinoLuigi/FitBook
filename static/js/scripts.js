@@ -418,11 +418,35 @@ console.log("JavaScript caricato correttamente!");
        // Mostra la Home di default al caricamento della pagina
         window.onload = () => {
             // Leggi la variabile di sessione
-            loggedInUser = sessionStorage.getItem('loggedInUser');
+            userId = sessionStorage.getItem('userId');
             if(loggedInUser){
-                activeLogin();
+                activeLogin();                
+                const userData = {
+                    userId: userId                    
+                };
+                fetch('/retrieveSubscription', {  
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(userData)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                      console.log(data.subscriptionList);
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Errore durante recupero dell'abbonamento:', error);
+                  //  alert('Si è verificato un errore durante la prenotazione.');
+            }
+            );
+           
             }
             showForm('home');
+
+           
            
             var today = new Date().toISOString().split('T')[0]; // Ottieni la data odierna in formato YYYY-MM-DD
             var dataInput = document.getElementById("dataInput");
