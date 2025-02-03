@@ -2,6 +2,7 @@
 
 [![Swagger](https://img.shields.io/badge/docs-Swagger-blue)](https://pellegrinoluigi.github.io/FitBook)
 ![Descrizione del Diagramma](docs/dm_fitbook.md)
+![Descrizione del Diagramma](docs/FitBook Diagram.svg)
 
 
 
