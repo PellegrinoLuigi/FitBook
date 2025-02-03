@@ -327,7 +327,7 @@ console.log("JavaScript caricato correttamente!");
                 })
                 .then(response => response.json())
                 .then(data => {
-                    if (data.success) {refreshRetrieveCourse();
+                    if (data.success) {refreshRetrieveReservation();
                         //alert(`Prenotazione cancellata !'`);
                         //showForm('showReservation');
                     } else {
@@ -391,7 +391,7 @@ console.log("JavaScript caricato correttamente!");
             retrieveCourse();
         }
     
-        function refreshRetrieveCourse(){
+        function refreshRetrieveReservation(){
             const tbody = document.querySelector('#prenotazioniTable tbody');
             tbody.innerHTML = '';
             retrieveReservation();
