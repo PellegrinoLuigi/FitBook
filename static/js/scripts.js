@@ -240,7 +240,7 @@ console.log("JavaScript caricato correttamente!");
                     }
                 } else {
                     console.error("Errore:", data.error);
-                    document.getElementById('showReservation').style.display = 'none';
+                    document.getElementById('prenotazioniTable').style.display = 'none';
 
                     //alert("Errore nella richiesta: " + data.error);
                 }
