@@ -276,6 +276,8 @@ console.log("JavaScript caricato correttamente!");
                 activeLogin();
             }
             showForm('home');
+             var today = new Date().toISOString().split('T')[0];
+            document.getElementById("dataInput").setAttribute('min', today);
            
         };
 
