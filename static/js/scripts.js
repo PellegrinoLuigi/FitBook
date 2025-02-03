@@ -221,7 +221,8 @@ console.log("JavaScript caricato correttamente!");
                             data: reservation[2],
                             startTime: reservation[3]                           
                         }));
-            
+
+                            
                         console.log('reservations:', reservations);
                         const tbody = document.querySelector('#prenotazioniTable tbody');
                         tbody.innerHTML = reservations.map(p => `
@@ -232,23 +233,23 @@ console.log("JavaScript caricato correttamente!");
                                 <td><button class="prenota-bottone" onclick="deleteReservation('${p.id}')">Cancella</button></td>
                             </tr>
                         `).join('');
-                       
+                        showReservation();
                         //alert(`Prenotazione effettuata per ${userName} il ${data}`);
                        // showForm('home');
                     } else {
+                         noReservation();
                         alert(res.message);
                     }
                 } else {
                     console.error("Errore:", data.error);
-                    document.getElementById('prenotazioniTable').style.display = 'none';
-
-                    //alert("Errore nella richiesta: " + data.error);
+                    noReservation();
                 }
             })            
             .catch(error => {
                 console.error('ERROR:', error);
                 console.error( error);
-                alert('Non risultano prenotazioni attive.');
+                //alert('Non risultano prenotazioni attive.');
+                 noReservation();
             });
 
            
@@ -388,6 +389,15 @@ console.log("JavaScript caricato correttamente!");
             const tbody = document.querySelector('#prenotazioniTable tbody');
             tbody.innerHTML = '';
             retrieveReservation();
+        }
+        function showReservation(){
+            document.getElementById('prenotazioniTable').style.display = 'block';
+            document.getElementById('noReservation').style.display = 'none';
+
+        }
+        function noReservation(){
+            document.getElementById('prenotazioniTable').style.display = 'none';
+            document.getElementById('noReservation').style.display = 'block';
         }
        // Mostra la Home di default al caricamento della pagina
         window.onload = () => {
