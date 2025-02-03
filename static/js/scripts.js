@@ -129,7 +129,7 @@ console.log("JavaScript caricato correttamente!");
         }
         function retrieveCourse() {
             const user_Name = sessionStorage.getItem('userEmail'); 
-            const data = document.getElementById('date').value;
+            const data = document.getElementById('dataInput').value;
             sessionStorage.setItem('reservationDate',data); 
             const userData = {
                 userName: user_Name,
