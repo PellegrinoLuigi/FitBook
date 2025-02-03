@@ -421,6 +421,6 @@ console.log("JavaScript caricato correttamente!");
         };
 
 function formatDate(date) {
-    return dayjs(date).format('YYYY-MM-DD'); // Formatta con Day.js
+    return ' '+date.toString(); // Formatta con Day.js
 }
         
