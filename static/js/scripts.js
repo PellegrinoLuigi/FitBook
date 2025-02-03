@@ -236,7 +236,6 @@ console.log("JavaScript caricato correttamente!");
                             <tr>
                                 <td>${p.name}</td>                                
                                 <td>${formatDate(p.data) + ' h: '+p.startTime}</td>
-                                //<td>${p.startTime}</td>
                                 <td><button class="prenota-bottone" onclick="deleteReservation('${p.id}')">Cancella</button></td>
                             </tr>
                         `).join('');
