@@ -159,7 +159,8 @@ console.log("JavaScript caricato correttamente!");
                         }));
             
                         console.log('Available Seats:', availableSeats);
-                        document.getElementById('availableSeats').style.display = 'block';
+                       
+                        showCourse();
                         const tbody = document.querySelector('#availableSeatsTable tbody');
                         tbody.innerHTML = availableSeats.map(p => `
                             <tr>
@@ -179,19 +180,19 @@ console.log("JavaScript caricato correttamente!");
                         //alert(`Prenotazione effettuata per ${userName} il ${data}`);
                        // showForm('home');
                     } else {
-                        alert(res.message);
-                        console.log('Available Seats:', availableSeats);
-                        document.getElementById('availableSeats').style.display = 'none';
+                             noCourse();
+                                console.log('Available Seats:', availableSeats);
+                                document.getElementById('availableSeats').style.display = 'none';
                     }
                 } else {
                     console.error("Errore:", data.error);
-                    alert("Errore nella richiesta: " + data.error);
+                         noCourse();
                 }
             })            
             .catch(error => {
+                     noCourse();
                 console.error('ERROR:', error);
                 console.error( error);
-                document.getElementById('availableSeats').style.display = 'none';
                 //alert('Non sono disponibili corsi per la data selezionata.');
             });
 
@@ -222,6 +223,7 @@ console.log("JavaScript caricato correttamente!");
                     if (data.reservationlist) {
                         const reservations = data.reservationlist.map(reservation => ({
                             id: reservation[0],
+                                
                             name: reservation[1],
                             data: reservation[2],
                             startTime: reservation[3]                           
@@ -297,7 +299,7 @@ console.log("JavaScript caricato correttamente!");
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        alert(`Prenotazione effettuata per ${user_Name} il ${data.reservation_date}`);
+                        //alert(`Prenotazione effettuata per ${user_Name} il ${data.reservation_date}`);
                         //showForm('home');
                         refreshRetrieveCourse();
                         
@@ -403,6 +405,16 @@ console.log("JavaScript caricato correttamente!");
         function noReservation(){
             document.getElementById('prenotazioniTable').style.display = 'none';
             document.getElementById('noReservation').style.display = 'block';
+        }
+
+        function showCourse(){
+            document.getElementById('noCourse').style.display = 'none';
+            document.getElementById('availableSeats').style.display = 'block';
+
+        }
+        function noCourse(){
+            document.getElementById('noCourse').style.display = 'block';
+            document.getElementById('availableSeats').style.display = 'none';
         }
        // Mostra la Home di default al caricamento della pagina
         window.onload = () => {
