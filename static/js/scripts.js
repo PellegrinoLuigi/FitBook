@@ -125,9 +125,9 @@ console.log("JavaScript caricato correttamente!");
                 showForm('login');
                 return;
             }
-            retrieveCourse();
+            retrieveCourseFuntion();
         }
-        function retrieveCourse() {
+        function retrieveCourseFuntion() {
             const user_Name = sessionStorage.getItem('userEmail'); 
             const data = document.getElementById('dataInput').value;
             sessionStorage.setItem('reservationDate',data); 
@@ -390,7 +390,7 @@ console.log("JavaScript caricato correttamente!");
         function refreshRetrieveCourse(){
             const tbody = document.querySelector('#availableSeatsTable tbody');
             tbody.innerHTML = '';
-            retrieveCourse();
+            retrieveCourseFuntion();
         }
     
         function refreshRetrieveReservation(){
