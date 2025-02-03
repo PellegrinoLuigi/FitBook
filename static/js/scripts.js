@@ -168,7 +168,12 @@ console.log("JavaScript caricato correttamente!");
                                 <td>${p.startTime}</td>
                                 <td>${p.duration}</td>
                                 <td>${p.trainer}</td>
-                                <td><button class="prenota-bottone" onclick="confirmedReservartion('${p.id}')">Prenota</button></td>
+                                <td><button 
+                                        class="prenota-bottone ${p.availableSeats < 1 ? 'disabled' : ''}" 
+                                        onclick="confirmedReservation('${p.id}')"
+                                        ${p.availableSeats < 1 ? 'disabled' : ''}>
+                                        Prenota
+                                    </button></td>
                             </tr>
                         `).join('');
                         //alert(`Prenotazione effettuata per ${userName} il ${data}`);
