@@ -386,7 +386,7 @@ console.log("JavaScript caricato correttamente!");
         }
 
         function refreshRetrieveCourse(){
-            const tbody = document.querySelector('#prenotazioniTable tbody');
+            const tbody = document.querySelector('#availableSeatsTable tbody');
             tbody.innerHTML = '';
             retrieveCourse();
         }
