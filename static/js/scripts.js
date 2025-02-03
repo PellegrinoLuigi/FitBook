@@ -445,6 +445,7 @@ function noCourse() {
 // Mostra la Home di default al caricamento della pagina
 window.onload = () => {
     userId = sessionStorage.getItem('userId');
+    loggedInUser = sessionStorage.getItem('userEmail');
     if (loggedInUser) {
         activeLogin();
         const userData = {
