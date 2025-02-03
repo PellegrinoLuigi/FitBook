@@ -5,7 +5,7 @@
 
 
 ## 📌 Descrizione
-FitBook API è un sistema di prenotazione online per palestre, che consente agli utenti di registrarsi, effettuare login e gestire le prenotazioni.
+FitBook è un sistema di prenotazione online per centro fitness, che consente agli utenti di registrarsi, effettuare login e gestire le prenotazioni.
 
 ---
 
