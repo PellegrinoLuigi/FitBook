@@ -20,6 +20,14 @@ FitBook è un sistema di prenotazione online per centro fitness, che consente ag
 - **Backend**: Python (Flask)
 - **Database**: PostgreSQL 
 - **Documentazione API**: Swagger (OpenAPI 3.0)
+- **Applicativi utilizzati**:
+  - Visual Studio Code
+  - GitHub
+  - Render.com
+  - Postman
+  - pgAdmin
+  - Swagger.io
+  - [dbdiagram.io](https://dbdiagram.io/d/FitBook-Diagram-6798b7b5263d6cf9a046ced8)
 
 --
 ## 📬 Contatti
