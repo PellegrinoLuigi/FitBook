@@ -141,7 +141,7 @@
         }
 
         form input[type="submit"]:hover {
-            background-color: var(--primary-color-hover)  
+            background-color: var(--primary-color-hover) ;
             font-family: Raleway, sans-serif;
         }
 
