@@ -48,7 +48,7 @@ QUERY_DELETE_RESERVATION = "DELETE FROM reservation WHERE id = %s;"
 QUERY_LOGICAL_DELETE_RESERVATION = (
     "UPDATE reservation SET reservation_status = 'Cancelled' WHERE id = %s;"
 )
-QUERY_GET_SUBSCRIPTION ="SELECT * FROM subscription where id = %s;"
+QUERY_GET_SUBSCRIPTION ="SELECT * FROM user_subscription where user_id = %s;"
 
 
 # Stringa di connessione al db
