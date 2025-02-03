@@ -232,8 +232,8 @@ console.log("JavaScript caricato correttamente!");
                         const tbody = document.querySelector('#prenotazioniTable tbody');
                         tbody.innerHTML = reservations.map(p => `
                             <tr>
-                                <td>${p.name}</td>
-                                <td>${formatDate(p.data) + ' '+p.startTime}</td>
+                                <td>${p.name}</td>                                
+                                <td>${formatDate(p.data) + ' h: '+p.startTime}</td>
                                 <td>${p.startTime}</td>
                                 <td><button class="prenota-bottone" onclick="deleteReservation('${p.id}')">Cancella</button></td>
                             </tr>
@@ -421,6 +421,6 @@ console.log("JavaScript caricato correttamente!");
         };
 
 function formatDate(date) {
-    return ' '+date.toString(); // Formatta con Day.js
+    return ' '+(date.toString()).substring(0, 11); // Formatta con Day.js
 }
         
