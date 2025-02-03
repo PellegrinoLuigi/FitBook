@@ -102,7 +102,7 @@ paths:
           description: Lista corsi trovata
         '500':
           description: Errore interno
-  /confirmedReservartion:
+  /confirmedReservation:
     post:
       summary: Conferma una prenotazione
       requestBody:
