@@ -13,7 +13,7 @@ function toggleMenu() {
 // Funzione per mostrare il form selezionato
 function showForm(formId) {
     // Nascondi tutti i form
-    if (!loggedInUser) {
+    if (!loggedInUser || sessionStorage.getItem('noLoggedForm')) {
         noActiveLogin();
     } else {
         activeLogin();
