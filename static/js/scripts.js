@@ -376,7 +376,7 @@ function checkLoggedUser() {
 function goLogout() {
    
     loggedInUser = null;
-    
+    noActiveLogin();
 
         showForm('home'); // Torna alla home
 }
@@ -423,6 +423,12 @@ function noActiveLogin() {
     document.getElementById('userEmailPlaceholder').textContent = '';   
     document.getElementById('welcomeNoSub').style.display = 'none';
     document.getElementById('welcomeSub').style.display = 'none';
+
+    sessionStorage.removeItem('expiredDate');
+    sessionStorage.removeItem('reservationDate');
+    sessionStorage.removeItem('subscriptionUser');
+
+
     sessionStorage.setItem('noLoggedForm', true);
     sessionStorage.removeItem('loggedInUser');
     sessionStorage.removeItem('userName');
