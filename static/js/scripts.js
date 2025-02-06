@@ -405,6 +405,9 @@ function activeSubscription(expiredDate) {
 }
 function noActiveSubscription(expiredDae) {
     document.getElementById('welcomeNoSub').style.display = 'block';
+    document.getElementById('welcomeSub').style.display = 'none';
+    sessionStorage.setItem('noLoggedForm', true);
+
     
 }
 
@@ -494,7 +497,8 @@ function retrieveSubscription(userData) {
             expiredDate= subscriptionUser[0].end_date
             activeSubscription(formatDate(expiredDate));
         } else {
-            alert(data.message);
+            noActiveSubscription();
+            //alert(data.message);
         }
     })
     .catch(error => {
