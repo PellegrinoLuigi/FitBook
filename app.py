@@ -35,7 +35,7 @@ QUERY_CHECK_RESERVATION = """SELECT course.id, course.name, course.capacity - CO
                                 WHERE users.email = %s
                                 AND reservation.reservation_date = %s
                                	AND reservation.reservation_status = 'Confirmed'
-                            );"""
+                            ) order by start_time;"""
 
 QUERY_BOOK_COURSE = "INSERT INTO reservation (user_id, course_id, reservation_date, reservation_status) VALUES (%s, %s, %s, %s);"
 QUERY_BOOKED_COURSES = """SELECT r.id as reservation_id, c.name AS course_name,DATE(r.reservation_date) AS reservation_date , c.start_time AS reservation_time 
