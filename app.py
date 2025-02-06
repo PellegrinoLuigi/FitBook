@@ -1,5 +1,7 @@
 import os
 from flask import Flask, render_template, request, jsonify
+from datetime import datetime
+
 import psycopg2
 
 app = Flask(__name__, static_folder="static")
@@ -47,7 +49,12 @@ QUERY_BOOKED_COURSES = """SELECT r.id as reservation_id, c.name AS course_name,D
 QUERY_DELETE_RESERVATION = "DELETE FROM reservation WHERE id = %s;"
 QUERY_LOGICAL_DELETE_RESERVATION = "UPDATE reservation SET reservation_status = 'Cancelled' WHERE id = %s;"
 QUERY_GET_SUBSCRIPTION ="SELECT * FROM user_subscription where user_id = %s;"
-
+QUERY_UPSERT_SUBSCRIPTION="""INSERT INTO user_subscription (user_id, start_date, subscription_days) 
+                            VALUES (%s, %s, %s)
+                            ON CONFLICT (user_id) 
+                            DO UPDATE SET 
+                                subscription_days = user_subscription.subscription_days + EXCLUDED.subscription_days,
+                                start_date = user_subscription.start_date;"""
 
 # Stringa di connessione al db
 conn_string = f"dbname={db_name} user={db_user} password={db_password} host={db_host} port={db_port}"
@@ -238,13 +245,32 @@ def buySubription():
     data = request.get_json()
     userId = data.get("userId")
     subscription = data.get("subscription")
-    result = db_request_select_all(QUERY_GET_SUBSCRIPTION, userId)
+    today = datetime.today()
+    formattedToday = today.strftime('%Y-%m-%d')
+    result = db_request_insert(QUERY_UPSERT_SUBSCRIPTION, userId,formattedToday,subscription)
     if result:
-        return jsonify({"success": True, "subscriptionList": result})
+        return jsonify({"success": True, "message": "Abbonamento acquistato con successo!"})
     else:
-        return jsonify({"success": False, "message": "Non è presente un abbonamento attivo."})
+        return jsonify({"success": False, "message": "Errore durante l'acquisto dell'abbonamento."})
 
-
+def db_request_insert(query, *params):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        if params:
+            cursor.execute(query, params)
+        else:
+            cursor.execute(query)
+        conn.commit()  # Conferma l'inserimento nel database
+        success = True
+    except Exception as e:
+        print(f"Errore durante l'INSERT: {e}")
+        conn.rollback()  # In caso di errore, annulla la transazione
+        success = False
+    finally:
+        cursor.close()
+        conn.close()
+    return success
 def db_request_select(query, *params):
     conn = get_db_connection()
     cursor = conn.cursor()

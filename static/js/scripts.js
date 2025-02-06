@@ -283,7 +283,7 @@ function retrieveReservation() {
 }
 
 // Funzione per effettuare un acquisto
-function buySub(event) {
+function buySubcription(event) {
     event.preventDefault();
     if (!loggedInUser) {
         alert("Devi effettuare il login per acquistare.");
@@ -291,8 +291,11 @@ function buySub(event) {
         return;
     }
 
-    const abbonamento = document.getElementById('abbonamento').value;
-    alert(`Abbonamento acquistato per ${abbonamento} mesi.`);
+    const subscription = document.getElementById('subscription').value;
+    userId = sessionStorage.getItem('userId');
+    const userData = {userId: userId,subscription: subscription};       
+    buySubcriptionft(userData);
+    //alert(`Abbonamento acquistato per ${abbonamento} mesi.`);
     showForm('home');
 }
 
@@ -499,6 +502,30 @@ function retrieveSubscription(userData) {
         } else {
             noActiveSubscription();
             //alert(data.message);
+        }
+    })
+    .catch(error => {
+          console.log('errore:' + error);
+                //  alert('Si è verificato un errore durante la prenotazione.');
+            }
+        );
+}
+
+function buySubcriptionft(userData) {
+    fetch('/buySubription', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(userData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {            
+            
+        } else {
+            
+             
         }
     })
     .catch(error => {
