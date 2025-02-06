@@ -398,8 +398,8 @@ function activeLogin() {
 }
 
 function activeSubscription() {
-    subscriptionUser= sessionStorage.getItem('subscriptionUser');
-    document.getElementById('subExpiredDate').textContent = subscriptionUser[0].end_date;
+    expiredDate= sessionStorage.getItem('expiredDate');
+    document.getElementById('subExpiredDate').textContent = expiredDate;
     document.getElementById('welcomeSub').style.display = 'block';
     
 }
@@ -490,8 +490,8 @@ function retrieveSubscription(userData) {
                 created_date: sub[4],
                 duration: sub[5] + ' giorni'
             }));
-            console.log(subscriptionUser[0].end_date);
-            sessionStorage.setItem('subscriptionUser', subscriptionUser);
+            const endDates = subscriptionUser.map(sub => sub.end_date);
+            sessionStorage.setItem('expiredDate', subscriptionUser.map(sub => sub.end_date));
             activeSubscription();
         } else {
             alert(data.message);
