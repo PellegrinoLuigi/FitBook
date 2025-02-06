@@ -374,18 +374,9 @@ function checkLoggedUser() {
 }
 
 function goLogout() {
-    sessionStorage.removeItem('loggedInUser');
-    sessionStorage.removeItem('userName');
-    sessionStorage.removeItem('userEmail');
-    sessionStorage.removeItem('userId');
-
+   
     loggedInUser = null;
-    document.getElementById('welcomeMessageHost').style.display = 'block';
-    document.getElementById('welcomeMessage').style.display = 'none';
-    document.getElementById('loginLink').style.display = 'block';
-    document.getElementById('logoutLink').style.display = 'none';
-    document.getElementById('welcomeNoSub').style.display = 'none';
-    document.getElementById('welcomeSub').style.display = 'none';
+    
 
         showForm('home'); // Torna alla home
 }
@@ -411,6 +402,8 @@ function activeSubscription(expiredDate) {
     //expiredDate= sessionStorage.getItem('expiredDate');
     document.getElementById('subExpiredDate').textContent = expiredDate;
     document.getElementById('welcomeSub').style.display = 'block';
+    sessionStorage.setItem('noLoggedForm', false);
+
     
 }
 function noActiveSubscription() {
@@ -427,7 +420,14 @@ function noActiveLogin() {
     document.getElementById('loginLink').style.display = 'block';
     document.getElementById('logoutLink').style.display = 'none';
     document.getElementById('userNamePlaceholder').textContent = '';
-    document.getElementById('userEmailPlaceholder').textContent = '';
+    document.getElementById('userEmailPlaceholder').textContent = '';   
+    document.getElementById('welcomeNoSub').style.display = 'none';
+    document.getElementById('welcomeSub').style.display = 'none';
+    sessionStorage.setItem('noLoggedForm', true);
+    sessionStorage.removeItem('loggedInUser');
+    sessionStorage.removeItem('userName');
+    sessionStorage.removeItem('userEmail');
+    sessionStorage.removeItem('userId');
 }
 
 function refreshRetrieveCourse() {
@@ -463,6 +463,8 @@ function noCourse() {
     document.getElementById('noCourse').style.display = 'block';
     document.getElementById('availableSeats').style.display = 'none';
 }
+
+
 
 // Mostra la Home di default al caricamento della pagina
 window.onload = () => {
