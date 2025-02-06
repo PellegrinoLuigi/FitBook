@@ -504,6 +504,9 @@ function retrieveSubscription(userData) {
         );
 }
 
-function formatDate(date) {
-    return ' ' + (date.toString()).substring(0, 11); // Formatta con Day.js
+function formatDate(dateInput) {
+    const date = new Date(dateInput);
+    const dateOptions = { weekday: 'long', day: 'numeric', month: 'long' };
+    const formattedDate = date.toLocaleDateString('it-IT', dateOptions);
+    return formattedDate;  
 }
