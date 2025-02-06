@@ -397,8 +397,9 @@ function activeLogin() {
     // sessionStorage.setItem('loggedInUser',loggedInUser); 
 }
 
-function activeSubscription(expiredDate) {
-    document.getElementById('subExpiredDate').textContent = expiredDate;
+function activeSubscription(expiredDae) {
+    expiredDate= sessionStorage.getItem('expiredDate');
+    document.getElementById('subExpiredDate').textContent = expireddate;
     document.getElementById('welcomeSub').style.display = 'block';
     
 }
@@ -477,9 +478,9 @@ function retrieveSubscription(userData) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            console.log(data.subscriptionList);
+            console.log(data.subscriptionList[3]);
             sessionStorage.setItem('expiredDate', data.subscriptionList[3]);
-            activeSubscription(data.subscriptionList[3]);
+            activeSubscription();
         } else {
             alert(data.message);
         }
