@@ -403,6 +403,10 @@ function activeSubscription(expiredDae) {
     document.getElementById('welcomeSub').style.display = 'block';
     
 }
+function noActiveSubscription(expiredDae) {
+    document.getElementById('welcomeNoSub').style.display = 'block';
+    
+}
 
 function noActiveLogin() {
     document.getElementById('welcomeMessageHost').style.display = 'block';
