@@ -490,7 +490,7 @@ function retrieveSubscription(userData) {
                 created_date: sub[4],
                 duration: sub[5] + ' giorni'
             }));
-            console.log(subscriptionUser);
+            console.log(subscriptionUser[0].end_date);
             sessionStorage.setItem('subscriptionUser', subscriptionUser);
             activeSubscription();
         } else {
