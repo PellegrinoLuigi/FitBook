@@ -399,7 +399,7 @@ function activeLogin() {
 
 function activeSubscription() {
     subscriptionUser= sessionStorage.getItem('subscriptionUser');
-    document.getElementById('subExpiredDate').textContent = subscriptionUser.end_date;
+    document.getElementById('subExpiredDate').textContent = subscriptionUser[0].end_date;
     document.getElementById('welcomeSub').style.display = 'block';
     
 }
