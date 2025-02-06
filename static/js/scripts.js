@@ -537,7 +537,7 @@ function buySubcriptionft(userData) {
 
 function formatDate(dateInput) {
     const date = new Date(dateInput);
-    const dateOptions = { weekday: 'long', day: 'numeric', month: 'long' };
+    const dateOptions = { weekday: 'long', day: 'numeric', month: 'long' , year: 'numeric' };
     const formattedDate = date.toLocaleDateString('it-IT', dateOptions);
     return formattedDate;  
 }
