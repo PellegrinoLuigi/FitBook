@@ -373,13 +373,18 @@ function checkLoggedUser() {
     }
 }
 
-function effettuaLogout() {
+function goLogout() {
     sessionStorage.removeItem('loggedInUser');
+    sessionStorage.removeItem('userName');
+    sessionStorage.removeItem('userEmail');
+    sessionStorage.removeItem('userId');
+
     loggedInUser = null;
     document.getElementById('welcomeMessageHost').style.display = 'block';
     document.getElementById('welcomeMessage').style.display = 'none';
     document.getElementById('loginLink').style.display = 'block';
     document.getElementById('logoutLink').style.display = 'none';
+    noActiveSubscription();
     showForm('home'); // Torna alla home
 }
 
@@ -406,7 +411,7 @@ function activeSubscription(expiredDate) {
     document.getElementById('welcomeSub').style.display = 'block';
     
 }
-function noActiveSubscription(expiredDae) {
+function noActiveSubscription() {
     document.getElementById('welcomeNoSub').style.display = 'block';
     document.getElementById('welcomeSub').style.display = 'none';
     sessionStorage.setItem('noLoggedForm', true);
