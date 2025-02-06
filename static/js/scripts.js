@@ -296,8 +296,6 @@ function buySub(event) {
     showForm('home');
 }
 
-
-
 function confirmedReservation(courseId) {
     if (checkLoggedUser) {
         const user_Name = sessionStorage.getItem('userEmail');
@@ -399,6 +397,12 @@ function activeLogin() {
     // sessionStorage.setItem('loggedInUser',loggedInUser); 
 }
 
+function activeSubscription(expiredDate) {
+    document.getElementById('subExpiredDate').textContent = expiredDate;
+    document.getElementById('welcomeSub').style.display = 'block';
+    
+}
+
 function noActiveLogin() {
     document.getElementById('welcomeMessageHost').style.display = 'block';
     document.getElementById('welcomeMessage').style.display = 'none';
@@ -451,33 +455,10 @@ window.onload = () => {
         const userData = {
             userId: userId
         };
-        fetch('/retrieveSubscription', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(userData)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    console.log(data.subscriptionList);
-                } else {
-                    alert(data.message);
-                }
-            })
-            .catch(error => {
-                  console.log('errore:' + error);
-                        //  alert('Si è verificato un errore durante la prenotazione.');
-                    }
-                );
-
+        retrieveSubscription(userData);        
     }
     
     showForm('home');
-
-
-
     var today = new Date().toISOString().split('T')[0]; // Ottieni la data odierna in formato YYYY-MM-DD
     var dataInput = document.getElementById("dataInput");
     dataInput.setAttribute('min', today); // Imposta la data minima a oggi
@@ -485,6 +466,30 @@ window.onload = () => {
 
 };
 
+function retrieveSubscription(userData) {
+    fetch('/retrieveSubscription', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(userData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log(data.subscriptionList);
+            sessionStorage.setItem('expiredDate', data.subscriptionList[3]);
+            activeSubscription(data.subscriptionList[3]);
+        } else {
+            alert(data.message);
+        }
+    })
+    .catch(error => {
+          console.log('errore:' + error);
+                //  alert('Si è verificato un errore durante la prenotazione.');
+            }
+        );
+}
 
 function formatDate(date) {
     return ' ' + (date.toString()).substring(0, 11); // Formatta con Day.js

@@ -34,7 +34,7 @@
             <h1>Benvenuto su FitBook</h1>
             <div class="welcome-text" id="welcomeMessageHost" style="display: block;">
                 <p>Prenota la tua sessione in palestra, gestisci le tue prenotazioni e acquista abbonamenti.</p>
-                <p>Se non sei ancora registrato,{{ users }}! <a href="#" onclick="showForm('login')">clicca qui per accedere o registrarti</a>.</p>
+                <p>Se non sei ancora registrato! <a href="#" onclick="showForm('login')">clicca qui per accedere o registrarti</a>.</p>
             </div>
             <div class="welcome-text" id="welcomeMessage" style="display: none;">
                 <p>Ciao, <span id="userNamePlaceholder"></span>! Bentornato su FitBook.</p><span id="userEmailPlaceholder" style="display: none;"></span>
@@ -105,8 +105,8 @@
         <div id="buySub" class="form-container" style="display: none;">
             <h1>Acquista Abbonamento</h1>
             <form id="buySubForm" onsubmit="buySub(event)">
-                <label for="abbonamento">Seleziona durata abbonamento:</label>
-                <select id="abbonamento" name="abbonamento" required>
+                <label for="subscription">Seleziona durata abbonamento:</label>
+                <select id="subscription" name="subscription" required>
                     <option value="1">1 Mese - €30</option>
                     <option value="2">2 Mesi - €55</option>
                     <option value="3">3 Mesi - €80</option>

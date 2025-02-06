@@ -231,7 +231,18 @@ def retrieveSubscription():
     if result:
         return jsonify({"success": True, "subscriptionList": result})
     else:
-        return jsonify({"success": False, "message": "Errore durante la prenotazione."})
+        return jsonify({"success": False, "message": "Non è presente un abbonamento attivo."})
+
+@app.route("/buySubription", methods=["POST"])
+def buySubription():
+    data = request.get_json()
+    userId = data.get("userId")
+    subscription = data.get("subscription")
+    result = db_request_select_all(QUERY_GET_SUBSCRIPTION, userId)
+    if result:
+        return jsonify({"success": True, "subscriptionList": result})
+    else:
+        return jsonify({"success": False, "message": "Non è presente un abbonamento attivo."})
 
 
 def db_request_select(query, *params):
