@@ -384,8 +384,10 @@ function goLogout() {
     document.getElementById('welcomeMessage').style.display = 'none';
     document.getElementById('loginLink').style.display = 'block';
     document.getElementById('logoutLink').style.display = 'none';
-    noActiveSubscription();
-    showForm('home'); // Torna alla home
+    document.getElementById('welcomeNoSub').style.display = 'none';
+    document.getElementById('welcomeSub').style.display = 'none';
+
+        showForm('home'); // Torna alla home
 }
 
 function activeLogin() {
