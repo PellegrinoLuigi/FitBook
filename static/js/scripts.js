@@ -484,7 +484,7 @@ window.onload = () => {
         retrieveSubscription(userData);        
     }
     
-    showForm('home');
+    //showForm('home');
     var today = new Date().toISOString().split('T')[0]; // Ottieni la data odierna in formato YYYY-MM-DD
     var dataInput = document.getElementById("dataInput");
     dataInput.setAttribute('min', today); // Imposta la data minima a oggi
