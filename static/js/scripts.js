@@ -397,8 +397,8 @@ function activeLogin() {
     // sessionStorage.setItem('loggedInUser',loggedInUser); 
 }
 
-function activeSubscription() {
-    expiredDate= sessionStorage.getItem('expiredDate');
+function activeSubscription(expiredDate) {
+    //expiredDate= sessionStorage.getItem('expiredDate');
     document.getElementById('subExpiredDate').textContent = expiredDate;
     document.getElementById('welcomeSub').style.display = 'block';
     
@@ -490,9 +490,9 @@ function retrieveSubscription(userData) {
                 created_date: sub[4],
                 duration: sub[5] + ' giorni'
             }));
-            const endDates = subscriptionUser.map(sub => sub.end_date);
-            sessionStorage.setItem('expiredDate', subscriptionUser.map(sub => sub.end_date));
-            activeSubscription();
+            //const endDates = subscriptionUser.map(sub => sub.end_date);
+            expiredDate= subscriptionUser[0].end_date
+            activeSubscription(formatDate(expiredDate));
         } else {
             alert(data.message);
         }
