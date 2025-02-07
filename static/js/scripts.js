@@ -13,7 +13,7 @@ function toggleMenu() {
 // Funzione per mostrare il form selezionato
 function showForm(formId) {
     // Nascondi tutti i form
-    if (!loggedInUser /*|| sessionStorage.getItem('noActiveSubscription')*/) {
+    if (!loggedInUser /*|| sessionStorage.getItem('activeSubscription')*/) {
         noActiveLogin();
     } else {
         activeLogin();
@@ -303,7 +303,7 @@ function buySubscription(event) {
 }
 
 function confirmedReservation(courseId) {
-    if(sessionStorage.getItem('noActiveSubscription')){
+    if(!sessionStorage.getItem('activeSubscription')){
         showForm('buySubscription');
     }else if (checkLoggedUser) {
         const user_Name = sessionStorage.getItem('userEmail');
@@ -407,14 +407,14 @@ function activeSubscription(expiredDate) {
     //expiredDate= sessionStorage.getItem('expiredDate');
     document.getElementById('subExpiredDate').textContent = expiredDate;
     document.getElementById('welcomeSub').style.display = 'block';
-    sessionStorage.setItem('noActiveSubscription', false);
+    sessionStorage.setItem('activeSubscription', true);
 
     
 }
 function noActiveSubscription() {
     document.getElementById('welcomeNoSub').style.display = 'block';
     document.getElementById('welcomeSub').style.display = 'none';
-    sessionStorage.setItem('noActiveSubscription', true);
+    sessionStorage.setItem('activeSubscription', false);
 
     
 }
@@ -434,7 +434,7 @@ function noActiveLogin() {
     sessionStorage.removeItem('subscriptionUser');
 
 
-    sessionStorage.setItem('noActiveSubscription', true);
+    sessionStorage.setItem('activeSubscription', false);
     sessionStorage.removeItem('loggedInUser');
     sessionStorage.removeItem('userName');
     sessionStorage.removeItem('userEmail');
