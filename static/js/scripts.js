@@ -75,7 +75,10 @@ function login(event) {
                 sessionStorage.setItem('userEmail', data.userEmail);
                 sessionStorage.setItem('userId', data.userId);
                 activeLogin();
-
+                const userData = {
+                    userId: userId
+                };
+                retrieveSubscription(userData); 
                 //document.getElementById('userName').textContent = data.userFullName;
             } else {
                 alert(data.message || "Login fallito. Controlla email e password.");
