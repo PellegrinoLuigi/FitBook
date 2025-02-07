@@ -439,6 +439,11 @@ function noActiveLogin() {
     sessionStorage.removeItem('userName');
     sessionStorage.removeItem('userEmail');
     sessionStorage.removeItem('userId');
+    sessionStorage.removeItem('activeSubscription');
+    sessionStorage.removeItem('noActiveSubscription');
+    sessionStorage.removeItem('noLoggedForm');
+
+    activeSubscription
 }
 
 function refreshRetrieveCourse() {
