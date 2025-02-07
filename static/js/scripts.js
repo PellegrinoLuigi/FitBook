@@ -429,21 +429,8 @@ function noActiveLogin() {
     document.getElementById('welcomeNoSub').style.display = 'none';
     document.getElementById('welcomeSub').style.display = 'none';
 
-    sessionStorage.removeItem('expiredDate');
-    sessionStorage.removeItem('reservationDate');
-    sessionStorage.removeItem('subscriptionUser');
+    sessionStorage.clear();
 
-
-    sessionStorage.setItem('activeSubscription', false);
-    sessionStorage.removeItem('loggedInUser');
-    sessionStorage.removeItem('userName');
-    sessionStorage.removeItem('userEmail');
-    sessionStorage.removeItem('userId');
-    sessionStorage.removeItem('activeSubscription');
-    sessionStorage.removeItem('noActiveSubscription');
-    sessionStorage.removeItem('noLoggedForm');
-
-    activeSubscription
 }
 
 function refreshRetrieveCourse() {
