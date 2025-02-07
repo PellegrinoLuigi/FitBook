@@ -44,7 +44,7 @@ QUERY_BOOKED_COURSES = """SELECT r.id as reservation_id, c.name AS course_name,D
                      FROM reservation r
                      JOIN course c ON r.course_id = c.id
                      WHERE   r.reservation_status = 'Confirmed'
-                     AND r.user_id = %s ;"""
+                     AND r.user_id = %s  AND reservation_date>=CURRENT_DATE;"""
 
 QUERY_DELETE_RESERVATION = "DELETE FROM reservation WHERE id = %s;"
 QUERY_LOGICAL_DELETE_RESERVATION = "UPDATE reservation SET reservation_status = 'Cancelled' WHERE id = %s;"
