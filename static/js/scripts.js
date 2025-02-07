@@ -541,10 +541,10 @@ function buySubscriptionFT(userData) {
     })
     .then(response => response.json())
     .then(data => {
-        if (data.success) {            
-            
-        } else {
-            
+        if (data.success) {   
+            showForm('activeSubscription');        
+          } else {
+            alert(data.message);showForm('home');
              
         }
     })
