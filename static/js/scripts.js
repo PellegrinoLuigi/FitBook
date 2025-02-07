@@ -283,7 +283,7 @@ function retrieveReservation() {
 }
 
 // Funzione per effettuare un acquisto
-function buySubcription(event) {
+function buySubscription(event) {
     event.preventDefault();
     if (!loggedInUser) {
         alert("Devi effettuare il login per acquistare.");
@@ -294,7 +294,7 @@ function buySubcription(event) {
     const subscription = document.getElementById('subscription').value;
     userId = sessionStorage.getItem('userId');
     const userData = {userId: userId,subscription: subscription};       
-    buySubcriptionft(userData);
+    buySubscriptionFT(userData);
     //alert(`Abbonamento acquistato per ${abbonamento} mesi.`);
     showForm('home');
 }
@@ -527,7 +527,7 @@ function retrieveSubscription(userData) {
         );
 }
 
-function buySubcriptionft(userData) {
+function buySubscriptionFT(userData) {
     fetch('/buySubription', {
         method: 'POST',
         headers: {

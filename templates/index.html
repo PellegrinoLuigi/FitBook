@@ -20,7 +20,7 @@
             <a href="#" onclick="showForm('home')">Home</a>
             <a href="#" onclick="checkLogin('reservation')" id="reservationLink">Prenota Corsi</a>
             <a href="#" onclick="checkLogin('showReservation')" id="showReservationLink">Le tue Prenotazioni</a>
-            <a href="#" onclick="checkLogin('buySubcription')" id="buySubLink">Acquista</a>
+            <a href="#" onclick="checkLogin('buySubscription')" id="buySubLink">Acquista</a>
             <a href="#" onclick="showForm('login')" id="loginLink">Login</a>
             <a href="#" onclick="goLogout()" id="logoutLink">Logout</a>
         </nav>
@@ -102,9 +102,9 @@
         </div>
 
         <!-- Form Acquista Abbonamento -->
-        <div id="buySubcription" class="form-container" style="display: none;">
+        <div id="buySubscription" class="form-container" style="display: none;">
             <h1>Acquista Abbonamento</h1>
-            <form id="buySubForm" onsubmit="buySubcription(event)">
+            <form id="buySubForm" onsubmit="buySubscription(event)">
                 <label for="subscription">Seleziona durata abbonamento:</label>
                 <select id="subscription" name="subscription" required>
                     <option value="30">30 giorni - €30</option>
