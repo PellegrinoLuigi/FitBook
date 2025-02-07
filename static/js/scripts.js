@@ -182,7 +182,7 @@ function retrieveCourseFuntion() {
                                 <td>${p.startTime}</td>
                                 <td>${p.duration}</td>
                                 <td>${p.trainer}</td>
-                                <td><button 
+                                <td><button title="Verifica se il tuo abbonamento è attivo"
                                         class="prenota-bottone ${p.availableSeats < 1 ? 'disabled' : ''}" 
                                         onclick="confirmedReservation('${p.id}')"
                                         ${p.availableSeats < 1 ? 'disabled' : ''}>
