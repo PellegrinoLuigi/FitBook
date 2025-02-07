@@ -303,8 +303,9 @@ function buySubscription(event) {
 }
 
 function confirmedReservation(courseId) {
-    if(sessionStorage.getItem('noActiveSubscription'))showForm('buySubscription');
-    if (checkLoggedUser) {
+    if(sessionStorage.getItem('noActiveSubscription')){
+        showForm('buySubscription');
+    }else if (checkLoggedUser) {
         const user_Name = sessionStorage.getItem('userEmail');
         const userId = sessionStorage.getItem('userId');
         reservationDate = sessionStorage.getItem('reservationDate');
