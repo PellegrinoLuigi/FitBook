@@ -1,10 +1,15 @@
 import os
 from flask import Flask, render_template, request, jsonify
+from flask_cors import CORS
+
 from datetime import datetime
+
 
 import psycopg2
 
 app = Flask(__name__, static_folder="static")
+CORS(app)
+
 
 # Configurazione del database tramite variabili d'ambiente configurate su Render.com
 db_name = os.getenv("DB_NAME")
