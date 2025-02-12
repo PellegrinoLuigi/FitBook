@@ -139,14 +139,16 @@ def login():
         return jsonify({"success": False, "message": "Credenziali errate."})
 
 # Funzione per recuperare i corsi prenotabili dall'utente loggato
-@app.route("/retrieveCourse", methods=["POST"])
+@app.route("/retrieveCourse", methods=["GET"])
 def retrieveCourse():
     try:
         data = request.get_json()
-        user_email = data.get("userName")
-        reservation_date = data.get("reservation_date")
-        reservation_date2 = data.get("reservation_date")
-        reservation_date3 = data.get("reservation_date")
+        user_email =request.args.get("userName") 
+        # data.get("userName")
+        reservation_date = request.args.get("reservation_date") 
+        # data.get("reservation_date")
+        reservation_date2 = request.args.get("reservation_date")
+        reservation_date3 = request.args.get("reservation_date")
 
         result = db_request_select_all_4_params(
             QUERY_CHECK_RESERVATION,
