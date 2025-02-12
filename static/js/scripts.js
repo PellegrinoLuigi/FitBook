@@ -212,12 +212,12 @@ function retrieveCourseFuntion() {
 
 // Funzione per caricare le prenotazioni
 function retrieveReservation() {
+    userId = sessionStorage.getItem('userId');
     if (!userId) {
         alert("Devi effettuare il login per visualizzare le prenotazioni.");
         showForm('login');
         return;
     }
-    const userId = sessionStorage.getItem('userId');
     const userData = {
         userId: userId
     };
