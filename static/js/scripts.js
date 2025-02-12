@@ -47,8 +47,8 @@ function checkLogin(formId) {
 
 // Funzione per effettuare il login
 function login(event) {
-    event.preventDefault();
-
+    event.preventDefault();        
+    
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
 
@@ -139,20 +139,12 @@ function retrieveCourseFuntion() {
     const user_Name = sessionStorage.getItem('userEmail');
     const data = document.getElementById('dataInput').value;
     sessionStorage.setItem('reservationDate', data);
-    const userData = {
-        userName: user_Name,
-        reservation_date: data
 
-    };
-
-    fetch('/retrieveCourse', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(userData)
-        })
-        .then(response => {
+    
+    let url = '/retrieveCourse?userName=${user_Name}&reservation_date=${data}';   
+    fetch(url, {
+        method: 'GET',
+       }).then(response => {
             return response.json();
         })
         .then(data => {
