@@ -181,9 +181,9 @@ function retrieveCourseFuntion() {
                                 <td>${p.duration}</td>
                                 <td>${p.trainer}</td>
                                 <td><button title="Verifica se il tuo abbonamento è attivo"
-                                        class="prenota-bottone ${p.availableSeats < 1 ? 'disabled' : ''}" 
+                                        class="prenota-bottone ${p.availableSeats < 1 || !sessionStorage.getItem('activeSubscription') ? 'disabled' : ''}" 
                                         onclick="confirmedReservation('${p.id}')"
-                                        ${p.availableSeats < 1 ? 'disabled' : ''}>
+                                        ${p.availableSeats < 1 || !sessionStorage.getItem('activeSubscription') ? 'disabled' : ''}>
                                         Prenota
                                     </button></td>
                             </tr>
