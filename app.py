@@ -162,7 +162,7 @@ def retrieveCourse():
         if result:
             return jsonify({"success": True, "courselist": result})
         else:
-            print("Nessun risultato trovato")
+             return jsonify({"success": False, "message": "errore"+result}) 
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
 
