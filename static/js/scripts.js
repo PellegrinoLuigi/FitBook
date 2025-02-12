@@ -141,12 +141,17 @@ function retrieveCourseFuntion() {
     const reservation_date = document.getElementById('dataInput').value;
     sessionStorage.setItem('reservationDate', reservation_date);
 
+     const userData = {
+        reservation_date: reservation_date,
+        userEmail: userEmail    
+    };
     
-    let url = '/retrieveCourse?userEmail=${userEmail}&reservation_date=${reservation_date}';   
-    fetch(url, {
-        method: 'GET',
-       }).then(response => {
-            return response.json();
+    fetch('/retrieveCourse', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(userData)
         })
         .then(data => {
             console.log("Dati JSON ricevuti:", data);
