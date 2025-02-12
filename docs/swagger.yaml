@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: API FitBook
   version: 1.0.0
-  description: Documentazione Swagger per le API del sistema di prenotazione corsi.
+  description: Documentazione Swagger per le API del sistema di prenotazione corsi, acquisto abbonamenti, login/registrazione.
 servers:
   - url: https://fitbook-sr59.onrender.com/
 paths:
