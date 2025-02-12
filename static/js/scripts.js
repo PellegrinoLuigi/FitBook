@@ -153,6 +153,7 @@ function retrieveCourseFuntion() {
             },
             body: JSON.stringify(userData)
         })
+        .then(response => response.json())
         .then(data => {
             console.log("Dati JSON ricevuti:", data);
             if (data.success) {
