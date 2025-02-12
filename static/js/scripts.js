@@ -138,11 +138,11 @@ function retrieveCourse(event) {
 
 function retrieveCourseFuntion() {
     const userEmail = sessionStorage.getItem('userEmail');
-    const data = document.getElementById('dataInput').value;
+    const reservation_date = document.getElementById('dataInput').value;
     sessionStorage.setItem('reservationDate', data);
 
     
-    let url = '/retrieveCourse?userEmail=${userEmail}&reservation_date=${data}';   
+    let url = '/retrieveCourse?userEmail=${userEmail}&reservation_date=${reservation_date}';   
     fetch(url, {
         method: 'GET',
        }).then(response => {
