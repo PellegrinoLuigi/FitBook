@@ -170,8 +170,9 @@ function retrieveCourseFuntion() {
                     }));
 
                     console.log('Available Seats:', availableSeats);
-                    console.log('Active subscription:', !sessionStorage.getItem('activeSubscription'));
-                    console.log('Active subscription:', sessionStorage.getItem('activeSubscription'));
+                    activeSubscription= sessionStorage.getItem('activeSubscription')==='false';
+                    console.log('Active subscription:', activeSubscription);
+                    console.log('Active subscription:', !activeSubscription);
 
                     showCourse();
                     const tbody = document.querySelector('#availableSeatsTable tbody');
@@ -183,9 +184,9 @@ function retrieveCourseFuntion() {
                                 <td>${p.duration}</td>
                                 <td>${p.trainer}</td>
                                 <td><button title="Verifica se il tuo abbonamento è attivo"
-                                        class="prenota-bottone ${p.availableSeats < 1 || !sessionStorage.getItem('activeSubscription') ? 'disabled' : ''}" 
+                                        class="prenota-bottone ${p.availableSeats < 1 || !activeSubscription ? 'disabled' : ''}" 
                                         onclick="confirmedReservation('${p.id}')"
-                                        ${p.availableSeats < 1 || !sessionStorage.getItem('activeSubscription') ? 'disabled' : ''}>
+                                        ${p.availableSeats < 1 || !activeSubscription ? 'disabled' : ''}>
                                         Prenota
                                     </button></td>
                             </tr>
