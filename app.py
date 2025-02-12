@@ -24,7 +24,7 @@ QUERY_CHECK_RESERVATION = """SELECT course.id, course.name, course.capacity - CO
                             LEFT JOIN (
                                 SELECT course_id, COUNT(*) AS reservation_count 
                                 FROM reservation 
-                                WHERE reservation_date = %s
+                                WHERE reservation_date = %s AND reservation_status = 'Confirmed'
                                 GROUP BY course_id 
                             ) AS reservations ON course.id = reservations.course_id 
                             JOIN trainer ON course.trainer_id = trainer.id 
