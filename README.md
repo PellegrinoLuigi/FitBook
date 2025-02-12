@@ -12,7 +12,8 @@ FitBook è un sistema di prenotazione online per centro fitness, che consente ag
 
 ## 🚀 Funzionalità
 - 🔑 **Autenticazione**: Login e registrazione utenti
-- 📅 **Gestione prenotazioni**: Creazione, modifica e cancellazione prenotazioni
+- 📅 **Gestione prenotazioni**: Creazione e cancellazione prenotazioni
+- 💳 **Acquisto Abbonamento**: Acquisto di abbonamenti, con diversa durata.
 - 📄 **Documentazione API**: Accessibile tramite Swagger UI
 
 ---
