@@ -1,8 +1,8 @@
-console.log("JavaScript caricato correttamente!");
+console.log("JavaScript caricato correttamente! Utente loggato: ",userId);
 
 
 // Variabile per memorizzare lo stato di login
-let loggedInUser = null;
+let userId = null;
 
 // Funzione per attivare/disattivare il menu hamburger
 function toggleMenu() {
@@ -13,7 +13,7 @@ function toggleMenu() {
 // Funzione per mostrare il form selezionato
 function showForm(formId) {
     // Nascondi tutti i form
-    if (!loggedInUser /*|| sessionStorage.getItem('activeSubscription')*/) {
+    if (!userId /*|| sessionStorage.getItem('activeSubscription')*/) {
         noActiveLogin();
     } else {
         activeLogin();
@@ -32,7 +32,7 @@ function showForm(formId) {
 
 // Funzione per verificare se l'utente è loggato
 function checkLogin(formId) {
-    if (!loggedInUser) {
+    if (!userId) {
         //alert("Devi effettuare il login per accedere a questa funzionalità.");
         showForm('login');
         noActiveLogin();
@@ -42,7 +42,6 @@ function checkLogin(formId) {
         if (formId === 'showReservation') {
             retrieveReservation();
         }
-        //  document.getElementById('userName').textContent = loggedInUser.email;
     }
 }
 
@@ -66,11 +65,8 @@ function login(event) {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                loggedInUser = {
-                    email
-                };
+               
                 showForm('home');
-                sessionStorage.setItem('loggedInUser', loggedInUser);
                 sessionStorage.setItem('userName', data.userFullName);
                 sessionStorage.setItem('userEmail', data.userEmail);
                 sessionStorage.setItem('userId', data.userId);
@@ -131,7 +127,7 @@ function registration(event) {
 // Funzione per effettuare una prenotazione
 function retrieveCourse(event) {
     event.preventDefault();
-    if (!loggedInUser) {
+    if (!userId) {
         alert("Devi effettuare il login per prenotare.");
         showForm('login');
         return;
@@ -218,7 +214,7 @@ function retrieveCourseFuntion() {
 
 // Funzione per caricare le prenotazioni
 function retrieveReservation() {
-    if (!loggedInUser) {
+    if (!userId) {
         alert("Devi effettuare il login per visualizzare le prenotazioni.");
         showForm('login');
         return;
@@ -288,7 +284,7 @@ function retrieveReservation() {
 // Funzione per effettuare un acquisto
 function buySubscription(event) {
     event.preventDefault();
-    if (!loggedInUser) {
+    if (!userId) {
         alert("Devi effettuare il login per acquistare.");
         showForm('login');
         return;
@@ -371,7 +367,7 @@ function deleteReservation(reservationId) {
 }
 
 function checkLoggedUser() {
-    if (!loggedInUser) {
+    if (!userId) {
         alert("Devi effettuare il login per visualizzare le prenotazioni.");
         showForm('login');
         return false;
@@ -380,7 +376,7 @@ function checkLoggedUser() {
 
 function goLogout() {
    
-    loggedInUser = null;
+    userId = null;
     noActiveLogin();
 
         showForm('home'); // Torna alla home
@@ -392,7 +388,7 @@ function activeLogin() {
     document.getElementById('loginLink').style.display = 'none';
     document.getElementById('logoutLink').style.display = 'block';
 
-    sessionStorage.getItem('loggedInUser');
+    sessionStorage.getItem('userId');
 
     userName = sessionStorage.getItem('userName');
     userEmail = sessionStorage.getItem('userEmail');
@@ -400,7 +396,6 @@ function activeLogin() {
     document.getElementById('userEmailPlaceholder').textContent = userEmail;
 
 
-    // sessionStorage.setItem('loggedInUser',loggedInUser); 
 }
 
 function activeSubscription(expiredDate) {
@@ -472,8 +467,7 @@ function noCourse() {
 // Mostra la Home di default al caricamento della pagina
 window.onload = () => {
     userId = sessionStorage.getItem('userId');
-    loggedInUser = sessionStorage.getItem('userEmail');
-    if (loggedInUser) {
+    if (userId) {
         activeLogin();
         const userData = {
             userId: userId
