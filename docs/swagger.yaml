@@ -57,23 +57,41 @@ paths:
         '200':
           description: Login effettuato con successo
   /retrieveCourse:
-    post:
+    get:
       summary: Recupera i corsi prenotabili per un utente
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                userName:
-                  type: string
-                reservation_date:
-                  type: string
-                  format: date
+      parameters:
+        - in: query
+          name: userEmail
+          required: true
+          schema:
+            type: string
+          description: Nome dell'utente per cui recuperare i corsi prenotabili
+        - in: query
+          name: reservation_date
+          required: true
+          schema:
+            type: string
+            format: date
+          description: Data della prenotazione per cui recuperare i corsi
       responses:
         '200':
           description: Lista dei corsi disponibili
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    courseId:
+                      type: string
+                      description: ID del corso
+                    courseName:
+                      type: string
+                      description: Nome del corso
+                    availableSeats:
+                      type: integer
+                      description: Numero di posti disponibili
   /confirmedReservation:
     post:
       summary: Conferma una prenotazione
