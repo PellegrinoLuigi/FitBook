@@ -143,8 +143,8 @@ def login():
 def retrieveCourse():
     try:
         data = request.get_json()
-        user_email =request.args.get("userName") 
-        # data.get("userName")
+        user_email =request.args.get("userEmail") 
+        # data.get("userEmail")
         reservation_date = request.args.get("reservation_date") 
         # data.get("reservation_date")
         reservation_date2 = request.args.get("reservation_date")
