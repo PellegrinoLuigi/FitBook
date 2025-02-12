@@ -227,7 +227,7 @@ def retrieveReservation():
     if result:
         return jsonify({"success": True, "reservationlist": result})
     else:
-        return jsonify({"success": False, "message": "Errore durante la prenotazione."})
+        return jsonify({"success": False, "message": "Errore! Al momento il servizio non è disponibile!"})
 
 @app.route("/retrieveSubscription", methods=["POST"])
 def retrieveSubscription():
