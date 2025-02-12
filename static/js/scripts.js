@@ -139,7 +139,7 @@ function retrieveCourse(event) {
 function retrieveCourseFuntion() {
     const userEmail = sessionStorage.getItem('userEmail');
     const reservation_date = document.getElementById('dataInput').value;
-    sessionStorage.setItem('reservationDate', data);
+    sessionStorage.setItem('reservationDate', reservation_date);
 
     
     let url = '/retrieveCourse?userEmail=${userEmail}&reservation_date=${reservation_date}';   
