@@ -170,6 +170,8 @@ function retrieveCourseFuntion() {
                     }));
 
                     console.log('Available Seats:', availableSeats);
+                    console.log('Active subscription:', !sessionStorage.getItem('activeSubscription'));
+                    console.log('Active subscription:', sessionStorage.getItem('activeSubscription'));
 
                     showCourse();
                     const tbody = document.querySelector('#availableSeatsTable tbody');
