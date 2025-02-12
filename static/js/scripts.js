@@ -1,4 +1,4 @@
-console.log("JavaScript caricato correttamente! Utente loggato: ",userId);
+console.log("JavaScript caricato correttamente! ");
 
 
 // Variabile per memorizzare lo stato di login
