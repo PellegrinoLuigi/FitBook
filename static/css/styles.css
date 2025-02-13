@@ -200,6 +200,7 @@ table th {
 
 td {
 	font-weight: bolder;
+	color: var(--primary-color-p);
 }
 
 /* Responsive Design */
