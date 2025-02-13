@@ -169,9 +169,9 @@ function retrieveCourseFuntion() {
             body: JSON.stringify(userData)
         })
         .then(response => response.json())
-        .then(data => {
-            console.log("Dati JSON ricevuti:", data);
+        .then(data => {          
             if (data.success) {
+                console.log("Dati JSON ricevuti:", data);
                 console.log("Lista prenotazioni:", data.courselist);
                 document.getElementById('selectedDate').textContent = formatDate(reservation_date);
                 
