@@ -404,7 +404,7 @@ function retrieveSubscription(userData) {
                 }));
                 //const endDates = subscriptionUser.map(sub => sub.end_date);
                 expiredDate = subscriptionUser[0].end_date
-                activeSubscription(formatDate(expiredDate));
+                activeSubscription(expiredDate);
             } else {
                 noActiveSubscription();
                 //alert(data.message);
@@ -487,8 +487,8 @@ function activeLogin() {
 }
 
 function activeSubscription(expiredDate) {
-    //expiredDate= sessionStorage.getItem('expiredDate');
-    document.getElementById('subExpiredDate').textContent = expiredDate;
+   
+    document.getElementById('subExpiredDate').textContent = formatDate(expiredDate);
     document.getElementById('welcomeSub').style.display = 'block';
     sessionStorage.setItem('activeSubscription', true);
 
