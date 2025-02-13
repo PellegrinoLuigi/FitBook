@@ -396,6 +396,7 @@ function activeLogin() {
     document.querySelectorAll("#userNamePlaceholder").forEach(el => {
     el.textContent = userName;
      });
+    document.getElementById('logoPlaceholder').style.display = '- Ciao '+userName+' !';    
     const userData = {userId: userId};
     retrieveSubscription(userData);  
 
@@ -424,7 +425,9 @@ function noActiveLogin() {
     document.getElementById('logoutLink').style.display = 'none';
     document.querySelectorAll("#userNamePlaceholder").forEach(el => {
     el.textContent ='';
-     });    document.getElementById('welcomeNoSub').style.display = 'none';
+     });   
+    document.getElementById('welcomeNoSub').style.display = 'none';
+    document.getElementById('logoPlaceholder').style.display = '';    
     document.getElementById('welcomeSub').style.display = 'none';
 
     sessionStorage.clear();
