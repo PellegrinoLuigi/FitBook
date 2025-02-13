@@ -266,12 +266,12 @@ td {
 	}
 }
 
-.prenota-bottone {
+.custom-button {
 	padding: 10px;
 	background-color:var(--primary-color-p);
 	color: #fff;
 	border: none;
-	border-radius: 20px 0px 0px 20px;
+	border-radius: 20px;
 	cursor: pointer;
 	font-size: 16px;
 	transition: background-color 0.3s ease;
@@ -280,7 +280,7 @@ td {
 	font-family: Raleway, sans-serif;
 }
 
-.prenota-bottone:hover {
+.custom-button:hover {
 	background-color: var(--secondary-btn-hover);
 }
 
