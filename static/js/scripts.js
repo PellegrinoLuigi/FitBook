@@ -75,7 +75,7 @@ function login(event) {
                 const userData = {
                     userId: userId
                 };
-                retrieveSubscription(userData); 
+                // retrieveSubscription(userData); 
                 //document.getElementById('userName').textContent = data.userFullName;
             } else {
                 alert(data.message || "Login fallito. Controlla email e password.");
@@ -468,11 +468,7 @@ function noCourse() {
 window.onload = () => {
     userId = sessionStorage.getItem('userId');
     if (userId) {
-        activeLogin();
-        const userData = {
-            userId: userId
-        };
-        retrieveSubscription(userData);        
+        activeLogin();          
     }
     
     showForm('home');
