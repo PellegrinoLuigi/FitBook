@@ -1,197 +1,183 @@
 <!DOCTYPE html>
-
 <html lang="it">
-<head>
+    
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FitBook - Prenotazione</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
-       <style></style>
-    <link id="favicon" rel="shortcut icon" type="image/png"  href="{{ url_for('static', filename='images/favico.jpg')}}">          
-</head>
-    
-<body style="background-image: url('{{ url_for('static', filename='images/background.jpg') }}');">
+    <style></style>
+    <link id="favicon" rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='images/favico.jpg')}}">
+  </head>
+  <body style="background-image: url('{{ url_for('static', filename='images/background.jpg') }}');">
+      
     <!-- Header con Hamburger Menu -->
     <header>
-        <div class="logo">FitBook  <span id="logoPlaceholder"></span></div>
-        <div class="menu-icon" onclick="toggleMenu()">&#9776;</div>
-        <nav id="navMenu">
-            <a href="#" onclick="showForm('home')">Home</a>
-            <a href="#" onclick="checkLogin('reservation')" id="reservationLink">Prenota Corsi</a>
-            <a href="#" onclick="checkLogin('showReservation')" id="showReservationLink">Le tue Prenotazioni</a>
-            <a href="#" onclick="checkLogin('buySubscription')" id="buySubLink">Acquista</a>
-            <a href="#" onclick="showForm('login')" id="loginLink">Login</a>
-            <a href="#" onclick="goLogout()" id="logoutLink">Logout</a>
-        </nav>
+      <div class="logo">FitBook <span id="logoPlaceholder"></span>
+      </div>
+      <div class="menu-icon" onclick="toggleMenu()">&#9776;</div>
+      <nav id="navMenu">
+        <a href="#" onclick="showForm('home')">Home</a>
+        <a href="#" onclick="checkLogin('reservation')" id="reservationLink">Prenota Corsi</a>
+        <a href="#" onclick="checkLogin('showReservation')" id="showReservationLink">Le tue Prenotazioni</a>
+        <a href="#" onclick="checkLogin('buySubscription')" id="buySubLink">Acquista</a>
+        <a href="#" onclick="showForm('login')" id="loginLink">Login</a>
+        <a href="#" onclick="goLogout()" id="logoutLink">Logout</a>
+      </nav>
     </header>
-
+      
     <!-- Contenuto principale -->
-    
-<div class="container">
-        <!-- Home -->
-        <div id="home" class="form-container">
-            <h1>🏋️‍♂️ Benvenuti su FitBook! 🏋️‍♀️</h1>
-             <div class="welcome-text" id="welcomeSub" style="display: none;">
-                <p  style="text-align:center">🔔Ciao <span id="userNamePlaceholder"></span>, il tuo abbonamento è attivo!🔔</p>
-                <p  style="text-align:center"> Scade  <span style="font-weight:bolder; text-decoration:underline" id="subExpiredDate"></span>, quindi approfittatene al massimo!.</p>
-                <p  style="text-align:center">Iniziate subito a prenotare e godetevi il vostro allenamento con FitBook!</p>
-                <br>
-                <hr>
-            </div>
-             <div class="welcome-text" id="welcomeNoSub" style="display: none;">
-                 <p style="text-align:center">🔔Ciao <span id="userNamePlaceholder"></span>, non hai un abbonamento attivo!🔔</p>
-                 <p style="text-align:center">Vai nella sezione abbonamenti se vuoi procedere con un nuovo acquisto!<span id="subExpired"></span>.</p>
-                 <br>
-                 <hr>
-            </div>
-             <div class="welcome-text" style="display: block;">
-                <p style="text-align:justify">Fitbook è il vostro spazio dedicato al fitness, dove prenotare i corsi non è mai stato così semplice! 
-                    Acquistate un abbonamento flessibile a partire da 1 giorno e accedete senza limiti a tutti i corsi disponibili.</p>
-                <p style="text-align:left">🎟 Un solo abbonamento, massima libertà!</p>
-                <p style="text-align:left">📅 Gestite le vostre prenotazioni con facilità</p>
-                <p style="text-align:justify">💪 Scegliete i corsi che preferite, prenotate in pochi clic e allenatevi secondo i vostri ritmi!</p>
-            </div>
-            <div class="welcome-text" id="welcomeMessageHost" style="display: block;">
-                <p  style="text-align:justify">Se non sei ancora registrato! <a href="#" onclick="showForm('login')">clicca qui per accedere o registrarti</a>.</p>
-            </div>                      
+    <div class="container">
+      <!-- Home -->
+      <div id="home" class="form-container">
+        <h1>🏋️‍♂️ Benvenuti su FitBook! 🏋️‍♀️</h1>
+        <div class="welcome-text" id="welcomeSub" style="display: none;">
+          <p style="text-align:center">🔔Ciao <span id="userNamePlaceholder"></span>, il tuo abbonamento è attivo!🔔 </p>
+          <p style="text-align:center"> Scade <span style="font-weight:bolder; text-decoration:underline" id="subExpiredDate"></span>, quindi approfittatene al massimo!. </p>
+          <p style="text-align:center">Iniziate subito a prenotare e godetevi il vostro allenamento con FitBook!</p>
+          <br>
+          <hr>
         </div>
-
-        <!-- Form Effettua Prenotazione -->
-        <div id="reservation" class="form-container" style="display: none;">
-            <h1>Ricerca i tuoi corsi preferiti</h1>
-            <form id="reservationForm" onsubmit="retrieveCourse(event)"  >
-                <label for="date">INSERISCI DATA:</label>
-                <input type="date" id="dataInput" name="date"  required>
-                <input type="submit" value="CERCA">
-            </form>
-            <br>
-               <div id="noCourse"  style="display: none;">
-                <h4 style="text-align:center ; color:red">Non sono presenti corsi disponibili per la data selezionata!</h4>
-            </div> 
-            <div id="availableSeats" class="form-container" style="display: block;">
-                <h1>Corsi Disponibili</h1>
-                <table id="availableSeatsTable">
-                    <thead>
-                        <tr>
-                            <th>Corso</th>
-                            <th>Disponibilità</th>
-                            <th>Orario</th>
-                            <th>Durata</th>
-                            <th>Trainer</th>
-                            <th>Prenota</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- POSTI DISPONIBILI -->
-                    </tbody>
-                </table>
-            </div>
-            <br>
-           
+        <div class="welcome-text" id="welcomeNoSub" style="display: none;">
+          <p style="text-align:center">🔔Ciao <span id="userNamePlaceholder"></span>, non hai un abbonamento attivo!🔔 </p>
+          <p style="text-align:center">Vai nella sezione abbonamenti se vuoi procedere con un nuovo acquisto! <span id="subExpired"></span>. </p>
+          <br>
+          <hr>
         </div>
-
-        <!-- Tabella Mostra Prenotazioni -->
-        <div id="showReservation" class="form-container" style="display: none;">
-            <h1>Le tue Prenotazioni</h1>
-            <div id="noReservation"  style="display: none;">
-                <h4 style="text-align:center ; color:red">Non sono presenti prenotazioni</h4>
-            </div> 
-            <table id="prenotazioniTable" style="display: table;">
-                <thead>
-                    <tr>
-                        <th>Corso</th>
-                        <th>Data/Ora</th>
-                        <th>Gestisci</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- PRENOTAZIONI ATTIVE -->
-                </tbody>
-            </table>
+        <div class="welcome-text" style="display: block;">
+          <p style="text-align:justify">Fitbook è il vostro spazio dedicato al fitness, dove prenotare i corsi non è mai stato così semplice! Acquistate un abbonamento flessibile a partire da 1 giorno e accedete senza limiti a tutti i corsi disponibili.</p>
+          <p style="text-align:left">🎟 Un solo abbonamento, massima libertà!</p>
+          <p style="text-align:left">📅 Gestite le vostre prenotazioni con facilità</p>
+          <p style="text-align:justify">💪 Scegliete i corsi che preferite, prenotate in pochi clic e allenatevi secondo i vostri ritmi!</p>
         </div>
-
-        <!-- Form Acquista Abbonamento -->
-        <div id="buySubscription" class="form-container" style="display: none;">
-            <h1>Acquista Abbonamento</h1>
-            <form id="buySubForm" onsubmit="buySubscription(event)">
-                <label for="subscription">Seleziona durata abbonamento:</label>
-                <select id="subscription" name="subscription" required>
-                    <option value="1">1 giorno - €5</option>
-                    <option value="7">7 giorni - €15</option>
-                    <option value="30">30 giorni - €30</option>
-                    <option value="60">60 giorni - €55</option>
-                    <option value="90">90 giorni - €80</option>
-                    <option value="365">1 anno - €300</option>
-                </select>
-
-                <input type="submit" value="Acquista">
-            </form>
+        <div class="welcome-text" id="welcomeMessageHost" style="display: block;">
+          <p style="text-align:justify">Se non sei ancora registrato! <a href="#" onclick="showForm('login')">clicca qui per accedere o registrarti</a>. </p>
         </div>
-
-         <!-- Form Abbonamento Acquista -->
-         <div id="activeSubscription" class="form-container" style="display: none;">
-            <h1>Abbonamento Acquistato</h1>
-            <div id="activeSubscriptiontext"  >
-                <h4 style="text-align:center ;">✅ Acquisto confermato! Ora sei pronto per prenotare i tuoi corsi!</h4>
-                    <h4 style="text-align:center ;">
-                        Prenota subito un corso!</h4>
-                        <button  class="prenota-bottone" onclick="showForm('reservation')" >Cerca Corso</button>
-            </div> 
+      </div>
+        
+      <!-- Form Effettua Prenotazione -->
+      <div id="reservation" class="form-container" style="display: none;">
+        <h1>Ricerca i tuoi corsi preferiti</h1>
+        <form id="reservationForm" onsubmit="retrieveCourse(event)">
+          <label for="date">INSERISCI DATA:</label>
+          <input type="date" id="dataInput" name="date" required>
+          <input type="submit" value="CERCA">
+        </form>
+        <br>
+        <div id="noCourse" style="display: none;">
+          <h4 style="text-align:center ; color:red">Non sono presenti corsi disponibili per la data selezionata!</h4>
         </div>
-
-        <!-- Form Login -->
-        <div id="login" class="form-container" style="display: none;">
-            <h1>Login</h1>
-            <form id="loginForm" onsubmit="login(event)">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
-
-                <label for="password">Password:</label>
-                <input type="password" id="password" autocomplete="current-password" name="password" required>
-
-                <input type="submit" value="Accedi">
-            </form>
-            <div class="switch-form">
-                <p>Non sei ancora registrato? <a href="#" onclick="showForm('registrazione')">Registrati qui</a>.</p>
-            </div>
+        <div id="availableSeats" class="form-container" style="display: block;">
+          <h1>Corsi Disponibili</h1>
+          <table id="availableSeatsTable">
+            <thead>
+              <tr>
+                <th>Corso</th>
+                <th>Disponibilità</th>
+                <th>Orario</th>
+                <th>Durata</th>
+                <th>Trainer</th>
+                <th>Prenota</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- POSTI DISPONIBILI -->
+            </tbody>
+          </table>
         </div>
-
-        <!-- Form Registrazione -->
-        <div id="registrazione" class="form-container" style="display: none;">
-            <h1>Registrazione</h1>
-            <form id="registrazioneForm" onsubmit="registration(event)">
-                <label for="firstname">Nome:</label>
-                <input type="text" id="firstname" name="firstname" required>
-
-                <label for="lastname">Cognome:</label>
-                <input type="text" id="lastname" name="lastname" required>
-
-                <label for="email">Email:</label>
-                <input type="email" id="emailreg" name="email" required>
-
-                <label for="birthdate">Data di nascita:</label>
-                <input type="date" id="birthdate" name="birthdate" required>
-
-                <label for="password">Password:</label>
-                <input type="password" id="passwordReg" name="password" required>
-
-                <input type="submit" value="Registrati">
-            </form>
-            <div class="switch-form">
-                <p>Hai già un account? <a href="#" onclick="showForm('login')">Accedi qui</a>.</p>
-            </div>
+        <br>
+      </div>
+        
+      <!-- Tabella Mostra Prenotazioni -->
+      <div id="showReservation" class="form-container" style="display: none;">
+        <h1>Le tue Prenotazioni</h1>
+        <div id="noReservation" style="display: none;">
+          <h4 style="text-align:center ; color:red">Non sono presenti prenotazioni</h4>
         </div>
+        <table id="prenotazioniTable" style="display: table;">
+          <thead>
+            <tr>
+              <th>Corso</th>
+              <th>Data/Ora</th>
+              <th>Gestisci</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- PRENOTAZIONI ATTIVE -->
+          </tbody>
+        </table>
+      </div>
+        
+      <!-- Form Acquista Abbonamento -->
+      <div id="buySubscription" class="form-container" style="display: none;">
+        <h1>Acquista Abbonamento</h1>
+        <form id="buySubForm" onsubmit="buySubscription(event)">
+          <label for="subscription">Seleziona durata abbonamento:</label>
+          <select id="subscription" name="subscription" required>
+            <option value="1">1 giorno - €5</option>
+            <option value="7">7 giorni - €15</option>
+            <option value="30">30 giorni - €30</option>
+            <option value="60">60 giorni - €55</option>
+            <option value="90">90 giorni - €80</option>
+            <option value="365">1 anno - €300</option>
+          </select>
+          <input type="submit" value="Acquista">
+        </form>
+      </div>
+        
+      <!-- Form Abbonamento Acquista -->
+      <div id="activeSubscription" class="form-container" style="display: none;">
+        <h1>Abbonamento Acquistato</h1>
+        <div id="activeSubscriptiontext">
+          <h4 style="text-align:center ;">✅ Acquisto confermato! Ora sei pronto per prenotare i tuoi corsi!</h4>
+          <h4 style="text-align:center ;"> Prenota subito un corso!</h4>
+          <button class="prenota-bottone" onclick="showForm('reservation')">Cerca Corso</button>
+        </div>
+      </div>
+        
+      <!-- Form Login -->
+      <div id="login" class="form-container" style="display: none;">
+        <h1>Login</h1>
+        <form id="loginForm" onsubmit="login(event)">
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" required>
+          <label for="password">Password:</label>
+          <input type="password" id="password" autocomplete="current-password" name="password" required>
+          <input type="submit" value="Accedi">
+        </form>
+        <div class="switch-form">
+          <p>Non sei ancora registrato? <a href="#" onclick="showForm('registrazione')">Registrati qui</a>. </p>
+        </div>
+      </div>
+        
+      <!-- Form Registrazione -->
+      <div id="registrazione" class="form-container" style="display: none;">
+        <h1>Registrazione</h1>
+        <form id="registrazioneForm" onsubmit="registration(event)">
+          <label for="firstname">Nome:</label>
+          <input type="text" id="firstname" name="firstname" required>
+          <label for="lastname">Cognome:</label>
+          <input type="text" id="lastname" name="lastname" required>
+          <label for="email">Email:</label>
+          <input type="email" id="emailreg" name="email" required>
+          <label for="birthdate">Data di nascita:</label>
+          <input type="date" id="birthdate" name="birthdate" required>
+          <label for="password">Password:</label>
+          <input type="password" id="passwordReg" name="password" required>
+          <input type="submit" value="Registrati">
+        </form>
+        <div class="switch-form">
+          <p>Hai già un account? <a href="#" onclick="showForm('login')">Accedi qui</a>. </p>
+        </div>
+      </div>
+        
     </div>
-
-<footer >  
-    <div class="footer-bottom">
+    <footer>
+      <div class="footer-bottom">
         <p style="color: #fdfdfd;">&copy; 2025 FitBook - Tutti i diritti riservati.</p>
-    </div>
-</footer>
-
-   
-<script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
-
-</body>
+      </div>
+    </footer>
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+  </body>
 </html>
