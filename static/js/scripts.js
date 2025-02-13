@@ -20,7 +20,7 @@ window.onload = () => {
 };
 
 // Funzione per attivare/disattivare il menu hamburger
-function toggleMenu() {
+function activeMenu() {
     const navMenu = document.getElementById('navMenu');
     navMenu.classList.toggle('active');
 }
