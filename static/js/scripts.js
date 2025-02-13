@@ -173,6 +173,8 @@ function retrieveCourseFuntion() {
             console.log("Dati JSON ricevuti:", data);
             if (data.success) {
                 console.log("Lista prenotazioni:", data.courselist);
+                document.getElementById('selectedDate').textContent = formatDate(reservation_date);
+                
                 if (data.courselist) {
                     const availableSeats = data.courselist.map(course => ({
                         id: course[0],
