@@ -10,14 +10,15 @@ window.onload = () => {
     if (userId) {
         activeLogin();
     }
-
     showForm('home');
-    var today = new Date().toISOString().split('T')[0]; // Ottieni la data odierna in formato YYYY-MM-DD
-    var dataInput = document.getElementById("dataInput");
-    dataInput.setAttribute('min', today); // Imposta la data minima a oggi
-    dataInput.value = today; // Imposta il valore di default a oggi
+    document.getElementById("dataInput").setAttribute('min',  today());
+    document.getElementById("dataInput").value = today();
 
 };
+
+function today() {
+    return new Date().toISOString().split('T')[0]; 
+}
 
 // Funzione per attivare/disattivare il menu hamburger
 function activeMenu() {
