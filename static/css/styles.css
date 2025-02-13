@@ -3,6 +3,9 @@
 	/* #87556e;  #00796b; */
 	--primary-color-hover: #03656a;
 	--primary-color-p: #03656a;
+	--primary-disabled:  #d3d3d3;
+	--secondary-btn: #d85c95;
+	--secondary-btn-hover: #904065;
 }
 
 * {
@@ -265,7 +268,7 @@ td {
 
 .prenota-bottone {
 	padding: 10px;
-	background-color: #d85c95;
+	background-color:var(--primary-color-p);
 	color: #fff;
 	border: none;
 	border-radius: 20px 0px 0px 20px;
@@ -278,28 +281,20 @@ td {
 }
 
 .prenota-bottone:hover {
-	background-color: #904065;
+	background-color: var(--secondary-btn-hover);
 }
 
 button.disabled {
-	background-color: #d3d3d3;
-	/* Colore grigio */
+	background-color: var(--primary-disabled);
 	color: #a1a1a1;
-	/* Colore del testo grigio */
 	cursor: not-allowed;
-	/* Cambia il cursore per mostrare che è disabilitato */
 }
 
 button:disabled {
-	background-color: #d3d3d3;
-	/* Colore grigio */
+	background-color:  var(--primary-disabled);;
 	color: #a1a1a1;
-	/* Colore del testo grigio */
 	cursor: not-allowed;
-	/* Cambia il cursore per mostrare che è disabilitato */
 }
-
-
 .footer-bottom {
 	position: fixed;
 	bottom: 0;
