@@ -4,6 +4,21 @@ console.log("JavaScript caricato correttamente! ");
 // Variabile per memorizzare lo stato di login
 let userId = null;
 
+// Mostra la Home di default al caricamento della pagina
+window.onload = () => {
+    userId = sessionStorage.getItem('userId');
+    if (userId) {
+        activeLogin();
+    }
+
+    showForm('home');
+    var today = new Date().toISOString().split('T')[0]; // Ottieni la data odierna in formato YYYY-MM-DD
+    var dataInput = document.getElementById("dataInput");
+    dataInput.setAttribute('min', today); // Imposta la data minima a oggi
+    dataInput.value = today; // Imposta il valore di default a oggi
+
+};
+
 // Funzione per attivare/disattivare il menu hamburger
 function toggleMenu() {
     const navMenu = document.getElementById('navMenu');
@@ -13,7 +28,7 @@ function toggleMenu() {
 // Funzione per mostrare il form selezionato
 function showForm(formId) {
     // Nascondi tutti i form
-    if (!userId /*|| sessionStorage.getItem('activeSubscription')*/) {
+    if (!userId /*|| sessionStorage.getItem('activeSubscription')*/ ) {
         noActiveLogin();
     } else {
         activeLogin();
@@ -47,8 +62,8 @@ function checkLogin(formId) {
 
 // Funzione per effettuare il login
 function login(event) {
-    event.preventDefault();        
-    
+    event.preventDefault();
+
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
 
@@ -65,9 +80,9 @@ function login(event) {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-               
+
                 showForm('home');
-                userId=data.userId;
+                userId = data.userId;
                 sessionStorage.setItem('userName', data.userFullName);
                 sessionStorage.setItem('userEmail', data.userEmail);
                 sessionStorage.setItem('userId', data.userId);
@@ -141,11 +156,11 @@ function retrieveCourseFuntion() {
     const reservation_date = document.getElementById('dataInput').value;
     sessionStorage.setItem('reservationDate', reservation_date);
 
-     const userData = {
+    const userData = {
         reservation_date: reservation_date,
-        userEmail: userEmail    
+        userEmail: userEmail
     };
-    
+
     fetch('/retrieveCourse', {
             method: 'POST',
             headers: {
@@ -170,7 +185,7 @@ function retrieveCourseFuntion() {
                     }));
 
                     console.log('Available Seats:', availableSeats);
-                    activeSubscription= sessionStorage.getItem('activeSubscription')==='true';
+                    activeSubscription = sessionStorage.getItem('activeSubscription') === 'true';
                     console.log('Active subscription:', activeSubscription);
                     console.log('Active subscription:', !activeSubscription);
 
@@ -289,16 +304,19 @@ function buySubscription(event) {
 
     const subscription = document.getElementById('subscription').value;
     userId = sessionStorage.getItem('userId');
-    const userData = {userId: userId,subscription: subscription};       
+    const userData = {
+        userId: userId,
+        subscription: subscription
+    };
     buySubscriptionFT(userData);
     //alert(`Abbonamento acquistato per ${abbonamento} mesi.`);
-   // showForm('home');
+    // showForm('home');
 }
 
 function confirmedReservation(courseId) {
-    if(!sessionStorage.getItem('activeSubscription')){
+    if (!sessionStorage.getItem('activeSubscription')) {
         showForm('buySubscription');
-    }else if (checkLoggedUser) {
+    } else if (checkLoggedUser) {
         const user_Name = sessionStorage.getItem('userEmail');
         const userId = sessionStorage.getItem('userId');
         reservationDate = sessionStorage.getItem('reservationDate');
@@ -363,6 +381,78 @@ function deleteReservation(reservationId) {
     }
 }
 
+function retrieveSubscription(userData) {
+    fetch('/retrieveSubscription', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(userData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const subscriptionUser = data.subscriptionList.map(sub => ({
+                    id: sub[0],
+                    user_id: sub[1],
+                    start_date: sub[2],
+                    end_date: sub[3],
+                    created_date: sub[4],
+                    duration: sub[5] + ' giorni'
+                }));
+                //const endDates = subscriptionUser.map(sub => sub.end_date);
+                expiredDate = subscriptionUser[0].end_date
+                activeSubscription(formatDate(expiredDate));
+            } else {
+                noActiveSubscription();
+                //alert(data.message);
+            }
+        })
+        .catch(error => {
+            console.log('errore:' + error);
+            //  alert('Si è verificato un errore durante la prenotazione.');
+        });
+}
+
+function buySubscriptionFT(userData) {
+    fetch('/buySubription', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(userData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showForm('activeSubscription');
+            } else {
+                alert(data.message);
+                showForm('home');
+
+            }
+        })
+        .catch(error => {
+            console.log('errore:' + error);
+            //  alert('Si è verificato un errore durante la prenotazione.');
+        });
+}
+
+function formatDate(dateInput) {
+    const date = new Date(dateInput);
+    const dateOptions = {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+    };
+    const formattedDate = date.toLocaleDateString('it-IT', dateOptions);
+    return formattedDate;
+}
+
+
+
+
 function checkLoggedUser() {
     if (!userId) {
         alert("Devi effettuare il login per visualizzare le prenotazioni.");
@@ -372,11 +462,9 @@ function checkLoggedUser() {
 }
 
 function goLogout() {
-   
     userId = null;
     noActiveLogin();
-
-        showForm('home'); // Torna alla home
+    showForm('home'); // Torna alla home
 }
 
 function activeLogin() {
@@ -388,12 +476,10 @@ function activeLogin() {
 
     userName = sessionStorage.getItem('userName');
     userEmail = sessionStorage.getItem('userEmail');
-    document.querySelectorAll("#userNamePlaceholder").forEach(el => {
-    el.textContent = userName;
-     });
-    document.getElementById('logoPlaceholder').textContent = '- Ciao '+userName+' !';    
+    document.querySelectorAll("#userNamePlaceholder").forEach(el => {el.textContent = userName;});
+    document.getElementById('logoPlaceholder').textContent = '- Ciao ' + userName + ' !';
     const userData = {userId: userId};
-    retrieveSubscription(userData);  
+    retrieveSubscription(userData);
 
 
 }
@@ -404,27 +490,25 @@ function activeSubscription(expiredDate) {
     document.getElementById('welcomeSub').style.display = 'block';
     sessionStorage.setItem('activeSubscription', true);
 
-    
+
 }
+
 function noActiveSubscription() {
     document.getElementById('welcomeNoSub').style.display = 'block';
     document.getElementById('welcomeSub').style.display = 'none';
     sessionStorage.setItem('activeSubscription', false);
 
-    
+
 }
 
 function noActiveLogin() {
     document.getElementById('welcomeMessageHost').style.display = 'block';
     document.getElementById('loginLink').style.display = 'block';
     document.getElementById('logoutLink').style.display = 'none';
-    document.querySelectorAll("#userNamePlaceholder").forEach(el => {
-    el.textContent ='';
-     });   
+    document.querySelectorAll("#userNamePlaceholder").forEach(el => {el.textContent = '';});
     document.getElementById('welcomeNoSub').style.display = 'none';
-    document.getElementById('logoPlaceholder').textContent = '';    
+    document.getElementById('logoPlaceholder').textContent = '';
     document.getElementById('welcomeSub').style.display = 'none';
-
     sessionStorage.clear();
 
 }
@@ -461,86 +545,4 @@ function showCourse() {
 function noCourse() {
     document.getElementById('noCourse').style.display = 'block';
     document.getElementById('availableSeats').style.display = 'none';
-}
-
-
-
-// Mostra la Home di default al caricamento della pagina
-window.onload = () => {
-    userId = sessionStorage.getItem('userId');
-    if (userId) {
-        activeLogin();          
-    }
-    
-    showForm('home');
-    var today = new Date().toISOString().split('T')[0]; // Ottieni la data odierna in formato YYYY-MM-DD
-    var dataInput = document.getElementById("dataInput");
-    dataInput.setAttribute('min', today); // Imposta la data minima a oggi
-    dataInput.value = today; // Imposta il valore di default a oggi
-
-};
-
-function retrieveSubscription(userData) {
-    fetch('/retrieveSubscription', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(userData)
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            const subscriptionUser = data.subscriptionList.map(sub => ({
-                id: sub[0],
-                user_id: sub[1],
-                start_date: sub[2],
-                end_date: sub[3],
-                created_date: sub[4],
-                duration: sub[5] + ' giorni'
-            }));
-            //const endDates = subscriptionUser.map(sub => sub.end_date);
-            expiredDate= subscriptionUser[0].end_date
-            activeSubscription(formatDate(expiredDate));
-        } else {
-            noActiveSubscription();
-            //alert(data.message);
-        }
-    })
-    .catch(error => {
-          console.log('errore:' + error);
-                //  alert('Si è verificato un errore durante la prenotazione.');
-            }
-        );
-}
-
-function buySubscriptionFT(userData) {
-    fetch('/buySubription', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(userData)
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {   
-            showForm('activeSubscription');        
-          } else {
-            alert(data.message);showForm('home');
-             
-        }
-    })
-    .catch(error => {
-          console.log('errore:' + error);
-                //  alert('Si è verificato un errore durante la prenotazione.');
-            }
-        );
-}
-
-function formatDate(dateInput) {
-    const date = new Date(dateInput);
-    const dateOptions = { weekday: 'long', day: 'numeric', month: 'long' , year: 'numeric' };
-    const formattedDate = date.toLocaleDateString('it-IT', dateOptions);
-    return formattedDate;  
 }
