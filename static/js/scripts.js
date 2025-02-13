@@ -297,7 +297,7 @@ function buySubscription(event) {
     const userData = {userId: userId,subscription: subscription};       
     buySubscriptionFT(userData);
     //alert(`Abbonamento acquistato per ${abbonamento} mesi.`);
-    showForm('home');
+   // showForm('home');
 }
 
 function confirmedReservation(courseId) {
@@ -396,6 +396,8 @@ function activeLogin() {
     userEmail = sessionStorage.getItem('userEmail');
     document.getElementById('userNamePlaceholder').textContent = userName;
     document.getElementById('userEmailPlaceholder').textContent = userEmail;
+    const userData = {userId: userId};
+    retrieveSubscription(userData);  
 
 
 }
