@@ -479,7 +479,7 @@ function activeLogin() {
     userName = sessionStorage.getItem('userName');
     userEmail = sessionStorage.getItem('userEmail');
     document.querySelectorAll("#userNamePlaceholder").forEach(el => {el.textContent = userName;});
-    document.getElementById('logoPlaceholder').textContent = '- ' + userName.split(" ")[0] + ' !';
+    document.getElementById('logoPlaceholder').textContent = '- ' + userName.split(" ")[0] ;
     const userData = {userId: userId};
     retrieveSubscription(userData);
 
