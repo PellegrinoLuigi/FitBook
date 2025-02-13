@@ -243,14 +243,10 @@ function retrieveReservation() {
                 if (data.reservationlist) {
                     const reservations = data.reservationlist.map(reservation => ({
                         id: reservation[0],
-
                         name: reservation[1],
                         data: reservation[2],
                         startTime: reservation[3]
                     }));
-
-
-                    console.log('reservations:', reservations);
                     const tbody = document.querySelector('#prenotazioniTable tbody');
                     tbody.innerHTML = reservations.map(p => `
                             <tr>
@@ -260,7 +256,6 @@ function retrieveReservation() {
                             </tr>
                         `).join('');
                     showReservation();
-                    //alert(`Prenotazione effettuata per ${userName} il ${data}`);
                     // showForm('home');
                 } else {
                     noReservation();
