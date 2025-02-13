@@ -32,6 +32,15 @@
         <!-- Home -->
         <div id="home" class="form-container">
             <h1>🏋️‍♂️ Benvenuti su FitBook! 🏋️‍♀️</h1>
+             <div class="welcome-text" id="welcomeSub" style="display: none;">
+                <p>🔔Ciao <span id="userNamePlaceholder"></span>, il vostro abbonamento è attivo!</p>
+                <p> Scade il <span style="font-weight:bolder" id="subExpiredDate"></span>, quindi approfittatene al massimo!.</p>
+                <p>Iniziate subito a prenotare e godetevi il vostro allenamento con FitBook! 💪</p>
+            </div>
+             <div class="welcome-text" id="welcomeNoSub" style="display: none;">
+                 <p>🔔Ciao <span id="userNamePlaceholder"></span>, non hai un abbonamento attivo!</p>
+                <p>Vai nella sezione abbonamenti se vuoi procedere con un nuovo acquisto!<span id="subExpired"></span>.</p>
+            </div>
              <div class="welcome-text" style="display: block;">
                 <p>Il vostro spazio dedicato al fitness, dove prenotare i corsi non è mai stato così semplice!</p>
                 <p>🎟 Un solo abbonamento, massima libertà!</p>
@@ -42,19 +51,7 @@
             <div class="welcome-text" id="welcomeMessageHost" style="display: block;">
                 <p>Prenota la tua sessione in palestra, gestisci le tue prenotazioni e acquista abbonamenti.</p>
                 <p>Se non sei ancora registrato! <a href="#" onclick="showForm('login')">clicca qui per accedere o registrarti</a>.</p>
-            </div>
-            <div class="welcome-text" id="welcomeMessage" style="display: none;">
-                <p>Ciao, ! Bentornato su FitBook.</p><span id="userEmailPlaceholder" style="display: none;"></span>
-            </div>
-            <div class="welcome-text" id="welcomeSub" style="display: none;">
-                <p>🔔Ciao <span id="userNamePlaceholder"></span>, il vostro abbonamento è attivo!</p>
-                <p> Scade il <span style="font-weight:bolder" id="subExpiredDate"></span>, quindi approfittatene al massimo!.</p>
-                <p>Iniziate subito a prenotare e godetevi il vostro allenamento con FitBook! 💪</p>
-            </div>
-            <div class="welcome-text" id="welcomeNoSub" style="display: none;">
-                 <p>🔔Ciao <span id="userNamePlaceholder"></span>, non hai un abbonamento attivo!</p>
-                <p>Vai nella sezione abbonamenti se vuoi procedere con un nuovo acquisto!<span id="subExpired"></span>.</p>
-            </div>
+            </div>                      
         </div>
 
         <!-- Form Effettua Prenotazione -->
