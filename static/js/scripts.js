@@ -386,7 +386,6 @@ function goLogout() {
 
 function activeLogin() {
     document.getElementById('welcomeMessageHost').style.display = 'none';
-    document.getElementById('welcomeMessage').style.display = 'block';
     document.getElementById('loginLink').style.display = 'none';
     document.getElementById('logoutLink').style.display = 'block';
 
@@ -420,7 +419,6 @@ function noActiveSubscription() {
 
 function noActiveLogin() {
     document.getElementById('welcomeMessageHost').style.display = 'block';
-    document.getElementById('welcomeMessage').style.display = 'none';
     document.getElementById('loginLink').style.display = 'block';
     document.getElementById('logoutLink').style.display = 'none';
     document.getElementById('userNamePlaceholder').textContent = '';
