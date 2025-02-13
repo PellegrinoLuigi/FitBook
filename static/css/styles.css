@@ -2,6 +2,7 @@
         :root {
             --primary-color: #00B0B9;/* #87556e;  #00796b; */
             --primary-color-hover: #03656a;
+            --primary-color-p:#03656a;    
         } 
         
         * {
@@ -12,6 +13,10 @@
 
         a{
                 cursor:pointer;
+        }
+        p{
+                color:var(--primary-color-p);
+                font-weight: bolder;
         }
        
         body {        
