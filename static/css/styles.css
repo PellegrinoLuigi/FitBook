@@ -1,289 +1,313 @@
+:root {
+	--primary-color: #00B0B9;
+	/* #87556e;  #00796b; */
+	--primary-color-hover: #03656a;
+	--primary-color-p: #03656a;
+}
 
-        :root {
-            --primary-color: #00B0B9;/* #87556e;  #00796b; */
-            --primary-color-hover: #03656a;
-            --primary-color-p:#03656a;    
-        } 
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
 
-        a{
-                cursor:pointer;
-        }
-        p{
-                color:var(--primary-color-p);
-                font-weight: bolder;
-        }
-       
-        body {        
-            background-size: cover; 
-            background-position: center; 
-            background-attachment: fixed; 
-            background-repeat: no-repeat;
-            margin: 0;
-            padding: 0;
-            font-family: Raleway, sans-serif;
-            color: var(--primary-color); /* Colore del testo */
-            line-height: 1.6;
-        }
+a {
+	cursor: pointer;
+}
 
-        /* Header e Hamburger Menu */
-        header {
-            background-color: rgba(51, 51, 51, 0.9); /* Grigio scuro con trasparenza */
-            color: #fff;
-            padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            font-family: Raleway, sans-serif;
-        }
+p {
+	color: var(--primary-color-p);
+	font-weight: bolder;
+}
 
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: #80cbc4; /* Verde acqua pastello */
-        }
+body {
+	background-size: cover;
+	background-position: center;
+	background-attachment: fixed;
+	background-repeat: no-repeat;
+	margin: 0;
+	padding: 0;
+	font-family: Raleway, sans-serif;
+	color: var(--primary-color);
+	/* Colore del testo */
+	line-height: 1.6;
+}
 
-        .menu-icon {
-            display: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: #80cbc4; /* Verde acqua pastello */
-        }
+/* Header e Hamburger Menu */
+header {
+	background-color: rgba(51, 51, 51, 0.9);
+	/* Grigio scuro con trasparenza */
+	color: #fff;
+	padding: 10px 20px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	position: sticky;
+	top: 0;
+	z-index: 1000;
+	font-family: Raleway, sans-serif;
+}
 
-        nav {
-            display: flex;
-            gap: 20px;
-        }
+.logo {
+	font-size: 24px;
+	font-weight: bold;
+	color: #80cbc4;
+	/* Verde acqua pastello */
+}
 
-        nav a {
-            color: #fff;
-            text-decoration: none;
-            font-size: 16px;
-            transition: color 0.3s ease;
-        }
+.menu-icon {
+	display: none;
+	font-size: 24px;
+	cursor: pointer;
+	color: #80cbc4;
+	/* Verde acqua pastello */
+}
 
-        nav a:hover {
-            color: #80cbc4; /* Verde acqua pastello al passaggio del mouse */
-        }
+nav {
+	display: flex;
+	gap: 20px;
+}
 
-        /* Contenuto principale */
-        .container {
-            max-width: 800px;
-            margin: 50px auto;
-            padding: 20px;
-            background-color: rgba(255, 255, 255, 0.6); 
-            border-radius: 60px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            backdrop-filter:blur(5px);
-        }
+nav a {
+	color: #fff;
+	text-decoration: none;
+	font-size: 16px;
+	transition: color 0.3s ease;
+}
 
-        h1 {
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 28px;
-            color:var(--primary-color); /* Verde scuro pastello */
-            font-family: Raleway, sans-serif;
-        }
+nav a:hover {
+	color: #80cbc4;
+	/* Verde acqua pastello al passaggio del mouse */
+}
 
-        .welcome-text {
-            text-align: center;
-            font-size: 18px;
-            margin-bottom: 20px;
-        }
+/* Contenuto principale */
+.container {
+	max-width: 800px;
+	margin: 50px auto;
+	padding: 20px;
+	background-color: rgba(255, 255, 255, 0.6);
+	border-radius: 60px;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	backdrop-filter: blur(5px);
+}
 
-        .welcome-text a {
-            color: var(--primary-color); /* Verde scuro pastello */
-            text-decoration: none;
-            font-weight: bold;
-        }
+h1 {
+	text-align: center;
+	margin-bottom: 20px;
+	font-size: 28px;
+	color: var(--primary-color);
+	/* Verde scuro pastello */
+	font-family: Raleway, sans-serif;
+}
 
-        .welcome-text a:hover {
-            text-decoration: underline;
-        }
+.welcome-text {
+	text-align: center;
+	font-size: 18px;
+	margin-bottom: 20px;
+}
 
-        form label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: var(--primary-color); /* Verde scuro pastello */
-            text-align:center;
-            font-family: Raleway, sans-serif;
-        }
+.welcome-text a {
+	color: var(--primary-color);
+	/* Verde scuro pastello */
+	text-decoration: none;
+	font-weight: bold;
+}
 
-        form input[type="text"],
-        form input[type="email"],
-        form input[type="date"],
-        form input[type="password"],
-        form select {
-            width: 50%;
-            padding: 10px;
-            margin: 10px auto;
-            display: block;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            background-color: rgba(255, 255, 255, 0.8); /* Bianco con trasparenza */
-            font-family: Raleway, sans-serif;
-        }
+.welcome-text a:hover {
+	text-decoration: underline;
+}
 
-        form input[type="submit"] {
-            width: 50%;
-            padding: 10px;
-            background-color: var(--primary-color); /* Verde scuro pastello */
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
-            margin: 30px auto;
-            display: block;
-            font-family: Raleway, sans-serif;
-        }
+form label {
+	display: block;
+	margin-bottom: 8px;
+	font-weight: bold;
+	color: var(--primary-color);
+	/* Verde scuro pastello */
+	text-align: center;
+	font-family: Raleway, sans-serif;
+}
 
-        form input[type="submit"]:hover {
-            background-color: var(--primary-color-hover) ;
-            font-family: Raleway, sans-serif;
-        }
+form input[type="text"],
+form input[type="email"],
+form input[type="date"],
+form input[type="password"],
+form select {
+	width: 50%;
+	padding: 10px;
+	margin: 10px auto;
+	display: block;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	background-color: rgba(255, 255, 255, 0.8);
+	/* Bianco con trasparenza */
+	font-family: Raleway, sans-serif;
+}
 
-        .switch-form {
-            text-align: center;
-            margin-top: 20px;
-        }
+form input[type="submit"] {
+	width: 50%;
+	padding: 10px;
+	background-color: var(--primary-color);
+	/* Verde scuro pastello */
+	color: #fff;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 16px;
+	transition: background-color 0.3s ease;
+	margin: 30px auto;
+	display: block;
+	font-family: Raleway, sans-serif;
+}
 
-        .switch-form a {
-            color: var(--primary-color);  
-            text-decoration: none;
-            font-weight: bold;
-        }
+form input[type="submit"]:hover {
+	background-color: var(--primary-color-hover);
+	font-family: Raleway, sans-serif;
+}
 
-        .switch-form a:hover {
-            text-decoration: underline;
-        }
+.switch-form {
+	text-align: center;
+	margin-top: 20px;
+}
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
+.switch-form a {
+	color: var(--primary-color);
+	text-decoration: none;
+	font-weight: bold;
+}
 
-        table th,
-        table td {
-            padding: 10px;
-            border-bottom: 1px solid #ccc;
-            border-radius: 50px 10px 50px 0px;
-            text-align: center;
-        }
+.switch-form a:hover {
+	text-decoration: underline;
+}
 
-        table th {
-            background-color: var(--primary-color); 
-            color: #fff;
-        }
-        td{
-                    font-weight: bolder;
-        }
+table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-bottom: 20px;
+}
 
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .menu-icon {
-                display: block;
-            }
+table th,
+table td {
+	padding: 10px;
+	border-bottom: 1px solid #ccc;
+	border-radius: 50px 10px 50px 0px;
+	text-align: center;
+}
 
-            nav {
-                display: none;
-                flex-direction: column;
-                background-color: rgba(51, 51, 51, 0.9); 
-                position: absolute;
-                top: 50px;
-                right: 20px;
-                padding: 10px;
-                border-radius: 4px;
-            }
+table th {
+	background-color: var(--primary-color);
+	color: #fff;
+}
 
-            nav.active {
-                display: flex;
-            }
-            table, thead, tbody, th, td, tr {
-                display: block;
-            }
-            
-            th {
-                position: absolute;
-                top: -9999px;
-                left: -9999px;
-            }
-            
-            tr {
-                margin-bottom: 10px;
-            }
-            
-            td {
-                border: none;
-                position: relative;
-                padding-left: 50%;
-                text-align: right;
-            }
-            
-            td:before {
-                position: absolute;
-                top: 6px;
-                left: 6px;
-                width: 45%;
-                padding-right: 10px;
-                white-space: nowrap;
-                content: attr(data-label);
-                text-align: left;
-                font-weight: bold;
-            }
-        }
+td {
+	font-weight: bolder;
+}
 
-        .prenota-bottone {
-            padding: 10px;
-            background-color: #d85c95; 
-            color: #fff;
-            border: none;
-            border-radius: 20px 0px 0px 20px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
-            margin: 30px auto;
-            display: block;
-            font-family: Raleway, sans-serif;
-        }
-        
-        .prenota-bottone:hover {
-            background-color: #904065; 
-        }
-        button.disabled {
-            background-color: #d3d3d3; /* Colore grigio */
-            color: #a1a1a1; /* Colore del testo grigio */
-            cursor: not-allowed; /* Cambia il cursore per mostrare che è disabilitato */
-        }
-        
-        button:disabled {
-            background-color: #d3d3d3; /* Colore grigio */
-            color: #a1a1a1; /* Colore del testo grigio */
-            cursor: not-allowed; /* Cambia il cursore per mostrare che è disabilitato */
-        }
+/* Responsive Design */
+@media (max-width: 768px) {
+	.menu-icon {
+		display: block;
+	}
+
+	nav {
+		display: none;
+		flex-direction: column;
+		background-color: rgba(51, 51, 51, 0.9);
+		position: absolute;
+		top: 50px;
+		right: 20px;
+		padding: 10px;
+		border-radius: 4px;
+	}
+
+	nav.active {
+		display: flex;
+	}
+
+	table,
+	thead,
+	tbody,
+	th,
+	td,
+	tr {
+		display: block;
+	}
+
+	th {
+		position: absolute;
+		top: -9999px;
+		left: -9999px;
+	}
+
+	tr {
+		margin-bottom: 10px;
+	}
+
+	td {
+		border: none;
+		position: relative;
+		padding-left: 50%;
+		text-align: right;
+	}
+
+	td:before {
+		position: absolute;
+		top: 6px;
+		left: 6px;
+		width: 45%;
+		padding-right: 10px;
+		white-space: nowrap;
+		content: attr(data-label);
+		text-align: left;
+		font-weight: bold;
+	}
+}
+
+.prenota-bottone {
+	padding: 10px;
+	background-color: #d85c95;
+	color: #fff;
+	border: none;
+	border-radius: 20px 0px 0px 20px;
+	cursor: pointer;
+	font-size: 16px;
+	transition: background-color 0.3s ease;
+	margin: 30px auto;
+	display: block;
+	font-family: Raleway, sans-serif;
+}
+
+.prenota-bottone:hover {
+	background-color: #904065;
+}
+
+button.disabled {
+	background-color: #d3d3d3;
+	/* Colore grigio */
+	color: #a1a1a1;
+	/* Colore del testo grigio */
+	cursor: not-allowed;
+	/* Cambia il cursore per mostrare che è disabilitato */
+}
+
+button:disabled {
+	background-color: #d3d3d3;
+	/* Colore grigio */
+	color: #a1a1a1;
+	/* Colore del testo grigio */
+	cursor: not-allowed;
+	/* Cambia il cursore per mostrare che è disabilitato */
+}
 
 
 .footer-bottom {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    background-color: #333; /* Colore di sfondo del footer */
-    color: white; /* Colore del testo */
-    text-align: center;
-    padding: 10px 0; /* Spaziatura interna */
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+	background-color: rgb(0, 0, 0, 0.7);
+	/* Colore di sfondo del footer */
+	color: white;
+	/* Colore del testo */
+	text-align: center;
+	padding: 10px 0;
+	/* Spaziatura interna */
 }
-
-    
-
-    
