@@ -393,7 +393,7 @@ function activeLogin() {
 
     userName = sessionStorage.getItem('userName');
     userEmail = sessionStorage.getItem('userEmail');
-    document.getElementById('userNamePlaceholder').textContent = userName;
+    document.querySelectorAll('userNamePlaceholder').textContent = userName;
     const userData = {userId: userId};
     retrieveSubscription(userData);  
 
@@ -420,7 +420,7 @@ function noActiveLogin() {
     document.getElementById('welcomeMessageHost').style.display = 'block';
     document.getElementById('loginLink').style.display = 'block';
     document.getElementById('logoutLink').style.display = 'none';
-    document.getElementById('userNamePlaceholder').textContent = '';
+    document.querySelectorAll('userNamePlaceholder').textContent = '';
     document.getElementById('welcomeNoSub').style.display = 'none';
     document.getElementById('welcomeSub').style.display = 'none';
 
