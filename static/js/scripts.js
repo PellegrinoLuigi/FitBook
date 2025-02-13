@@ -199,7 +199,7 @@ function retrieveCourseFuntion() {
                                 <td>${p.duration}</td>
                                 <td>${p.trainer}</td>
                                 <td><button title="Verifica se il tuo abbonamento è attivo"
-                                        class="prenota-bottone ${p.availableSeats < 1 || !activeSubscription ? 'disabled' : ''}" 
+                                        class="custom-button ${p.availableSeats < 1 || !activeSubscription ? 'disabled' : ''}" 
                                         onclick="confirmedReservation('${p.id}')"
                                         ${p.availableSeats < 1 || !activeSubscription ? 'disabled' : ''}>
                                         Prenota
@@ -267,7 +267,7 @@ function retrieveReservation() {
                             <tr>
                                 <td>${p.name}</td>                                
                                 <td>${formatDate(p.data) + ' h: '+p.startTime}</td>
-                                <td><button class="prenota-bottone" onclick="deleteReservation('${p.id}')">Cancella</button></td>
+                                <td><button class="custom-button" onclick="deleteReservation('${p.id}')">Cancella</button></td>
                             </tr>
                         `).join('');
                     showReservation();
