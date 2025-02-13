@@ -394,7 +394,6 @@ function activeLogin() {
     userName = sessionStorage.getItem('userName');
     userEmail = sessionStorage.getItem('userEmail');
     document.getElementById('userNamePlaceholder').textContent = userName;
-    document.getElementById('userEmailPlaceholder').textContent = userEmail;
     const userData = {userId: userId};
     retrieveSubscription(userData);  
 
@@ -422,7 +421,6 @@ function noActiveLogin() {
     document.getElementById('loginLink').style.display = 'block';
     document.getElementById('logoutLink').style.display = 'none';
     document.getElementById('userNamePlaceholder').textContent = '';
-    document.getElementById('userEmailPlaceholder').textContent = '';   
     document.getElementById('welcomeNoSub').style.display = 'none';
     document.getElementById('welcomeSub').style.display = 'none';
 
