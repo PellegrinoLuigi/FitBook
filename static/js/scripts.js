@@ -216,7 +216,7 @@ function retrieveCourseFuntion() {
                     document.getElementById('availableSeats').style.display = 'none';
                 }
             } else {
-                console.error("Errore:", data.error);
+                //console.error("Errore:", data.error);
                 noCourse();
             }
         })
@@ -279,7 +279,7 @@ function retrieveReservation() {
                     alert(res.message);
                 }
             } else {
-                console.error("Errore:", data.error);
+               // console.error("Errore:", data.error);
                 noReservation();
             }
         })
