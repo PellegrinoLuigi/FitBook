@@ -190,7 +190,7 @@ function retrieveCourseFuntion() {
                     console.log('Available Seats:', availableSeats);
                     activeSubscription = sessionStorage.getItem('activeSubscription') === 'true';
                     console.log('Active subscription:', activeSubscription);
-                    console.log('Active subscription:', !activeSubscription);
+                    //console.log('Active subscription:', !activeSubscription);
 
                     showCourse();
                     const tbody = document.querySelector('#availableSeatsTable tbody');
