@@ -1,0 +1,122 @@
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    email VARCHAR NOT NULL,
+    password VARCHAR NOT NULL,
+    first_name VARCHAR NOT NULL,
+    last_name VARCHAR NOT NULL,
+    birthdate DATE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE trainer (
+    id SERIAL PRIMARY KEY,
+    first_name VARCHAR NOT NULL,
+    last_name VARCHAR NOT NULL,
+    email VARCHAR NOT NULL,
+    specialization VARCHAR
+);
+
+CREATE TABLE course (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR NOT NULL,
+    capacity INTEGER NOT NULL,
+    weekday VARCHAR NOT NULL,
+    start_time VARCHAR NOT NULL,
+    duration INTEGER NOT NULL,
+    trainer_id INTEGER REFERENCES trainer(id)
+);
+
+CREATE TABLE reservation (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id),
+    course_id INTEGER REFERENCES course(id),
+    reservation_date TIMESTAMP NOT NULL,
+    reservation_status VARCHAR NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE user_subscription (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER UNIQUE REFERENCES users(id),
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    subscription_days INTEGER NOT NULL,
+    status VARCHAR NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+CREATE OR REPLACE FUNCTION update_end_date()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.end_date := NEW.start_date + INTERVAL '1 day' * NEW.subscription_days;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE TRIGGER before_insert_update_user_subscription
+BEFORE INSERT OR UPDATE ON user_subscription
+FOR EACH ROW
+EXECUTE FUNCTION update_end_date();
+
+
+INSERT INTO trainer (first_name, last_name, email, specialization) VALUES
+('Anna', 'Rossi', 'anna.rossi@example.com', 'Bodybuilding'),
+('Luca', 'Gialli', 'luca.gialli@example.com', 'Cardio Training'),
+('Serena', 'Viola', 'serena.viola@example.com', 'Stretching'),
+('Davide', 'Azzurri', 'davide.azzurri@example.com', 'HIIT'),
+('Martina', 'Arancioni', 'martina.arancioni@example.com', 'Aerobics'),
+('Alessandro', 'Verdi', 'alessandro.verdi@example.com', 'Weightlifting'),
+('Giulia', 'Bianchi', 'giulia.bianchi@example.com', 'Dance Fitness'),
+('Tommaso', 'Rossi', 'tommaso.rossi@example.com', 'Martial Arts'),
+('Federica', 'Neri', 'federica.neri@example.com', 'Spinning'),
+('Giorgio', 'Blu', 'giorgio.blu@example.com', 'Functional Training');
+
+
+INSERT INTO course (name, capacity, weekday, start_time, duration, trainer_id) VALUES
+('Bodybuilding Mattutino', 20, 'Monday', '08:00', 60, 1),
+('Allenamento Cardio', 25, 'Tuesday', '10:00', 45, 2),
+('Stretching Serale', 30, 'Wednesday', '18:00', 60, 3),
+('Workout HIIT', 20, 'Thursday', '17:00', 30, 4),
+('Aerobica Divertente', 30, 'Friday', '09:00', 50, 5),
+('Pesistica Base', 15, 'Monday', '14:00', 60, 6),
+('Fitness Dance', 25, 'Tuesday', '19:00', 45, 7),
+('Allenamento Arti Marziali', 20, 'Wednesday', '16:00', 60, 8),
+('Sessione di Spinning', 30, 'Thursday', '12:00', 45, 9),
+('Allenamento Funzionale', 25, 'Friday', '11:00', 60, 10),
+('Bodybuilding Avanzato', 20, 'Monday', '09:00', 60, 1),
+('Cardio Intenso', 25, 'Tuesday', '11:00', 45, 2),
+('Stretching Rilassante', 30, 'Wednesday', '19:00', 60, 3),
+('HIIT Mattutino', 20, 'Thursday', '08:00', 30, 4),
+('Aerobica Energetica', 30, 'Friday', '10:00', 50, 5),
+('Pesistica Avanzata', 15, 'Monday', '15:00', 60, 6),
+('Dance Fitness', 25, 'Tuesday', '20:00', 45, 7),
+('Arti Marziali Serali', 20, 'Wednesday', '17:00', 60, 8),
+('Spinning Avanzato', 30, 'Thursday', '13:00', 45, 9),
+('Functional Training', 25, 'Friday', '12:00', 60, 10),
+('Bodybuilding Pomeridiano', 20, 'Monday', '16:00', 60, 1),
+('Cardio Veloce', 25, 'Tuesday', '09:00', 45, 2),
+('Stretching Mattutino', 30, 'Wednesday', '08:00', 60, 3),
+('HIIT Serale', 20, 'Thursday', '18:00', 30, 4),
+('Aerobica Mattutina', 30, 'Friday', '08:00', 50, 5),
+('Pesistica Notturna', 15, 'Monday', '20:00', 60, 6),
+('Dance Fitness Mattutino', 25, 'Tuesday', '07:00', 45, 7),
+('Arti Marziali Mattutine', 20, 'Wednesday', '09:00', 60, 8),
+('Spinning Mattutino', 30, 'Thursday', '07:00', 45, 9),
+('Allenamento Funzionale Mattutino', 25, 'Friday', '08:00', 60, 10),
+('Bodybuilding Intensivo', 20, 'Monday', '07:00', 60, 1),
+('Cardio e Forza', 25, 'Tuesday', '08:00', 45, 2),
+('Stretching di Pranzo', 30, 'Wednesday', '13:00', 60, 3),
+('HIIT di Pranzo', 20, 'Thursday', '13:00', 30, 4),
+('Aerobica di Pranzo', 30, 'Friday', '13:00', 50, 5),
+('Pesistica Pomeridiana', 15, 'Monday', '13:00', 60, 6),
+('Fitness Dance Pomeridiano', 25, 'Tuesday', '13:00', 45, 7),
+('Arti Marziali Notturne', 20, 'Wednesday', '20:00', 60, 8),
+('Spinning Notturno', 30, 'Thursday', '20:00', 45, 9),
+('Allenamento Funzionale Notturno', 25, 'Friday', '20:00', 60, 10);
+
+
+
+INSERT INTO users (email, password, first_name, last_name, birthdate) VALUES
+('a.rossi@example.com', 'password123', 'Alessio', 'Rossi', '1990-04-15');
