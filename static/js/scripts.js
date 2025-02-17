@@ -406,13 +406,13 @@ function retrieveSubscription(userData) {
                 //const endDates = subscriptionUser.map(sub => sub.end_date);
                 expiredDate = subscriptionUser[0].end_date
                // activeSubscriptionFT(expiredDate);
-
-                if (expiredDate >= today()) {
+                let expiredDateFormat = new Date(subscriptionUser[0].end_date);                   
+                if (expiredDateFormat.toISOString().split('T')[0] >= today()) {
                     activeSubscriptionFT(expiredDate);
                 } else {
-                    // Se expiredDate è minore di oggi, esegui altro codice se necessario
+                    noActiveSubscription();
                     console.log('La sottoscrizione è scaduta.');
-                }
+                }               
             } else {
                 noActiveSubscription();
                 //alert(data.message);
