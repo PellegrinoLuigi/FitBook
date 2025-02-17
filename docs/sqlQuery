@@ -21,7 +21,7 @@ CREATE TABLE course (
     name VARCHAR NOT NULL,
     capacity INTEGER NOT NULL,
     weekday VARCHAR NOT NULL,
-    start_time VARCHAR,
+    start_time VARCHAR NOT NULL,
     duration INTEGER NOT NULL,
     trainer_id INTEGER REFERENCES trainer(id)
 );
@@ -30,17 +30,18 @@ CREATE TABLE reservation (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id),
     course_id INTEGER REFERENCES course(id),
-    reservation_date TIMESTAMP ,
-    reservation_status VARCHAR ,
+    reservation_date TIMESTAMP NOT NULL,
+    reservation_status VARCHAR NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE user_subscription (
     id SERIAL PRIMARY KEY,
     user_id INTEGER UNIQUE REFERENCES users(id),
-    start_date DATE,
-    end_date DATE,
-    subscription_days INTEGER,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    subscription_days INTEGER NOT NULL,
+    status VARCHAR NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -70,7 +71,11 @@ INSERT INTO trainer (first_name, last_name, email, specialization) VALUES
 ('Giulia', 'Bianchi', 'giulia.bianchi@example.com', 'Dance Fitness'),
 ('Tommaso', 'Rossi', 'tommaso.rossi@example.com', 'Martial Arts'),
 ('Federica', 'Neri', 'federica.neri@example.com', 'Spinning'),
-('Giorgio', 'Blu', 'giorgio.blu@example.com', 'Functional Training');
+('Giorgio', 'Blu', 'giorgio.blu@example.com', 'Functional Training'),
+('Luigi', 'Conti', 'luigi.conti@example.com', 'Personal Trainer');
+
+INSERT INTO trainer (first_name, last_name, email, specialization) VALUES
+('Luigi', 'Conti', 'luigi.conti@example.com', 'Personal Trainer');
 
 
 INSERT INTO course (name, capacity, weekday, start_time, duration, trainer_id) VALUES
@@ -133,8 +138,66 @@ INSERT INTO course (name, capacity, weekday, start_time, duration, trainer_id) V
 ('Festa di Dance Fitness', 25, 'Sunday', '08:00', 60, 7),
 ('Focus Arti Marziali', 20, 'Sunday', '09:00', 60, 8),
 ('Maratona Spinning', 30, 'Sunday', '10:00', 60, 9),
-('Allenamento Funzionale della Domenica', 25, 'Sunday', '08:00', 60, 10);
+('Allenamento Funzionale della Domenica', 25, 'Sunday', '08:00', 60, 10),
+('Personal Training', 1, 'Monday', '09:00', 60, 11),
+('Personal Training', 1, 'Monday', '10:00', 60, 11),
+('Personal Training', 1, 'Monday', '11:00', 60, 11),
+('Personal Training', 1, 'Monday', '12:00', 60, 11),
+('Personal Training', 1, 'Monday', '14:00', 60, 11),
+('Personal Training', 1, 'Monday', '15:00', 60, 11),
+('Personal Training', 1, 'Monday', '16:00', 60, 11),
+('Personal Training', 1, 'Monday', '17:00', 60, 11),
+('Personal Training', 1, 'Tuesday', '09:00', 60, 11),
+('Personal Training', 1, 'Tuesday', '10:00', 60, 11),
+('Personal Training', 1, 'Tuesday', '11:00', 60, 11),
+('Personal Training', 1, 'Tuesday', '12:00', 60, 11),
+('Personal Training', 1, 'Tuesday', '14:00', 60, 11),
+('Personal Training', 1, 'Tuesday', '15:00', 60, 11),
+('Personal Training', 1, 'Tuesday', '16:00', 60, 11),
+('Personal Training', 1, 'Tuesday', '17:00', 60, 11),
+('Personal Training', 1, 'Wednesday', '09:00', 60, 11),
+('Personal Training', 1, 'Wednesday', '10:00', 60, 11),
+('Personal Training', 1, 'Wednesday', '11:00', 60, 11),
+('Personal Training', 1, 'Wednesday', '12:00', 60, 11),
+('Personal Training', 1, 'Wednesday', '14:00', 60, 11),
+('Personal Training', 1, 'Wednesday', '15:00', 60, 11),
+('Personal Training', 1, 'Wednesday', '16:00', 60, 11),
+('Personal Training', 1, 'Wednesday', '17:00', 60, 11),
+('Personal Training', 1, 'Thursday', '09:00', 60, 11),
+('Personal Training', 1, 'Thursday', '10:00', 60, 11),
+('Personal Training', 1, 'Thursday', '11:00', 60, 11),
+('Personal Training', 1, 'Thursday', '12:00', 60, 11),
+('Personal Training', 1, 'Thursday', '14:00', 60, 11),
+('Personal Training', 1, 'Thursday', '15:00', 60, 11),
+('Personal Training', 1, 'Thursday', '16:00', 60, 11),
+('Personal Training', 1, 'Thursday', '17:00', 60, 11),
+('Personal Training', 1, 'Friday', '09:00', 60, 11),
+('Personal Training', 1, 'Friday', '10:00', 60, 11),
+('Personal Training', 1, 'Friday', '11:00', 60, 11),
+('Personal Training', 1, 'Friday', '12:00', 60, 11),
+('Personal Training', 1, 'Friday', '14:00', 60, 11),
+('Personal Training', 1, 'Friday', '15:00', 60, 11),
+('Personal Training', 1, 'Friday', '16:00', 60, 11),
+('Personal Training', 1, 'Friday', '17:00', 60, 11),
+('Personal Training', 1, 'Saturday', '09:00', 60, 11),
+('Personal Training', 1, 'Saturday', '10:00', 60, 11),
+('Personal Training', 1, 'Saturday', '11:00', 60, 11),
+('Personal Training', 1, 'Saturday', '12:00', 60, 11),
+('Personal Training', 1, 'Saturday', '14:00', 60, 11),
+('Personal Training', 1, 'Saturday', '15:00', 60, 11),
+('Personal Training', 1, 'Saturday', '16:00', 60, 11),
+('Personal Training', 1, 'Saturday', '17:00', 60, 11);
+
 
 
 INSERT INTO users (email, password, first_name, last_name, birthdate) VALUES
-('a.rossi@example.com', 'password123', 'Alessio', 'Rossi', '1990-04-15');
+('a.rossi@example.com', 'password123', 'Alessio', 'Rossi', '1990-04-15'),
+('m.bianchi@example.com', 'password123', 'Martina', 'Bianchi', '1985-06-22'),
+('g.verdi@example.com', 'password123', 'Giuseppe', 'Verdi', '1992-11-05'),
+('s.neri@example.com', 'password123', 'Sara', 'Neri', '1988-08-30'),
+('f.blu@example.com', 'password123', 'Federico', 'Blu', '1995-02-10'),
+('e.gialli@example.com', 'password123', 'Elisa', 'Gialli', '1987-07-19'),
+('m.verdi@example.com', 'password123', 'Michele', 'Verdi', '1993-01-12'),
+('v.rossi@example.com', 'password123', 'Valentina', 'Rossi', '1991-03-21'),
+('a.rossi@example.com', 'password123', 'Andrea', 'Rossi', '1994-12-04'),
+('f.bianchi@example.com', 'password123', 'Francesca', 'Bianchi', '1989-09-17');
