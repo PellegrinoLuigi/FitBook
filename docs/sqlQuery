@@ -113,8 +113,27 @@ INSERT INTO course (name, capacity, weekday, start_time, duration, trainer_id) V
 ('Fitness Dance Pomeridiano', 25, 'Tuesday', '13:00', 45, 7),
 ('Arti Marziali Notturne', 20, 'Wednesday', '20:00', 60, 8),
 ('Spinning Notturno', 30, 'Thursday', '20:00', 45, 9),
-('Allenamento Funzionale Notturno', 25, 'Friday', '20:00', 60, 10);
-
+('Allenamento Funzionale Notturno', 25, 'Friday', '20:00', 60, 10),
+('Bodybuilding Intensivo', 20, 'Saturday', '08:00', 60, 1),
+('Maratona Cardio', 25, 'Saturday', '09:00', 60, 2),
+('Stretching Rilassante', 30, 'Saturday', '10:00', 60, 3),
+('Sfida HIIT', 20, 'Saturday', '08:00', 60, 4),
+('Aerobica del Weekend', 30, 'Saturday', '09:00', 60, 5),
+('Pesistica Avanzata', 15, 'Saturday', '10:00', 45, 6),
+('Fitness Dance del Sabato', 25, 'Saturday', '08:00', 80, 7),
+('Masterclass di Arti Marziali', 20, 'Saturday', '09:00', 80, 8),
+('Spinning Endurance', 30, 'Saturday', '10:00', 30, 9),
+('Allenamento Funzionale Speciale', 25, 'Saturday', '08:00', 45, 10),
+('Bodybuilding Mattutino', 20, 'Sunday', '08:00', 100, 1),
+('Cardio della Domenica', 25, 'Sunday', '09:00', 50, 2),
+('Stretching della Domenica', 30, 'Sunday', '10:00', 60, 3),
+('Blast HIIT', 20, 'Sunday', '08:00', 60, 4),
+('Energia Aerobica', 30, 'Sunday', '09:00', 60, 5),
+('Pesistica Pro', 15, 'Sunday', '10:00', 60, 6),
+('Festa di Dance Fitness', 25, 'Sunday', '08:00', 60, 7),
+('Focus Arti Marziali', 20, 'Sunday', '09:00', 60, 8),
+('Maratona Spinning', 30, 'Sunday', '10:00', 60, 9),
+('Allenamento Funzionale della Domenica', 25, 'Sunday', '08:00', 60, 10);
 
 
 INSERT INTO users (email, password, first_name, last_name, birthdate) VALUES
