@@ -7,6 +7,10 @@
 	--secondary-btn: #d85c95;
 	--secondary-btn-hover: #904065;
 }
+.red-text {
+    color: red;
+    font-weight: bold;
+}
 
 * {
 	margin: 0;
