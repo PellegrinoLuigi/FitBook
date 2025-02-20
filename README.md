@@ -30,6 +30,7 @@ FitBook è un sistema di prenotazione online per centro fitness, che consente ag
   - pgAdmin
   - [Swagger.io](https://pellegrinoluigi.github.io/FitBook)
   - [dbdiagram.io](https://dbdiagram.io/d/FitBook-Diagram-6798b7b5263d6cf9a046ced8)
+  - [cron-job](https://cron-job.org/en/)
 
 ![Descrizione del Diagramma](docs/FitBook%20Diagram.svg)
     
