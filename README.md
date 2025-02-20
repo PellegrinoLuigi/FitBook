@@ -25,7 +25,7 @@ FitBook è un sistema di prenotazione online per centro fitness, che consente ag
 - **Applicativi utilizzati**:
   - Visual Studio Code
   - GitHub
-  - Render.com
+  - [Render.com](https://fitbook-sr59.onrender.com/)
   - Postman
   - pgAdmin
   - [Swagger.io](https://pellegrinoluigi.github.io/FitBook)
