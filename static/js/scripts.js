@@ -27,12 +27,13 @@ function activeMenu() {
 
 // Funzione per mostrare il form selezionato
 function showForm(formId) {
-    // Nascondi tutti i form
+   //Mostra messaggi se loggato o meno 
     if (!userId /*|| sessionStorage.getItem('activeSubscription')*/ ) {
         noActiveLogin();
     } else {
         activeLogin();
     }
+      // Nascondi tutti i form
     const forms = document.querySelectorAll('.form-container');
     forms.forEach(form => form.style.display = 'none');
 
