@@ -1,13 +1,12 @@
 import os
 from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS
-
 from datetime import datetime
-
-
 import psycopg2
 
+
 app = Flask(__name__, static_folder="static")
+# Abilitato per poter utilizzare le chiamate api in swagger
 CORS(app)
 
 
@@ -18,11 +17,16 @@ db_password = os.getenv("DB_PASSWORD")
 db_host = os.getenv("DB_HOST")
 db_port = os.getenv("DB_PORT", 5432)  # Porta di default
 
+# Verifica credenziali utente
 QUERY_LOGGED_USER = "SELECT first_name,last_name,email,id  FROM users WHERE email = %s AND password = %s;"
+
+# Verifica se email inserita è già presente a DB
 QUERY_EMAIL_FILTERED_USER = "SELECT * FROM users WHERE email = %s;"
+
+# Inserimento nuovo utente
 QUERY_NEW_USER="INSERT INTO users (first_name, last_name, email, birthdate, password) VALUES (%s, %s, %s, %s, %s)"
 
-
+# Verifica dei corsi disponibili per lo specifico utente loggato
 QUERY_CHECK_RESERVATION = """SELECT course.id, course.name, course.capacity - COALESCE(reservation_count, 0) AS available_seats, 
                                    course.weekday, course.start_time, course.duration, trainer.first_name, trainer.last_name 
                             FROM course 
@@ -43,16 +47,26 @@ QUERY_CHECK_RESERVATION = """SELECT course.id, course.name, course.capacity - CO
                                	AND reservation.reservation_status = 'Confirmed'
                             ) order by start_time;"""
 
+# Inserisci prenotazione
 QUERY_BOOK_COURSE = "INSERT INTO reservation (user_id, course_id, reservation_date, reservation_status) VALUES (%s, %s, %s, %s);"
+
+# Recupera prenotazioni per utente loggato
 QUERY_BOOKED_COURSES = """SELECT r.id as reservation_id, c.name AS course_name,DATE(r.reservation_date) AS reservation_date , c.start_time AS reservation_time 
                      FROM reservation r
                      JOIN course c ON r.course_id = c.id
                      WHERE   r.reservation_status = 'Confirmed'
                      AND r.user_id = %s  AND reservation_date>=CURRENT_DATE order by reservation_date,reservation_time;"""
 
+# Cancella prenotazione - Non utilizzata! preferita una cancellazione logica 
 QUERY_DELETE_RESERVATION = "DELETE FROM reservation WHERE id = %s;"
+
+# Cancella logica prenotazione 
 QUERY_LOGICAL_DELETE_RESERVATION = "UPDATE reservation SET reservation_status = 'Cancelled' WHERE id = %s;"
+
+# Recupera le informazioni sull'abbonamento dell'utente loggato 
 QUERY_GET_SUBSCRIPTION ="SELECT * FROM user_subscription where user_id = %s;"
+
+# Aggiornamento dell'abbonamento dell'utente loggato a seguito di un acquisto.
 QUERY_UPSERT_SUBSCRIPTION="""INSERT INTO user_subscription (user_id, start_date, subscription_days) 
                             VALUES (%s, %s, %s)
                             ON CONFLICT (user_id) 
@@ -71,7 +85,8 @@ def get_db_connection():
     except Exception as e:
         print(f"Errore durante la connessione al database: {e}")
         return None
-      
+
+#API - Registrazione utente
 @app.route("/register", methods=["POST"])
 def register():
     data = request.get_json()
@@ -119,7 +134,7 @@ def userRegister(first_name, last_name, email, birthdate, password):
         print(f"Errore nel registrare l'utente: {e}")
         return False
 
-# Funzione per verificare se l'utente esiste nel DB
+#API - Login utente
 @app.route("/login", methods=["POST"])
 def login():
     data = request.get_json()  # Riceve i dati come JSON
@@ -138,7 +153,7 @@ def login():
     else:
         return jsonify({"success": False, "message": "Credenziali errate."})
 
-# Funzione per recuperare i corsi prenotabili dall'utente loggato
+#API - recupera i corsi prenotabili dall'utente loggato
 @app.route("/retrieveCourse", methods=["POST"])
 def retrieveCourse():
     try:
@@ -166,7 +181,7 @@ def retrieveCourse():
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
 
-# Funzione per confermare una prenotazione 
+#API - conferma prenotazione
 @app.route("/confirmedReservation", methods=["POST"])
 def confirmedReservation():
     data = request.get_json()  # Riceve i dati come JSON
@@ -182,7 +197,7 @@ def confirmedReservation():
     else:
         return jsonify({"success": False, "message": "Errore durante la prenotazione."})
 
-
+#Metodo per conferma prenotazione
 def book(userId, courseId, reservationDate, reservation_status):
     try:
         conn = get_db_connection()
@@ -198,7 +213,7 @@ def book(userId, courseId, reservationDate, reservation_status):
         print(f"Errore nel registrare prenotazione: {e}")
         return False
 
-# Funzione per cancellare una prenotazione 
+#API - cancella prenotazione
 @app.route("/deleteReservation", methods=["POST"])
 def deleteReservation():
     data = request.get_json()  # Riceve i dati come JSON
@@ -211,7 +226,7 @@ def deleteReservation():
     else:
         return jsonify({"success": False, "message": "Errore durante la cancellazione della prenotazione."})
 
-
+#Metodo per cancellare prenotazione
 def deleteRes(reservationId):
     try:
         conn = get_db_connection()
@@ -224,7 +239,7 @@ def deleteRes(reservationId):
         print(f"Errore nel CANCELLARE prenotazione: {e}")
         return False
 
-# Funzione per recuperare le prenotazioni dell'utente loggato 
+#API - recupera le prenotazioni dell'utente loggato
 @app.route("/retrieveReservation", methods=["POST"])
 def retrieveReservation():
     data = request.get_json()
@@ -235,6 +250,8 @@ def retrieveReservation():
     else:
         return jsonify({"success": False, "message": "Errore! Al momento il servizio non è disponibile!"})
 
+
+#API - recupera l'abbonamento dell'utente loggato
 @app.route("/retrieveSubscription", methods=["POST"])
 def retrieveSubscription():
     data = request.get_json()
@@ -245,6 +262,7 @@ def retrieveSubscription():
     else:
         return jsonify({"success": False, "message": "Non è presente un abbonamento attivo."})
 
+#API - effettua acquisto di un abbonamento
 @app.route("/buySubription", methods=["POST"])
 def buySubription():
     data = request.get_json()
@@ -258,6 +276,7 @@ def buySubription():
     else:
         return jsonify({"success": False, "message": "Errore durante l'acquisto dell'abbonamento."})
 
+# Astrazione del metodo di insert in db con parametri
 def db_request_insert(query, *params):
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -276,6 +295,8 @@ def db_request_insert(query, *params):
         cursor.close()
         conn.close()
     return success
+
+# Astrazione del metodo di recupero dato in db con parametri
 def db_request_select(query, *params):
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -287,7 +308,7 @@ def db_request_select(query, *params):
     conn.close()
     return result
 
-
+# Astrazione del metodo di recupero dati in db con parametri
 def db_request_select_all(query, *params):
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -300,15 +321,8 @@ def db_request_select_all(query, *params):
     return result
 
 
-def db_request_select_all_3_params(query, par1, par2, par3):
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute(query, (par1, par2, par3))
-    result = cursor.fetchall()
-    conn.close()
-    return result
-
-
+# Astrazione del metodo di recupero dati in db con 4 parametri
+# (metodo si è reso necessario per un errore che si verifica con la query QUERY_CHECK_RESERVATION nella quale sono presenti 3 valori identici per la data e veniva restituito errore)
 def db_request_select_all_4_params(query, par1, par2, par3, par4):
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -318,9 +332,9 @@ def db_request_select_all_4_params(query, par1, par2, par3, par4):
     return result
 
 
+#Avvio dell'app e renderizzazione del index
 @app.route("/")
 def home():
-    #users=users
     return render_template("index.html")
 
 
