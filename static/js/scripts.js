@@ -1,10 +1,8 @@
 console.log("JavaScript caricato correttamente! ");
 
-
-// Variabile per memorizzare lo stato di login
 let userId = null;
 
-// Mostra la Home di default al caricamento della pagina
+// Mostra di default la Home , se userId è valorizzato allora viene richiamato il metodo activeLogin che mostra informazioni legata all'utenza
 window.onload = () => {
     userId = sessionStorage.getItem('userId');
     if (userId) {
@@ -16,6 +14,7 @@ window.onload = () => {
 
 };
 
+//Funzione che restituisce la data odierna
 function today() {
     return new Date().toISOString().split('T')[0]; 
 }
@@ -103,6 +102,7 @@ function login(event) {
         });
 }
 
+// Funzione per effettuare registrazione utente
 function registration(event) {
     event.preventDefault();
     const firstname = document.getElementById('firstname').value;
@@ -141,7 +141,7 @@ function registration(event) {
         });
 }
 
-// Funzione per effettuare una prenotazione
+// Funzione per recuperare i corsi prenotabili, viene richiamata dall'utente quando clicca sul relativo menù
 function retrieveCourse(event) {
     event.preventDefault();
     if (!userId) {
@@ -152,6 +152,8 @@ function retrieveCourse(event) {
     retrieveCourseFuntion();
 }
 
+// Funzione per recuperare i corsi prenotabili, viene richiamata 2 volte quando l'utente clicca sul relativo menù,
+// oppure successivamente alla prenotazione di un corso viene effettuato il refresh dei corsi disponibili
 function retrieveCourseFuntion() {
     const userEmail = sessionStorage.getItem('userEmail');
     const reservation_date = document.getElementById('dataInput').value;
@@ -232,7 +234,7 @@ function retrieveCourseFuntion() {
     // showForm('home');
 }
 
-// Funzione per caricare le prenotazioni
+// Funzione per caricare le prenotazioni effettuate
 function retrieveReservation() {
     userId = sessionStorage.getItem('userId');
     if (!userId) {
@@ -296,7 +298,7 @@ function retrieveReservation() {
 
 }
 
-// Funzione per effettuare un acquisto
+// Funzione per effettuare un acquisto di abbonamento
 function buySubscription(event) {
     event.preventDefault();
     if (!userId) {
@@ -312,10 +314,10 @@ function buySubscription(event) {
         subscription: subscription
     };
     buySubscriptionFT(userData);
-    //alert(`Abbonamento acquistato per ${abbonamento} mesi.`);
     // showForm('home');
 }
 
+// Funzione per confermare prenotazione
 function confirmedReservation(courseId) {
     if (!sessionStorage.getItem('activeSubscription')) {
         showForm('buySubscription');
@@ -354,6 +356,7 @@ function confirmedReservation(courseId) {
     }
 }
 
+// Funzione per cancellare  prenotazioni, 
 function deleteReservation(reservationId) {
     if (checkLoggedUser) {
         const userData = {
@@ -384,6 +387,7 @@ function deleteReservation(reservationId) {
     }
 }
 
+// Funzione per recuperare le info sull'abbonamento
 function retrieveSubscription(userData) {
     fetch('/retrieveSubscription', {
             method: 'POST',
@@ -424,6 +428,7 @@ function retrieveSubscription(userData) {
         });
 }
 
+// Funzione per effettuare un acquisto di abbonamento
 function buySubscriptionFT(userData) {
     fetch('/buySubription', {
             method: 'POST',
@@ -448,6 +453,7 @@ function buySubscriptionFT(userData) {
         });
 }
 
+//Funzione per formattare la data 
 function formatDate(dateInput) {
     const date = new Date(dateInput);
     const dateOptions = {
@@ -460,9 +466,7 @@ function formatDate(dateInput) {
     return formattedDate;
 }
 
-
-
-
+//Funzione che mostra alert se un utente non è loggato 
 function checkLoggedUser() {
     if (!userId) {
         alert("Devi effettuare il login per visualizzare le prenotazioni.");
@@ -471,12 +475,14 @@ function checkLoggedUser() {
     }
 }
 
+//Funzione per effettuare logout
 function goLogout() {
     userId = null;
     noActiveLogin();
     showForm('home'); // Torna alla home
 }
 
+//Funzione che modifica elementi del DOM se l'utente è loggato
 function activeLogin() {
     document.getElementById('welcomeMessageHost').style.display = 'none';
     document.getElementById('loginLink').style.display = 'none';
@@ -494,6 +500,7 @@ function activeLogin() {
 
 }
 
+//Funzione che modifica elementi del DOM se l'utente è abbonato
 function activeSubscriptionFT(expiredDate) {
    
     document.getElementById('subExpiredDate').textContent = formatDate(expiredDate);
@@ -503,6 +510,7 @@ function activeSubscriptionFT(expiredDate) {
 
 }
 
+//Funzione che modifica elementi del DOM se l'utente NON è abbonato
 function noActiveSubscription() {
     document.getElementById('welcomeNoSub').style.display = 'block';
     document.getElementById('welcomeSub').style.display = 'none';
@@ -511,6 +519,7 @@ function noActiveSubscription() {
 
 }
 
+//Funzione che modifica elementi del DOM se l'utente NON è loggato
 function noActiveLogin() {
     document.getElementById('welcomeMessageHost').style.display = 'block';
     document.getElementById('loginLink').style.display = 'block';
@@ -523,35 +532,41 @@ function noActiveLogin() {
 
 }
 
+//Funzione che modifica elementi del DOM per refreshare i corsi disponibili
 function refreshRetrieveCourse() {
     const tbody = document.querySelector('#availableSeatsTable tbody');
     tbody.innerHTML = '';
     retrieveCourseFuntion();
 }
 
+//Funzione che modifica elementi del DOM per refreshare le prenotazioni attive
 function refreshRetrieveReservation() {
     const tbody = document.querySelector('#prenotazioniTable tbody');
     tbody.innerHTML = '';
     retrieveReservation();
 }
 
+//Funzione che modifica elementi del DOM se ci sono prenotazioni
 function showReservation() {
     document.getElementById('prenotazioniTable').style.display = 'table';
     document.getElementById('noReservation').style.display = 'none';
 
 }
 
+//Funzione che modifica elementi del DOM se NON ci sono prenotazioni
 function noReservation() {
     document.getElementById('prenotazioniTable').style.display = 'none';
     document.getElementById('noReservation').style.display = 'block';
 }
 
+//Funzione che modifica elementi del DOM se ci sono corsi disponibili
 function showCourse() {
     document.getElementById('noCourse').style.display = 'none';
     document.getElementById('availableSeats').style.display = 'block';
 
 }
 
+//Funzione che modifica elementi del DOM se NON ci sono corsi disponibili
 function noCourse() {
     document.getElementById('noCourse').style.display = 'block';
     document.getElementById('availableSeats').style.display = 'none';
