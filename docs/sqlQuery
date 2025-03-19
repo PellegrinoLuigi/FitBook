@@ -41,7 +41,7 @@ CREATE TABLE user_subscription (
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
     subscription_days INTEGER NOT NULL,
-    status VARCHAR NOT NULL,
+    status VARCHAR,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -74,8 +74,6 @@ INSERT INTO trainer (first_name, last_name, email, specialization) VALUES
 ('Giorgio', 'Blu', 'giorgio.blu@example.com', 'Functional Training'),
 ('Luigi', 'Conti', 'luigi.conti@example.com', 'Personal Trainer');
 
-INSERT INTO trainer (first_name, last_name, email, specialization) VALUES
-('Luigi', 'Conti', 'luigi.conti@example.com', 'Personal Trainer');
 
 
 INSERT INTO course (name, capacity, weekday, start_time, duration, trainer_id) VALUES
