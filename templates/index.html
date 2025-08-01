@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitBook - Prenotazione</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.css" rel="stylesheet">
+	<link id="favicon" rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='images/favico.jpg')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles2.css') }}">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <div class="logo floating">FitBook <span id="logoPlaceholder">💪</span></div>
+            <div class="menu-icon" onclick="activeMenu()">&#9776;</div>
+            <nav id="navMenu">
+                <a href="#" onclick="showForm('home')">🏠 Home</a>
+                <a href="#" onclick="checkLogin('reservation')" id="reservationLink">📅 Corsi</a>
+                <a href="#" onclick="checkLogin('showReservation')" id="showReservationLink">📋 Prenotazioni</a>
+                <a href="#" onclick="checkLogin('buySubscription')" id="buySubLink">💎 Abbonamento</a>
+                <a href="#" onclick="showForm('login')" id="loginLink">🔐 Login</a>
+                <a href="#" onclick="goLogout()" id="logoutLink" style="display: none;">🚪 Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Home -->
+        <div id="home" class="form-container">
+            <div class="glass-effect glass-card">
+                <h1 class="floating">🏋️‍♂️ Benvenuti su FitBook! 🏋️‍♀️</h1>
+                
+                <div class="welcome-text" id="welcomeSub" style="display: none;">
+                    <div class="message message-success">
+                        <p style="text-align:center">🔔 Ciao <span id="userNamePlaceholder" class="gradient-text"></span>, il tuo abbonamento è attivo! 🔔</p>
+                        <p style="text-align:center">Scade il <span style="font-weight:bolder" id="subExpiredDate" class="gradient-text"></span></p>
+                        <p style="text-align:center">Inizia subito a prenotare e goditi il tuo allenamento!</p>
+                    </div>
+                </div>
+
+                <div class="welcome-text" id="welcomeNoSub" style="display: none;">
+                    <div class="message message-error">
+                        <p style="text-align:center">🔔 Ciao <span id="userNamePlaceholder2" class="gradient-text"></span>, non hai un abbonamento attivo! 🔔</p>
+                        <p style="text-align:center">Vai nella sezione abbonamenti per procedere con un nuovo acquisto!</p>
+                    </div>
+                </div>
+
+                <div class="welcome-text">
+                    <p><strong class="gradient-text">FitBook</strong> è il tuo spazio dedicato al fitness, dove prenotare i corsi è semplice, veloce e flessibile! Con i nostri abbonamenti flessibili, puoi iniziare già da 1 giorno e accedere senza limiti a tutti i corsi disponibili.</p>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin: 2rem 0;">
+                        <div class="glass-effect" style="padding: 1.5rem; text-align: center;">
+                            <div style="font-size: 2rem; margin-bottom: 1rem;">🎟️</div>
+                            <p><strong>Un solo abbonamento</strong><br>Massima libertà di scelta</p>
+                        </div>
+                        <div class="glass-effect" style="padding: 1.5rem; text-align: center;">
+                            <div style="font-size: 2rem; margin-bottom: 1rem;">📅</div>
+                            <p><strong>Gestione facile</strong><br>Prenota con un clic</p>
+                        </div>
+                        <div class="glass-effect" style="padding: 1.5rem; text-align: center;">
+                            <div style="font-size: 2rem; margin-bottom: 1rem;">💪</div>
+                            <p><strong>Allenati liberamente</strong><br>Secondo i tuoi ritmi</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="welcome-text" id="welcomeMessageHost" style="text-align: center;">
+                    <p>Non sei ancora registrato? <a href="#" onclick="showForm('login')" class="gradient-text" style="font-weight: 600;">Clicca qui per accedere o registrarti</a></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reservation Form -->
+        <div id="reservation" class="form-container" style="display: none;">
+            <div class="glass-effect glass-card">
+                <h1>🔍 Ricerca e prenota i tuoi corsi preferiti</h1>
+                <form id="reservationForm" onsubmit="retrieveCourse(event)">
+                    <label for="date">📅 INSERISCI DATA:</label>
+                    <input type="date" id="dataInput" name="date" required>
+                    <input type="submit" value="🔍 CERCA CORSI">
+                </form>
+
+                <div id="noCourse" style="display: none;">
+                    <div class="message message-error">
+                        <h4 style="text-align:center">❌ Non sono presenti corsi disponibili per la data selezionata!</h4>
+                    </div>
+                </div>
+
+                <div id="availableSeats" style="display: none;">
+                    <h2 class="gradient-text" style="text-align: center; margin: 2rem 0;">Corsi Disponibili <span id="selectedDate"></span></h2>
+                    <div class="glass-effect" style="border-radius: 20px; overflow: hidden;">
+                        <table id="availableSeatsTable">
+                            <thead>
+                                <tr>
+                                    <th>💪 Corso</th>
+                                    <th>👥 Disponibilità</th>
+                                    <th>🕐 Orario</th>
+                                    <th>⏱️ Durata</th>
+                                    <th>🏃‍♂️ Trainer</th>
+                                    <th>📝 Prenota</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Available courses will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Show Reservations -->
+        <div id="showReservation" class="form-container" style="display: none;">
+            <div class="glass-effect glass-card">
+                <h1>📋 Le tue Prenotazioni</h1>
+                
+                <div id="noReservation" style="display: none;">
+                    <div class="message message-error">
+                        <h4 style="text-align:center">❌ Non sono presenti prenotazioni</h4>
+                    </div>
+                </div>
+
+                <div class="glass-effect" style="border-radius: 20px; overflow: hidden;">
+                    <table id="prenotazioniTable">
+                        <thead>
+                            <tr>
+                                <th>💪 Corso</th>
+                                <th>📅 Data/Ora</th>
+                                <th>⚙️ Gestisci</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Active reservations will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Buy Subscription -->
+        <div id="buySubscription" class="form-container" style="display: none;">
+            <div class="glass-effect glass-card">
+                <h1>💎 Acquista Abbonamento</h1>
+                <form id="buySubForm" onsubmit="buySubscription(event)">
+                    <label for="subscription">⏱️ Seleziona durata abbonamento:</label>
+                    <select id="subscription" name="subscription" required>
+                        <option value="1">1 giorno - €5 ⚡</option>
+                        <option value="7">7 giorni - €15 🗓️</option>
+                        <option value="30">30 giorni - €30 📅</option>
+                        <option value="60">60 giorni - €55 🔥</option>
+                        <option value="90">90 giorni - €80 💪</option>
+                        <option value="365">1 anno - €300 👑</option>
+                    </select>
+                    <input type="submit" value="💳 ACQUISTA ORA">
+                </form>
+            </div>
+        </div>
+
+        <!-- Active Subscription -->
+        <div id="activeSubscription" class="form-container" style="display: none;">
+            <div class="glass-effect glass-card" style="text-align: center;">
+                <h1>🎉 Abbonamento Acquistato!</h1>
+                <div id="activeSubscriptiontext">
+                    <div class="message message-success">
+                        <h3>✅ Acquisto confermato! Ora sei pronto per prenotare i tuoi corsi!</h3>
+                        <p>Inizia subito la tua avventura fitness!</p>
+                    </div>
+                    <button class="custom-button btn-primary" onclick="showForm('reservation')" style="margin-top: 1rem; padding: 1rem 2rem; font-size: 1.1rem;">
+                        🔍 CERCA CORSO ORA
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Login Form -->
+        <div id="login" class="form-container" style="display: none;">
+            <div class="glass-effect glass-card">
+                <h1>🔐 Accedi</h1>
+                <form id="loginForm" onsubmit="login(event)">
+                    <label for="email">📧 Email:</label>
+                    <input type="email" id="email" name="email" required placeholder="Inserisci la tua email">
+                    
+                    <label for="password">🔒 Password:</label>
+                    <input type="password" id="password" autocomplete="current-password" name="password" required placeholder="Inserisci la tua password">
+                    
+                    <input type="submit" value="🚀 ACCEDI">
+                </form>
+                
+                <div class="switch-form" style="text-align: center; margin-top: 2rem;">
+                    <p>Non sei ancora registrato? <a href="#" onclick="showForm('registrazione')" class="gradient-text" style="font-weight: 600;">Registrati qui</a></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Registration Form -->
+        <div id="registrazione" class="form-container" style="display: none;">
+            <div class="glass-effect glass-card">
+                <h1>📝 Registrazione</h1>
+                <form id="registrazioneForm" onsubmit="registration(event)">
+                    <label for="firstname">👤 Nome:</label>
+                    <input type="text" id="firstname" name="firstname" required placeholder="Il tuo nome">
+                    
+                    <label for="lastname">👤 Cognome:</label>
+                    <input type="text" id="lastname" name="lastname" required placeholder="Il tuo cognome">
+                    
+                    <label for="emailreg">📧 Email:</label>
+                    <input type="email" id="emailreg" name="email" required placeholder="La tua email">
+                    
+                    <label for="birthdate">🎂 Data di nascita:</label>
+                    <input type="date" id="birthdate" name="birthdate" required>
+                    
+                    <label for="passwordReg">🔒 Password:</label>
+                    <input type="password" id="passwordReg" name="password" required placeholder="Crea una password sicura">
+                    
+                    <input type="submit" value="🎉 REGISTRATI">
+                </form>
+                
+                <div class="switch-form" style="text-align: center; margin-top: 2rem;">
+                    <p>Hai già un account? <a href="#" onclick="showForm('login')" class="gradient-text" style="font-weight: 600;">Accedi qui</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="glass-effect" style="padding: 2rem; border-radius: 20px; margin: 2rem;">
+            <p>&copy; 2025 <span class="gradient-text">FitBook</span> - Tutti i diritti riservati. Made with 💜</p>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/scripts2.js') }}"></script>
+
+</body>
+</html>
