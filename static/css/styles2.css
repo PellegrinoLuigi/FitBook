@@ -361,8 +361,10 @@
                 border-top: 1px solid var(--glass-border);
             }
 
+           
             nav.active {
-                top: 100px;
+              top: 100px;
+		display: flex;
             }
 
             .container {
