@@ -1,0 +1,832 @@
+-- ==================================================================
+-- FITBOOK DATABASE SCHEMA - VERSIONE MIGLIORATA
+-- ==================================================================
+
+-- Creazione estensioni necessarie
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+
+-- ==================================================================
+-- ENUM TYPES
+-- ==================================================================
+
+-- Stato delle prenotazioni
+CREATE TYPE reservation_status AS ENUM ('Confirmed', 'Cancelled', 'Pending', 'Completed');
+
+-- Stato degli abbonamenti
+CREATE TYPE subscription_status AS ENUM ('Active', 'Expired', 'Suspended', 'Cancelled');
+
+-- Giorni della settimana
+CREATE TYPE weekday_type AS ENUM ('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday');
+
+-- Livelli di difficoltà dei corsi
+CREATE TYPE difficulty_level AS ENUM ('Beginner', 'Intermediate', 'Advanced');
+
+-- ==================================================================
+-- TABELLE PRINCIPALI
+-- ==================================================================
+
+-- Tabella utenti migliorata
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    uuid UUID DEFAULT uuid_generate_v4() UNIQUE NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    birthdate DATE,
+    phone VARCHAR(20),
+    address TEXT,
+    emergency_contact VARCHAR(255),
+    medical_notes TEXT,
+    is_active BOOLEAN DEFAULT TRUE,
+    email_verified BOOLEAN DEFAULT FALSE,
+    last_login TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    -- Constraints
+    CONSTRAINT users_email_check CHECK (email ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'),
+    CONSTRAINT users_birthdate_check CHECK (birthdate <= CURRENT_DATE - INTERVAL '13 years')
+);
+
+-- Tabella trainer migliorata
+CREATE TABLE trainer (
+    id SERIAL PRIMARY KEY,
+    uuid UUID DEFAULT uuid_generate_v4() UNIQUE NOT NULL,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    phone VARCHAR(20),
+    specialization TEXT[],
+    bio TEXT,
+    certifications TEXT[],
+    experience_years INTEGER DEFAULT 0,
+    hourly_rate DECIMAL(10,2),
+    is_active BOOLEAN DEFAULT TRUE,
+    profile_image_url VARCHAR(500),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    -- Constraints
+    CONSTRAINT trainer_email_check CHECK (email ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'),
+    CONSTRAINT trainer_experience_check CHECK (experience_years >= 0),
+    CONSTRAINT trainer_rate_check CHECK (hourly_rate >= 0)
+);
+
+-- Tabella categorie corsi
+CREATE TABLE course_category (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL UNIQUE,
+    description TEXT,
+    color_code VARCHAR(7), -- Per UI (es. #FF5733)
+    icon VARCHAR(50), -- Nome icona
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+-- Tabella corsi migliorata
+CREATE TABLE course (
+    id SERIAL PRIMARY KEY,
+    uuid UUID DEFAULT uuid_generate_v4() UNIQUE NOT NULL,
+    name VARCHAR(200) NOT NULL,
+    description TEXT,
+    category_id INTEGER REFERENCES course_category(id),
+    trainer_id INTEGER REFERENCES trainer(id) ON DELETE SET NULL,
+    capacity INTEGER NOT NULL,
+    weekday weekday_type NOT NULL,
+    start_time TIME NOT NULL,
+    end_time TIME GENERATED ALWAYS AS (start_time + (duration * INTERVAL '1 minute')) STORED,
+    duration INTEGER NOT NULL, -- in minuti
+    difficulty_level difficulty_level DEFAULT 'Beginner',
+    price DECIMAL(10,2) DEFAULT 0.00,
+    location VARCHAR(200),
+    equipment_needed TEXT[],
+    prerequisites TEXT,
+    is_active BOOLEAN DEFAULT TRUE,
+    max_advance_booking_days INTEGER DEFAULT 30,
+    min_advance_booking_hours INTEGER DEFAULT 2,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    -- Constraints
+    CONSTRAINT course_capacity_check CHECK (capacity > 0 AND capacity <= 100),
+    CONSTRAINT course_duration_check CHECK (duration > 0 AND duration <= 480), -- max 8 ore
+    CONSTRAINT course_price_check CHECK (price >= 0),
+    CONSTRAINT course_booking_days_check CHECK (max_advance_booking_days > 0),
+    CONSTRAINT course_booking_hours_check CHECK (min_advance_booking_hours >= 0)
+);
+
+-- Tabella prenotazioni migliorata  XXX
+CREATE TABLE reservation (
+    id SERIAL PRIMARY KEY,
+    uuid UUID DEFAULT uuid_generate_v4() UNIQUE NOT NULL,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    course_id INTEGER REFERENCES course(id) ON DELETE CASCADE,
+    reservation_date DATE NOT NULL,
+    reservation_datetime TIMESTAMP GENERATED ALWAYS AS (
+        reservation_date + (SELECT start_time FROM course WHERE id = course_id)
+    ) STORED,
+    reservation_status reservation_status DEFAULT 'Pending',
+    notes TEXT,
+    checked_in BOOLEAN DEFAULT FALSE,
+    checked_in_at TIMESTAMP,
+    cancellation_reason TEXT,
+    cancelled_at TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    -- Constraints
+    CONSTRAINT reservation_date_future CHECK (reservation_date >= CURRENT_DATE),
+    CONSTRAINT reservation_unique UNIQUE (user_id, course_id, reservation_date),
+    CONSTRAINT reservation_checkin_logic CHECK (
+        (checked_in = FALSE AND checked_in_at IS NULL) OR 
+        (checked_in = TRUE AND checked_in_at IS NOT NULL)
+    )
+);
+
+CREATE VIEW reservation_with_datetime AS
+SELECT 
+    r.*,
+    r.reservation_date + c.start_time AS reservation_datetime
+FROM 
+    reservation r
+JOIN 
+    course c ON r.course_id = c.id;
+
+
+
+-- Tabella abbonamenti migliorata
+CREATE TABLE user_subscription (
+    id SERIAL PRIMARY KEY,
+    uuid UUID DEFAULT uuid_generate_v4() UNIQUE NOT NULL,
+    user_id INTEGER UNIQUE REFERENCES users(id) ON DELETE CASCADE,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    subscription_days INTEGER NOT NULL,
+    status subscription_status DEFAULT 'Active',
+    price_paid DECIMAL(10,2),
+    payment_method VARCHAR(50),
+    payment_reference VARCHAR(200),
+    auto_renewal BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    -- Constraints
+    CONSTRAINT subscription_date_logic CHECK (end_date > start_date),
+    CONSTRAINT subscription_days_check CHECK (subscription_days > 0),
+    CONSTRAINT subscription_price_check CHECK (price_paid IS NULL OR price_paid >= 0)
+);
+
+-- ==================================================================
+-- TABELLE AGGIUNTIVE
+-- ==================================================================
+
+-- Tabella per storico prenotazioni (per analytics)
+CREATE TABLE reservation_history (
+    id SERIAL PRIMARY KEY,
+    reservation_id INTEGER,
+    user_id INTEGER,
+    course_id INTEGER,
+    action VARCHAR(50) NOT NULL, -- 'created', 'cancelled', 'completed', etc.
+    old_status reservation_status,
+    new_status reservation_status,
+    reason TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Tabella per feedback/recensioni XXX
+CREATE TABLE course_feedback (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    course_id INTEGER REFERENCES course(id) ON DELETE CASCADE,
+    reservation_id INTEGER REFERENCES reservation(id) ON DELETE CASCADE,
+    rating INTEGER NOT NULL,
+    comment TEXT,
+    is_anonymous BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    -- Constraints
+    CONSTRAINT feedback_rating_check CHECK (rating >= 1 AND rating <= 5),
+    CONSTRAINT feedback_unique UNIQUE (user_id, reservation_id)
+);
+
+-- Tabella per notifiche
+CREATE TABLE notifications (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    title VARCHAR(200) NOT NULL,
+    message TEXT NOT NULL,
+    type VARCHAR(50) DEFAULT 'info', -- 'info', 'warning', 'error', 'success'
+    is_read BOOLEAN DEFAULT FALSE,
+    action_url VARCHAR(500),
+    expires_at TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Tabella per configurazioni sistema
+CREATE TABLE system_settings (
+    id SERIAL PRIMARY KEY,
+    key VARCHAR(100) UNIQUE NOT NULL,
+    value TEXT,
+    description TEXT,
+    data_type VARCHAR(20) DEFAULT 'string', -- 'string', 'integer', 'boolean', 'json'
+    is_public BOOLEAN DEFAULT FALSE,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ==================================================================
+-- INDICI PER PERFORMANCE
+-- ==================================================================
+
+-- Indici per ricerche frequenti
+CREATE INDEX idx_users_email ON users(email);
+CREATE INDEX idx_users_active ON users(is_active) WHERE is_active = TRUE;
+CREATE INDEX idx_users_created_at ON users(created_at);
+
+CREATE INDEX idx_trainer_active ON trainer(is_active) WHERE is_active = TRUE;
+CREATE INDEX idx_trainer_specialization ON trainer USING GIN(specialization);
+
+CREATE INDEX idx_course_active ON course(is_active) WHERE is_active = TRUE;
+CREATE INDEX idx_course_weekday ON course(weekday);
+CREATE INDEX idx_course_trainer ON course(trainer_id);
+CREATE INDEX idx_course_category ON course(category_id);
+CREATE INDEX idx_course_time ON course(weekday, start_time);
+
+CREATE INDEX idx_reservation_user ON reservation(user_id);
+CREATE INDEX idx_reservation_course ON reservation(course_id);
+CREATE INDEX idx_reservation_date ON reservation(reservation_date);
+CREATE INDEX idx_reservation_status ON reservation(reservation_status);
+CREATE INDEX idx_reservation_datetime ON reservation(reservation_datetime);
+CREATE INDEX idx_reservation_active ON reservation(reservation_status) 
+    WHERE reservation_status IN ('Confirmed', 'Pending');
+
+   --XXX
+CREATE INDEX idx_subscription_user ON user_subscription(user_id);
+CREATE INDEX idx_subscription_status ON user_subscription(status);
+CREATE INDEX idx_subscription_dates ON user_subscription(start_date, end_date);
+CREATE INDEX idx_subscription_active ON user_subscription(end_date) 
+    WHERE status = 'Active' AND end_date >= CURRENT_DATE;
+
+CREATE INDEX idx_notifications_user ON notifications(user_id);
+CREATE INDEX idx_notifications_unread ON notifications(user_id, is_read) 
+    WHERE is_read = FALSE;
+
+-- ==================================================================
+-- TRIGGER FUNCTIONS
+-- ==================================================================
+
+-- Funzione per aggiornare updated_at
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = CURRENT_TIMESTAMP;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Funzione per calcolare end_date automaticamente
+CREATE OR REPLACE FUNCTION update_end_date()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.end_date := NEW.start_date + (NEW.subscription_days * INTERVAL '1 day');
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Funzione per gestire lo storico prenotazioni
+CREATE OR REPLACE FUNCTION log_reservation_changes()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF TG_OP = 'INSERT' THEN
+        INSERT INTO reservation_history (reservation_id, user_id, course_id, action, new_status)
+        VALUES (NEW.id, NEW.user_id, NEW.course_id, 'created', NEW.reservation_status);
+        RETURN NEW;
+    ELSIF TG_OP = 'UPDATE' THEN
+        IF OLD.reservation_status != NEW.reservation_status THEN
+            INSERT INTO reservation_history (reservation_id, user_id, course_id, action, old_status, new_status)
+            VALUES (NEW.id, NEW.user_id, NEW.course_id, 'status_changed', OLD.reservation_status, NEW.reservation_status);
+        END IF;
+        RETURN NEW;
+    ELSIF TG_OP = 'DELETE' THEN
+        INSERT INTO reservation_history (reservation_id, user_id, course_id, action, old_status)
+        VALUES (OLD.id, OLD.user_id, OLD.course_id, 'deleted', OLD.reservation_status);
+        RETURN OLD;
+    END IF;
+    RETURN NULL;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Funzione per aggiornare automaticamente status abbonamento
+CREATE OR REPLACE FUNCTION update_subscription_status()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Aggiorna status basato sulla data di scadenza
+    IF NEW.end_date < CURRENT_DATE THEN
+        NEW.status := 'Expired';
+    ELSIF NEW.start_date <= CURRENT_DATE AND NEW.end_date >= CURRENT_DATE THEN
+        NEW.status := 'Active';
+    END IF;
+    
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- ==================================================================
+-- TRIGGERS
+-- ==================================================================
+
+-- Trigger per updated_at
+CREATE TRIGGER update_users_updated_at 
+    BEFORE UPDATE ON users 
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_trainer_updated_at 
+    BEFORE UPDATE ON trainer 
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_course_updated_at 
+    BEFORE UPDATE ON course 
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+ --  XXX
+CREATE TRIGGER update_reservation_updated_at 
+    BEFORE UPDATE ON reservation 
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_subscription_updated_at 
+    BEFORE UPDATE ON user_subscription 
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- Trigger per end_date degli abbonamenti
+CREATE TRIGGER calculate_subscription_end_date
+    BEFORE INSERT OR UPDATE ON user_subscription
+    FOR EACH ROW EXECUTE FUNCTION update_end_date();
+
+-- Trigger per status abbonamenti
+CREATE TRIGGER update_subscription_status_trigger
+    BEFORE INSERT OR UPDATE ON user_subscription
+    FOR EACH ROW EXECUTE FUNCTION update_subscription_status();
+
+-- Trigger per storico prenotazioni XXX
+CREATE TRIGGER log_reservation_changes_trigger
+    AFTER INSERT OR UPDATE OR DELETE ON reservation
+    FOR EACH ROW EXECUTE FUNCTION log_reservation_changes();
+
+-- ==================================================================
+-- VISTE UTILI
+-- ==================================================================
+
+-- Vista per corsi con informazioni complete
+CREATE VIEW course_details AS
+SELECT 
+    c.id,
+    c.uuid,
+    c.name,
+    c.description,
+    c.capacity,
+    c.weekday::text as weekday,
+    c.start_time,
+    c.end_time,
+    c.duration,
+    c.difficulty_level::text as difficulty_level,
+    c.price,
+    c.location,
+    c.equipment_needed,
+    cc.name as category_name,
+    cc.color_code as category_color,
+    t.first_name as trainer_first_name,
+    t.last_name as trainer_last_name,
+    t.specialization as trainer_specialization,
+    c.is_active
+FROM course c
+LEFT JOIN course_category cc ON c.category_id = cc.id
+LEFT JOIN trainer t ON c.trainer_id = t.id;
+
+-- Vista per prenotazioni con dettagli
+CREATE VIEW reservation_details AS
+SELECT 
+    r.id,
+    r.uuid,
+    r.reservation_date,
+    r.reservation_datetime,
+    r.reservation_status::text as status,
+    r.checked_in,
+    r.checked_in_at,
+    u.first_name as user_first_name,
+    u.last_name as user_last_name,
+    u.email as user_email,
+    c.name as course_name,
+    c.start_time as course_start_time,
+    c.duration as course_duration,
+    t.first_name as trainer_first_name,
+    t.last_name as trainer_last_name,
+    r.created_at
+FROM reservation r
+JOIN users u ON r.user_id = u.id
+JOIN course c ON r.course_id = c.id
+LEFT JOIN trainer t ON c.trainer_id = t.id;
+
+-- Vista per abbonamenti attivi
+CREATE VIEW active_subscriptions AS
+SELECT 
+    s.id,
+    s.user_id,
+    u.first_name,
+    u.last_name,
+    u.email,
+    s.start_date,
+    s.end_date,
+    s.subscription_days,
+    s.status::text as status,
+    s.price_paid,
+    (s.end_date - CURRENT_DATE) as days_remaining
+FROM user_subscription s
+JOIN users u ON s.user_id = u.id
+WHERE s.status = 'Active' AND s.end_date >= CURRENT_DATE;
+
+-- ==================================================================
+-- FUNZIONI UTILITY
+-- ==================================================================
+
+-- Funzione per verificare disponibilità corso
+CREATE OR REPLACE FUNCTION check_course_availability(
+    p_course_id INTEGER,
+    p_date DATE
+) RETURNS INTEGER AS $$
+DECLARE
+    course_capacity INTEGER;
+    reserved_count INTEGER;
+BEGIN
+    -- Ottieni capacità del corso
+    SELECT capacity INTO course_capacity 
+    FROM course 
+    WHERE id = p_course_id AND is_active = TRUE;
+    
+    IF course_capacity IS NULL THEN
+        RETURN -1; -- Corso non trovato o non attivo
+    END IF;
+    
+    -- Conta prenotazioni confermate per quella data
+    SELECT COUNT(*) INTO reserved_count
+    FROM reservation 
+    WHERE course_id = p_course_id 
+      AND reservation_date = p_date 
+      AND reservation_status = 'Confirmed';
+    
+    RETURN course_capacity - reserved_count;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Funzione per ottenere corsi disponibili per utente
+CREATE OR REPLACE FUNCTION get_available_courses_for_user(
+    p_user_id INTEGER,
+    p_date DATE
+) RETURNS TABLE (
+    course_id INTEGER,
+    course_name VARCHAR,
+    available_seats INTEGER,
+    weekday TEXT,
+    start_time TIME,
+    duration INTEGER,
+    trainer_name TEXT,
+    category_name VARCHAR
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT 
+        c.id,
+        c.name,
+        check_course_availability(c.id, p_date) as available_seats,
+        c.weekday::text,
+        c.start_time,
+        c.duration,
+        CONCAT(t.first_name, ' ', t.last_name) as trainer_name,
+        cc.name as category_name
+    FROM course c
+    LEFT JOIN trainer t ON c.trainer_id = t.id
+    LEFT JOIN course_category cc ON c.category_id = cc.id
+    WHERE c.is_active = TRUE
+      AND c.weekday = TO_CHAR(p_date, 'FMDay')::weekday_type
+      AND c.id NOT IN (
+          SELECT course_id 
+          FROM reservation 
+          WHERE user_id = p_user_id
+            AND reservation_date = p_date
+            AND reservation_status = 'Confirmed'
+      )
+      AND check_course_availability(c.id, p_date) > 0
+    ORDER BY c.start_time;
+END;
+$ LANGUAGE plpgsql;
+
+-- Funzione per verificare abbonamento attivo
+CREATE OR REPLACE FUNCTION has_active_subscription(p_user_id INTEGER) 
+RETURNS BOOLEAN AS $
+DECLARE
+    subscription_end DATE;
+BEGIN
+    SELECT end_date INTO subscription_end
+    FROM user_subscription 
+    WHERE user_id = p_user_id 
+      AND status = 'Active'
+      AND end_date >= CURRENT_DATE;
+    
+    RETURN subscription_end IS NOT NULL;
+END;
+$ LANGUAGE plpgsql;
+
+-- ==================================================================
+-- STORED PROCEDURES
+-- ==================================================================
+
+-- Procedura per creare prenotazione con validazione completa
+CREATE OR REPLACE FUNCTION create_reservation(
+    p_user_id INTEGER,
+    p_course_id INTEGER,
+    p_reservation_date DATE,
+    OUT success BOOLEAN,
+    OUT message TEXT,
+    OUT reservation_id INTEGER
+) AS $
+DECLARE
+    available_seats INTEGER;
+    user_has_subscription BOOLEAN;
+    course_active BOOLEAN;
+    booking_allowed BOOLEAN;
+BEGIN
+    -- Inizializza valori di output
+    success := FALSE;
+    message := '';
+    reservation_id := NULL;
+    
+    -- Verifica se l'utente ha un abbonamento attivo
+    SELECT has_active_subscription(p_user_id) INTO user_has_subscription;
+    
+    IF NOT user_has_subscription THEN
+        message := 'Abbonamento non attivo o scaduto';
+        RETURN;
+    END IF;
+    
+    -- Verifica se il corso è attivo
+    SELECT is_active INTO course_active FROM course WHERE id = p_course_id;
+    
+    IF NOT course_active OR course_active IS NULL THEN
+        message := 'Corso non disponibile';
+        RETURN;
+    END IF;
+    
+    -- Verifica disponibilità posti
+    SELECT check_course_availability(p_course_id, p_reservation_date) INTO available_seats;
+    
+    IF available_seats <= 0 THEN
+        message := 'Nessun posto disponibile per questa data';
+        RETURN;
+    END IF;
+    
+    -- Verifica limiti di prenotazione anticipata
+    SELECT 
+        p_reservation_date >= CURRENT_DATE + (min_advance_booking_hours * INTERVAL '1 hour') AND
+        p_reservation_date <= CURRENT_DATE + (max_advance_booking_days * INTERVAL '1 day')
+    INTO booking_allowed
+    FROM course 
+    WHERE id = p_course_id;
+    
+    IF NOT booking_allowed THEN
+        message := 'Prenotazione fuori dai limiti temporali consentiti';
+        RETURN;
+    END IF;
+    
+    -- Crea la prenotazione
+    BEGIN
+        INSERT INTO reservation (user_id, course_id, reservation_date, reservation_status)
+        VALUES (p_user_id, p_course_id, p_reservation_date, 'Confirmed')
+        RETURNING id INTO reservation_id;
+        
+        success := TRUE;
+        message := 'Prenotazione creata con successo';
+        
+    EXCEPTION WHEN unique_violation THEN
+        message := 'Hai già una prenotazione per questo corso in questa data';
+    WHEN OTHERS THEN
+        message := 'Errore durante la creazione della prenotazione';
+    END;
+END;
+$ LANGUAGE plpgsql;
+
+-- Procedura per cancellare prenotazione
+CREATE OR REPLACE FUNCTION cancel_reservation(
+    p_reservation_id INTEGER,
+    p_user_id INTEGER,
+    p_reason TEXT DEFAULT NULL,
+    OUT success BOOLEAN,
+    OUT message TEXT
+) AS $
+DECLARE
+    reservation_exists BOOLEAN;
+    reservation_date DATE;
+    current_status reservation_status;
+BEGIN
+    success := FALSE;
+    message := '';
+    
+    -- Verifica se la prenotazione esistee appartiene all'utente
+    SELECT 
+        TRUE,
+        r.reservation_date,
+        r.reservation_status
+    INTO 
+        reservation_exists,
+        reservation_date,
+        current_status
+    FROM reservation r 
+    WHERE r.id = p_reservation_id AND r.user_id = p_user_id;
+    
+    IF NOT reservation_exists THEN
+        message := 'Prenotazione non trovata';
+        RETURN;
+    END IF;
+    
+    -- Verifica se la prenotazione può essere cancellata
+    IF current_status IN ('Cancelled', 'Completed') THEN
+        message := 'Prenotazione già cancellata o completata';
+        RETURN;
+    END IF;
+    
+    -- Verifica se la cancellazione è ancora possibile (es. almeno 2 ore prima)
+    IF reservation_date + (SELECT start_time FROM course c 
+                          JOIN reservation r ON c.id = r.course_id 
+                          WHERE r.id = p_reservation_id) 
+       <= CURRENT_TIMESTAMP + INTERVAL '2 hours' THEN
+        message := 'Troppo tardi per cancellare questa prenotazione';
+        RETURN;
+    END IF;
+    
+    -- Cancella la prenotazione
+    UPDATE reservation 
+    SET 
+        reservation_status = 'Cancelled',
+        cancellation_reason = p_reason,
+        cancelled_at = CURRENT_TIMESTAMP
+    WHERE id = p_reservation_id;
+    
+    success := TRUE;
+    message := 'Prenotazione cancellata con successo';
+END;
+$ LANGUAGE plpgsql;
+
+-- ==================================================================
+-- DATI DI ESEMPIO
+-- ==================================================================
+
+-- Inserisci categorie di corsi
+INSERT INTO course_category (name, description, color_code, icon) VALUES
+('Cardio', 'Corsi per migliorare la resistenza cardiovascolare', '#FF6B6B', 'heart'),
+('Forza', 'Allenamenti per aumentare la forza muscolare', '#4ECDC4', 'dumbbell'),
+('Flessibilità', 'Corsi per migliorare flessibilità e mobilità', '#45B7D1', 'stretch'),
+('Danza', 'Corsi di danza e movimento ritmico', '#96CEB4', 'music'),
+('Rilassamento', 'Corsi per rilassamento e benessere mentale', '#FECA57', 'leaf');
+
+-- Inserisci alcuni trainer di esempio
+INSERT INTO trainer (first_name, last_name, email, specialization, bio, experience_years) VALUES
+('Marco', 'Rossi', 'marco.rossi@fitbook.com', 
+ ARRAY['Personal Training', 'Strength Training'], 
+ 'Trainer esperto con oltre 8 anni di esperienza nel fitness', 8),
+ 
+('Laura', 'Bianchi', 'laura.bianchi@fitbook.com', 
+ ARRAY['Yoga', 'Pilates', 'Flexibility'], 
+ 'Istruttrice certificata di yoga e pilates', 5),
+ 
+('Andrea', 'Verdi', 'andrea.verdi@fitbook.com', 
+ ARRAY['Cardio', 'HIIT', 'Functional Training'], 
+ 'Specialista in allenamenti ad alta intensità', 6);
+
+-- Inserisci alcuni corsi di esempio
+INSERT INTO course (name, description, category_id, trainer_id, capacity, weekday, start_time, duration, difficulty_level, location) VALUES
+('HIIT Mattutino', 'Allenamento ad alta intensità per iniziare la giornata', 1, 3, 15, 'Monday', '07:00', 45, 'Intermediate', 'Sala A'),
+('Yoga Rilassante', 'Sessione di yoga per corpo e mente', 5, 2, 20, 'Monday', '18:30', 60, 'Beginner', 'Sala B'),
+('Strength Training', 'Allenamento con pesi per tutti i livelli', 2, 1, 12, 'Tuesday', '19:00', 50, 'Intermediate', 'Sala Pesi'),
+('Pilates Base', 'Corso introduttivo al pilates', 3, 2, 18, 'Wednesday', '17:00', 55, 'Beginner', 'Sala B'),
+('Cardio Dance', 'Danza aerobica divertente e energica', 4, 2, 25, 'Thursday', '19:30', 45, 'Beginner', 'Sala A'),
+('Functional Training', 'Allenamento funzionale completo', 2, 3, 16, 'Friday', '18:00', 50, 'Intermediate', 'Sala A');
+
+-- Inserisci impostazioni di sistema
+INSERT INTO system_settings (key, value, description, data_type, is_public) VALUES
+('max_advance_booking_days', '30', 'Giorni massimi per prenotazione anticipata', 'integer', TRUE),
+('min_cancellation_hours', '2', 'Ore minime prima del corso per cancellare', 'integer', TRUE),
+('default_course_capacity', '20', 'Capacità predefinita per nuovi corsi', 'integer', FALSE),
+('maintenance_mode', 'false', 'Modalità manutenzione del sistema', 'boolean', FALSE),
+('subscription_prices', '{"1": 5, "7": 15, "30": 30, "60": 55, "90": 80, "365": 300}', 'Prezzi abbonamenti per durata in giorni', 'json', TRUE);
+
+-- ==================================================================
+-- PROCEDURE DI MANUTENZIONE
+-- ==================================================================
+
+-- Procedura per pulire dati vecchi
+CREATE OR REPLACE FUNCTION cleanup_old_data() 
+RETURNS TEXT AS $
+DECLARE
+    deleted_count INTEGER;
+    result_text TEXT := '';
+BEGIN
+    -- Elimina prenotazioni completate più vecchie di 1 anno
+    DELETE FROM reservation 
+    WHERE reservation_status = 'Completed' 
+      AND reservation_date < CURRENT_DATE - INTERVAL '1 year';
+    GET DIAGNOSTICS deleted_count = ROW_COUNT;
+    result_text := result_text || format('Eliminate %s prenotazioni vecchie. ', deleted_count);
+    
+    -- Elimina notifiche scadute
+    DELETE FROM notifications 
+    WHERE expires_at < CURRENT_TIMESTAMP;
+    GET DIAGNOSTICS deleted_count = ROW_COUNT;
+    result_text := result_text || format('Eliminate %s notifiche scadute. ', deleted_count);
+    
+    -- Aggiorna status abbonamenti scaduti
+    UPDATE user_subscription 
+    SET status = 'Expired' 
+    WHERE status = 'Active' AND end_date < CURRENT_DATE;
+    GET DIAGNOSTICS deleted_count = ROW_COUNT;
+    result_text := result_text || format('Aggiornati %s abbonamenti scaduti.', deleted_count);
+    
+    RETURN result_text;
+END;
+$ LANGUAGE plpgsql;
+
+-- Procedura per statistiche sistema
+CREATE OR REPLACE FUNCTION get_system_stats(
+    OUT total_users INTEGER,
+    OUT active_subscriptions INTEGER,
+    OUT total_courses INTEGER,
+    OUT todays_reservations INTEGER,
+    OUT this_month_revenue DECIMAL
+) AS $
+BEGIN
+    SELECT COUNT(*) INTO total_users FROM users WHERE is_active = TRUE;
+    
+    SELECT COUNT(*) INTO active_subscriptions 
+    FROM user_subscription 
+    WHERE status = 'Active' AND end_date >= CURRENT_DATE;
+    
+    SELECT COUNT(*) INTO total_courses FROM course WHERE is_active = TRUE;
+    
+    SELECT COUNT(*) INTO todays_reservations 
+    FROM reservation 
+    WHERE reservation_date = CURRENT_DATE AND reservation_status = 'Confirmed';
+    
+    SELECT COALESCE(SUM(price_paid), 0) INTO this_month_revenue
+    FROM user_subscription 
+    WHERE DATE_TRUNC('month', created_at) = DATE_TRUNC('month', CURRENT_DATE);
+END;
+$ LANGUAGE plpgsql;
+
+-- ==================================================================
+-- SECURITY E PERMISSIONS
+-- ==================================================================
+
+-- Crea ruoli per diversi tipi di utenti
+CREATE ROLE fitbook_admin;
+CREATE ROLE fitbook_trainer;
+CREATE ROLE fitbook_user;
+CREATE ROLE fitbook_readonly;
+
+-- Permessi per admin (accesso completo)
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO fitbook_admin;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO fitbook_admin;
+GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public TO fitbook_admin;
+
+-- Permessi per trainer (lettura e gestione dei propri corsi)
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO fitbook_trainer;
+GRANT UPDATE ON course, reservation TO fitbook_trainer;
+GRANT INSERT, DELETE ON course_feedback TO fitbook_trainer;
+
+-- Permessi per utenti standard
+GRANT SELECT ON course_details, course_category TO fitbook_user;
+GRANT SELECT, INSERT, UPDATE ON reservation TO fitbook_user;
+GRANT SELECT, INSERT, UPDATE ON user_subscription TO fitbook_user;
+GRANT SELECT ON users TO fitbook_user;
+GRANT UPDATE ON users TO fitbook_user;
+
+-- Permessi per accesso di sola lettura (per reporting)
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO fitbook_readonly;
+
+-- ==================================================================
+-- COMMENTI FINALI
+-- ==================================================================
+
+-- Aggiungi commenti alle tabelle principali
+COMMENT ON TABLE users IS 'Tabella utenti del sistema con informazioni complete';
+COMMENT ON TABLE trainer IS 'Tabella trainer/istruttori con specializzazioni';
+COMMENT ON TABLE course IS 'Tabella corsi con programmazionesettimanale';
+COMMENT ON TABLE reservation IS 'Tabella prenotazioni con stato e tracking';
+COMMENT ON TABLE user_subscription IS 'Tabella abbonamenti utenti con gestione automatica scadenze';
+COMMENT ON TABLE course_feedback IS 'Tabella feedback e recensioni corsi';
+COMMENT ON TABLE notifications IS 'Sistema notifiche per utenti';
+
+-- Aggiungi commenti alle funzioni principali  
+COMMENT ON FUNCTION check_course_availability(INTEGER, DATE) IS 'Verifica posti disponibili per un corso in una data specifica';
+COMMENT ON FUNCTION create_reservation(INTEGER, INTEGER, DATE) IS 'Crea prenotazione con validazione completa';
+COMMENT ON FUNCTION has_active_subscription(INTEGER) IS 'Verifica se utente ha abbonamento attivo';
+
+COMMIT;
