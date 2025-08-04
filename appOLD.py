@@ -335,7 +335,7 @@ def db_request_select_all_4_params(query, par1, par2, par3, par4):
 #Avvio dell'app e renderizzazione del index
 @app.route("/")
 def home():
-    return render_template("index.html")
+    return render_template("indexOld.html")
 
 
 if __name__ == "__main__":
