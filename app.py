@@ -627,7 +627,7 @@ def buy_subscription():
 
 @app.route("/")
 def home():
-    return render_template("index.html")
+    return render_template("indexNew.html")
 
 # Error handlers
 @app.errorhandler(404)
